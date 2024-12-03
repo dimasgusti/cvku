@@ -1,8 +1,17 @@
 /** @type {import('next').NextConfig} */
-import type { NextConfig } from "next";
+const nextConfig = {
+    async rewrites() {
+        return [
+            {
+                source: '/my-portfolio',
+                destination: '/dashboard/my-portfolio',
+            },
+            {
+                source: '/my-cv',
+                destination: '/dashboard/my-cv',
+            },
+        ]
+    },
+}
 
-const nextConfig: NextConfig = {
-  
-};
-
-export default nextConfig;
+module.exports = nextConfig

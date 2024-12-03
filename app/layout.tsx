@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth"; 
 import metadata from "./metadata";
 import Navbar from "@/components/ui/navbar";
+import { usePathname } from "next/navigation";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
   session: Session | null;
 }>) {
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <head>
@@ -38,9 +41,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SessionProvider session={session}>
-          <nav>
-            <Navbar />
-          </nav>
+          {pathname === "/" || pathname === "/about" && <Navbar />}
           <main className="flex flex-grow">{children}</main>
         </SessionProvider>
       </body>
