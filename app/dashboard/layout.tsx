@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSession } from 'next-auth/react';
+import Loading from '@/components/ui/loading';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  if(status === "loading") return null;
+  if(status === "loading") return <Loading />;
 
   if(status === "unauthenticated"){
     router.push('/auth/signin');
@@ -68,7 +69,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <main className="flex p-4">
+        <main className="flex flex-grow">
           <div className="flex-1">{children}</div>
         </main>
       </SidebarInset>

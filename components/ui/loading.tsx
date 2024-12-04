@@ -1,7 +1,9 @@
+import Text from "./text";
+
 const Loading = () => {
     return(
-        <div>
-            Loading...
+        <div className="w-full h-screen flex flex-col justify-center items-center">
+            <Text variant="body">Loading...</Text>
         </div>
     )
 }

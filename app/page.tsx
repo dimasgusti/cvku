@@ -4,7 +4,7 @@ export default function HomePage() {
     return (
         <>
             <div className="w-full flex flex-col justify-center items-center">
-                <Text variant="h1" className="">Welcome to cvku.id</Text>
+                <Text variant="heading1" className="">Welcome to cvku.id</Text>
             </div>
         </>
     );

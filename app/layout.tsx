@@ -41,7 +41,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <SessionProvider session={session}>
-          {pathname === "/" || pathname === "/about" && <Navbar />}
+          {pathname === "/" && <Navbar />}
           <main className="flex flex-grow">{children}</main>
         </SessionProvider>
       </body>

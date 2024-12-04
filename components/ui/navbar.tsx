@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LoginButton from "./login-btn";
+import { Button } from "./button";
 
 const Navbar = () => {
     return(
@@ -9,7 +10,12 @@ const Navbar = () => {
                     Home
                 </Link>
             </ul>
-            <ul>
+            <ul className="flex flex-row gap-2">
+                <li>
+                    <Link href='/dashboard'>
+                        <Button size="sm">Dashboard</Button>
+                    </Link>
+                </li>
                 <li>
                     <LoginButton />
                 </li>
