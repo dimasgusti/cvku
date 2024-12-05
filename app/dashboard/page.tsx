@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <div className="w-full h-[10rem] flex flex-row justify-between items-center gap-4 px-2">
           <div className="flex flex-row items-center gap-4 p-2">
             <Image
-              src={userAvatar || "defaultAvatar.png"}
+              src={userAvatar || "/defaultAvatar.png"}
               width={100}
               height={100}
               alt={session.user?.name || ""}
@@ -28,7 +28,6 @@ export default function DashboardPage() {
             />
             <div>
               <Text variant="body">Welcome back, {session?.user?.name}!</Text>
-              <Text variant="small">{session?.user?.email}</Text>
               <Link href="#" className="hover:cursor-pointer">
                 <Text variant="small" className="text-black/50 decoration-[#99AABB] hover:underline">Update Profile</Text>
               </Link>

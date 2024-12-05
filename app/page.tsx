@@ -1,3 +1,6 @@
+'use client';
+
+import LoginButton from "@/components/ui/login-btn";
 import Text from "@/components/ui/text";
 
 export default function HomePage() {
@@ -5,6 +8,7 @@ export default function HomePage() {
         <>
             <div className="w-full flex flex-col justify-center items-center">
                 <Text variant="heading1" className="">Welcome to cvku.id</Text>
+                <LoginButton />
             </div>
         </>
     );
