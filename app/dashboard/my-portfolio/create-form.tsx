@@ -1,7 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,8 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -25,94 +24,7 @@ import {
 import { filterCountries } from "./helpers";
 //@ts-ignore
 import countryRegionData from "country-region-data/dist/data-umd";
-import { getSession } from "next-auth/react";
-
-const formSchema = z.object({
-  fullName: z
-    .string()
-    .min(4, { message: "Full name must be at least 4 characters." })
-    .max(32, { message: "Full name must be at most 32 characters long." })
-    .regex(/^[a-zA-Z\s]+$/, {
-      message: "Full name can only contain letters and spaces.",
-    }),
-  title: z
-    .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(50, { message: "Title must be at most 50 characters long." })
-    .regex(/^[a-zA-Z\s-]+$/, {
-      message: "Title can only contain letters, spaces, and hyphens.",
-    }),
-  email: z.string().email(),
-  country: z.string().optional(),
-  website: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true; // Passes if it's undefined or empty
-        try {
-          new URL(val); // Check if it's a valid URL
-          return true;
-        } catch {
-          return false; // Invalid URL
-        }
-      },
-      {
-        message: "Invalid URL",
-      }
-    ),
-  github: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        try {
-          new URL(val);
-          return true;
-        } catch {
-          return false;
-        }
-      },
-      {
-        message: "Invalid URL",
-      }
-    ),
-  linkedin: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        try {
-          new URL(val);
-          return true;
-        } catch {
-          return false;
-        }
-      },
-      {
-        message: "Invalid URL",
-      }
-    ),
-  twitterx: z
-    .string()
-    .optional()
-    .refine(
-      (val) => {
-        if (!val) return true;
-        try {
-          new URL(val);
-          return true;
-        } catch {
-          return false;
-        }
-      },
-      {
-        message: "Invalid URL",
-      }
-    ),
-});
+import { portfolioSchema } from "@/lib/validation/portfolio-schema";
 
 export interface Region {
   name: string;
@@ -166,9 +78,64 @@ function CountrySelect({
   );
 }
 
+// const onSubmit = async (data: any) => {
+//   try {
+//     const response = await fetch("/api/route/portfolio/create", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(data),
+//     });
+
+//     if(!response.ok){
+//         const errorData = await response.json();
+//         throw new Error(errorData.error || "Failed to create portfolio");
+//     }
+
+//     const result = await response.json();
+//     console.log("Portfolio created:", result);
+//     alert("Portfolio created");
+//   } catch (error) {
+//     alert(error || "Something went wrong");
+//   }
+// };
+
+const onSubmit = async (data: any) => {
+  try {
+    const response = await fetch("/api/route/portfolio/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName: data.fullName,
+        title: data.title,
+        email: data.email,
+        country: data.country,
+        website: data.website,
+        github: data.github,
+        linkedin: data.linkedin,
+        twitterx: data.twitterx,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to create portfolio");
+    }
+
+    const result = await response.json();
+    console.log("Portfolio created:", result);
+    alert("Portfolio created");
+  } catch (error) {
+    console.error("Error creating portfolio:", error);
+  }
+};
+
 const CreatePortfolio = () => {
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(portfolioSchema),
     defaultValues: {
       fullName: "",
       title: "",
@@ -184,7 +151,7 @@ const CreatePortfolio = () => {
   return (
     <div className="w-[360px]">
       <Form {...form}>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="fullName"

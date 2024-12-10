@@ -77,7 +77,7 @@ export default function SignIn() {
                             className="border p-2 rounded"
                         />
                         <Button onClick={() => handleSignIn('email')}>
-                            <FaEnvelope /> Login with Google
+                            <FaEnvelope /> Login with Email
                         </Button>
                     </CardContent>
 

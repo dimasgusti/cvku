@@ -1,12 +1,9 @@
 "use client";
 
 import Loading from "@/components/ui/loading";
-import OverviewCard from "./components/overview-card";
 import { useSession } from "next-auth/react";
 import Text from "@/components/ui/text";
 import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
@@ -23,14 +20,14 @@ export default function DashboardPage() {
               src={userAvatar || "/defaultAvatar.png"}
               width={100}
               height={100}
-              alt={session.user?.name || ""}
-              className="object-contain"
+              alt={session.user?.name || "Guest"}
+              className="object-cover"
+              quality={100}
+              loading="lazy"
             />
             <div>
               <Text variant="body">Welcome back, {session?.user?.name}!</Text>
-              <Link href="#" className="hover:cursor-pointer">
-                <Text variant="small" className="text-black/50 decoration-[#99AABB] hover:underline">Update Profile</Text>
-              </Link>
+              <Text variant="caption">{session?.user?.email}</Text>
             </div>
           </div>
         </div>

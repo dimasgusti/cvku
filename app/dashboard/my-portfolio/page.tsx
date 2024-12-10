@@ -1,4 +1,4 @@
-import CreatePortfolio from "./form/create-portfolio";
+import CreatePortfolio from "./create-form";
 
 export default function PortfolioPage(){
     return(
