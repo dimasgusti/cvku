@@ -1,93 +1,89 @@
-import { signOut } from "next-auth/react";
+"use client"
+
+import * as React from "react"
+import {
+  Home,
+  PieChart,
+  Settings2,
+} from "lucide-react"
+
+import { NavMain } from "@/components/nav-main"
+import { NavProjects } from "@/components/nav-projects"
+import { NavUser } from "@/components/nav-user"
+import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { Button } from "./ui/button";
+} from "@/components/ui/sidebar"
 
+// This is sample data.
 const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Home",
+      url: "#", // Direct link to the home or landing page.
+      icon: Home,
+      isActive: true, // Make sure it's highlighted or active when viewing the home page.
+      items: [] // No items here; it's a simple link now, but can be expanded in the future.
+    },
+    {
+      title: "Explore",
+      url: "#", // Link to Explore section or portfolio discovery page.
+      icon: PieChart,
+    },
+    {
+      title: "Account",
+      url: "#", // Link to account page.
+      icon: Settings2,
       items: [
-        { title: "Overview", url: "/dashboard" },
-        { title: "Analytics", url: "/dashboard/analytics" },
-      ],
-    },
-    {
-      title: "Portfolio Management",
-      url: "#",
-      items: [{ title: "View Portfolio", url: "/my-portfolio" }],
-    },
-    {
-      title: "CV Management",
-      url: "#",
-      items: [{ title: "View CV", url: "/my-cv" }],
-    },
-    {
-      title: "Account Settings",
-      url: "#",
-      items: [
-        { title: "Profile", url: "/profile" },
-        { title: "Security Settings", url: "/settings/security" },
-        { title: "Notification Settings", url: "/settings/notifications" },
-      ],
-    },
-    {
-      title: "Help & Support",
-      url: "#",
-      items: [
-        { title: "FAQ", url: "/help/faq" },
-        { title: "Contact Support", url: "/help/contact" },
+        {
+          title: "Profile",
+          url: "/profile", // Link to the user's profile page.
+        },
+        {
+          title: "Settings",
+          url: "/settings", // Link to account settings page.
+        },
+        {
+          title: "Notifications",
+          url: "/notifications", // Link to notification settings.
+        },
       ],
     },
   ],
-};
+  projects: [
+    {
+      name: "Design Engineering",
+      url: "#",
+      icon: PieChart,
+    },
+  ],
+}
 
-export function AppSidebar({
-  pathname,
-  ...props
-}: React.ComponentProps<typeof Sidebar> & { pathname: string }) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <div className="sidebar-logo p-2">
-          <h2>cvku.id</h2> {/* Replace with your logo */}
-        </div>
+        {/* To-do: Add logo here */}
       </SidebarHeader>
       <SidebarContent>
-        {data.navMain.map((group) => (
-          <SidebarGroup key={group.title}>
-            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        <NavMain items={data.navMain} />
+        {/* If you have projects or other items, you can include them here */}
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
-      <div className="sidebar-footer p-2 mt-auto">
-        <Button onClick={() => signOut({ callbackUrl: '/' })} className="w-full">
-          Sign Out
-        </Button>
-      </div>
+      <SidebarFooter>
+        {/* Add user profile or other footer content here */}
+        {/* <NavUser user={data.user} /> */}
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }
