@@ -20,31 +20,6 @@ export const authOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      const client = await clientPromise;
-      const db = client.db();
-      const usersCollection = db.collection('users');
-    
-      const existingUser = await usersCollection.findOne({ email: user.email });
-    
-      if (!existingUser) {
-        return false;
-      }
-    
-      return true;
-    },
-    async session({ session, token, user }) {
-      session.user.email = session.user.email || user.email;
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.email = user.email;
-      }
-      return token;
-    },
-  },
   adapter: MongoDBAdapter(clientPromise),
   pages: {
     signIn: '/auth/signin',

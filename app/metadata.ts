@@ -1,35 +1,37 @@
-import { Metadata } from "next";
+// app/metadata.ts
 
-const metadata: Metadata = {
-  title: "CVku | Build Your Professional CV Online",
-  description: "Easily create and share your professional CV and portfolio online.",
-  applicationName: "CVku",
-  keywords: ["CV", "Portfolio", "Resume Builder", "Online CV", "Professional"],
-  authors: [{ name: "Your Name", url: "https://cvku.id" }],
-  creator: "Your Name",
-  themeColor: "#ffffff",
-  openGraph: {
-    title: "CVku | Build Your Professional CV Online",
-    description: "Easily create and share your professional CV and portfolio online.",
-    url: "https://cvku.id",
-    siteName: "CVku",
-    images: [
-      {
-        url: "https://cvku.id/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "CVku Banner",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "CVku | Build Your Professional CV Online",
-    description: "Easily create and share your professional CV and portfolio online.",
-    images: ["https://cvku.id/twitter-image.png"],
-  },
+interface MetaTags {
+  title: string;
+  description: string;
+  keywords?: string;
+  robots?: string;
+  canonical?: string;
+  image?: string;
+}
+
+export const defaultMeta: MetaTags = {
+  title: "CVKU.id - Build Your Professional Portfolio",
+  description: "Create, manage, and share your professional portfolio with CVKU.id. Showcase your skills, work experience, and achievements.",
+  keywords: "portfolio, CV, resume, professional, showcase",
+  robots: "index, follow",
+  canonical: "https://www.cvku.id",
+  image: "https://www.cvku.id/images/og-image.png",
 };
 
-export default metadata;
+export const generateMetaTags = ({
+  title,
+  description,
+  keywords = defaultMeta.keywords,
+  robots = defaultMeta.robots,
+  canonical = defaultMeta.canonical,
+  image = defaultMeta.image,
+}: MetaTags) => {
+  return {
+    title,
+    description,
+    keywords,
+    robots,
+    canonical,
+    image,
+  };
+};

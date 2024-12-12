@@ -30,14 +30,14 @@ export default function SignIn() {
         if (provider === 'email' && email) {
             const result = await signIn(provider, {
                 email,
-                callbackUrl: '/dashboard'
+                callbackUrl: '/'
             });
 
             if (result?.error) {
                 setError(result.error);
             }
         } else {
-            const result = await signIn(provider, { callbackUrl: '/dashboard' });
+            const result = await signIn(provider, { callbackUrl: '/' });
 
             if (result?.error) {
                 setError(result.error);

@@ -1,16 +1,15 @@
+// app/layout.tsx
+
 "use client";
 
-import localFont from "next/font/local";
-import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
-import metadata from "./metadata";
+import localFont from "next/font/local";
+import "./globals.css";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import LoginButton from "@/components/ui/login-btn";
+import { generateMetaTags, defaultMeta } from "./metadata"; // Import your SEO functions
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,32 +30,42 @@ export default function RootLayout({
   children: React.ReactNode;
   session: Session | null;
 }>) {
+  const meta = generateMetaTags(defaultMeta); // You can customize the meta tags if needed
+
   return (
     <html lang="en">
       <head>
-        <title>{String(metadata?.title ?? "Default Title")}</title>
-        <meta
-          name="description"
-          content={String(metadata?.description ?? "Default description")}
-        />
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={meta.description} />
+        <meta name="keywords" content={meta.keywords} />
+        <meta name="robots" content={meta.robots} />
+        <link rel="canonical" href={meta.canonical} />
+        <meta property="og:title" content={meta.title} />
+        <meta property="oshoug:description" content={meta.description} />
+        <meta property="og:image" content={meta.image} />
+        <meta property="og:url" content={meta.canonical} />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta name="twitter:image" content={meta.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <title>{meta.title}</title>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-      >
-        <SessionProvider session={session}>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              {/* Header with sidebar trigger button */}
-              <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-                <SidebarTrigger className="-ml-1" />
+      <body>
+        <SidebarProvider>
+          <AppSidebar />
+          <SessionProvider session={session}>
+            <main
+              className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full`}
+            >
+              <header className="w-full flex flex-row justify-between border-b my-2 py-3 px-3">
+                <SidebarTrigger />
+                <LoginButton />
               </header>
-
-              {/* Main Content */}
-              <main className="flex-1 flex flex-col p-4">{children}</main>
-            </SidebarInset>
-          </SidebarProvider>
-        </SessionProvider>
+              {children}
+            </main>
+          </SessionProvider>
+        </SidebarProvider>
       </body>
     </html>
   );
