@@ -40,8 +40,8 @@ model Session {
   user         User     @relation(fields: [userId], references: [id])
 }
 
-model ProjectRecord {
-  id          String   @id @default(cuid()) @map("_id")
+model Project {
+  id          String       @id @default(cuid()) @map("_id")
   userId      String
   title       String
   startDate   String
@@ -49,28 +49,27 @@ model ProjectRecord {
   company     String?
   description String?
   link        String?
-  attachment  String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id             String          @id @default(cuid()) @map("_id")
-  name           String?
-  username       String?         @unique
-  title          String?
-  country        String?
-  bio            String?
-  email          String?         @unique
-  emailVerified  DateTime?
-  image          String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  social         Json
-  accounts       Account[]
-  sessions       Session[]
-  projectrecords ProjectRecord[]
+  id            String    @id @default(cuid()) @map("_id")
+  name          String?
+  username      String?   @unique
+  title         String?
+  country       String?
+  bio           String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  social        Json
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
 }
 
 model VerificationRequest {

@@ -1,19 +1,29 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "./button";
 import Link from "next/link";
+import { FaSpinner } from "react-icons/fa6";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return null;
+    return (
+      <>
+        <Button size="sm">
+          <FaSpinner className="animate-spin" />
+          Loading...
+        </Button>
+      </>
+    );
   }
 
   if (session) {
     return (
       <>
-        <Button onClick={() => signOut()} size="sm">
-          Sign out
+        <Button variant="outline" onClick={() => signOut()} size="sm">
+          <FaSignOutAlt />
+          Logout
         </Button>
       </>
     );
@@ -22,7 +32,8 @@ export default function LoginButton() {
   return (
     <>
       <Button onClick={() => signIn()} size="sm">
-        Sign in
+        <FaSignInAlt />
+        Login
       </Button>
     </>
   );

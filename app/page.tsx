@@ -29,14 +29,6 @@ export default function HomePage() {
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </Head>
-      <article>
-        <header>
-          <h1>Welcome to CVKU.id</h1>
-        </header>
-        <section>
-          <p>Create your professional portfolio and showcase your work with ease.</p>
-        </section>
-      </article>
     </>
   );
 }

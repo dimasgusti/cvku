@@ -1,15 +1,15 @@
-// app/layout.tsx
-
 "use client";
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import LoginButton from "@/components/ui/login-btn";
-import { generateMetaTags, defaultMeta } from "./metadata"; // Import your SEO functions
+import { generateMetaTags, defaultMeta } from "./metadata";
+import { Button } from "@/components/ui/button";
+import { FaSpinner } from "react-icons/fa6";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
   session: Session | null;
 }>) {
-  const meta = generateMetaTags(defaultMeta); // You can customize the meta tags if needed
+  const meta = generateMetaTags(defaultMeta);
 
   return (
     <html lang="en">
@@ -58,7 +58,7 @@ export default function RootLayout({
             <main
               className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full`}
             >
-              <header className="w-full flex flex-row justify-between border-b my-2 py-3 px-3">
+              <header className="w-full flex flex-row justify-between border-b my-1 p-4">
                 <SidebarTrigger />
                 <LoginButton />
               </header>
@@ -68,5 +68,33 @@ export default function RootLayout({
         </SidebarProvider>
       </body>
     </html>
+  );
+}
+
+function LoginButton() {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div className="h-8"></div>;
+  }
+
+  if (session) {
+    return (
+      <>
+        <Button variant="outline" onClick={() => signOut()} size="sm">
+          <FaSignOutAlt />
+          Logout
+        </Button>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Button onClick={() => signIn()} size="sm">
+        <FaSignInAlt />
+        Login
+      </Button>
+    </>
   );
 }
