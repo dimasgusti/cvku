@@ -1,6 +1,5 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "./button";
-import Link from "next/link";
 import { FaSpinner } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 

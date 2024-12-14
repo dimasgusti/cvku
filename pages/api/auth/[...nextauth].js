@@ -4,8 +4,12 @@ import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "../../../lib/mongodb"; 
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export const authOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -21,23 +25,23 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    session: async ({ session, token }) => {
-      if (session?.user) {
-        session.user.id = token.uid;
-      }
-      return session;
-    },
     jwt: async ({ user, token }) => {
       if (user) {
         token.uid = user.id;
       }
       return token;
     },
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token?.uid;
+      }
+      return session;
+    },
   },
   session: {
     strategy: 'jwt',
+    maxAge: 24 * 60 * 60
   },
-  adapter: MongoDBAdapter(clientPromise),
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',

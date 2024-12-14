@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -27,11 +28,26 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { title } from "process";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
-export default function CreateProjectForm() {
+type ProjectFormProps = {
+  onProjectAdded: () => void;
+  onProjectUpdated?: () => void;
+  initialValues?: ProjectFormValues;
+  isEdit?: boolean;
+};
+
+export default function CreateProjectForm({
+  onProjectAdded,
+  onProjectUpdated,
+  initialValues,
+  isEdit = false,
+}: ProjectFormProps) {
   const { data: session, status } = useSession();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
@@ -45,21 +61,38 @@ export default function CreateProjectForm() {
   });
 
   async function onSubmit(values: z.infer<typeof projectSchema>) {
-    console.log(values);
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json();
+      setDialogOpen(false);
+      onProjectAdded();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <FaPlus />
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild className="hover:underline hover:cursor-pointer">
+        <button
+          className="flex flex-row text-sm items-center gap-1"
+          onClick={() => setDialogOpen(true)}
+        >
+          <FaPlus size={10} />
           Add Project
-        </Button>
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[420px] md:max-w-[540px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>New Project</DialogTitle>
         </DialogHeader>
+        <DialogDescription></DialogDescription>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -169,7 +202,7 @@ export default function CreateProjectForm() {
 
             <DialogFooter>
               <Button type="submit">Submit</Button>
-              <Button type="reset" variant="outline">
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
                 Cancel
               </Button>
             </DialogFooter>

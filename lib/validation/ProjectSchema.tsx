@@ -28,9 +28,20 @@ export const projectSchema = z.object({
     .regex(/^[a-zA-Z\s-]+$/, {
       message: "Title can only contain letters, spaces, and hyphens.",
     }),
-  startDate: z.string(),
-  endDate: z.string().optional(),
+  startDate: z.string().refine((date) => !isNaN(new Date(date).getTime()), {
+    message: "Date from required",
+  }),
+  endDate: z.string(),
   company: z.string().optional(),
   description: z.string().max(150).optional(),
   link: linkUrlValidation,
+})
+.refine((data) => {
+  if (data.endDate && new Date(data.endDate) < new Date(data.startDate)) {
+    return false;
+  }
+  return true;
+}, {
+  message: "End date cannot be before start date.",
+  path: ["endDate"],
 });
