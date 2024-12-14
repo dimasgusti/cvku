@@ -6,8 +6,8 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
-import CreateProjectForm from "./forms/Create-Project-Form";
 import { useEffect, useState } from "react";
+import ProjectForm from "./forms/ProjectForm";
 
 interface Project {
   id: string;
@@ -28,7 +28,7 @@ export default function ProfilePage() {
     if (session?.user?.id) {
       try {
         const response = await fetch(
-          `/api/projects?userId=${session?.user?.id}`
+          `/api/projects/${session.user.id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
@@ -44,6 +44,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
+    console.log("Session ID:", session?.user?.id);
     fetchProjects();
   }, [session]);
 
@@ -57,7 +58,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-row justify-center items-center my-4">
-      <div className="w-[360px] min-h-96">
+      <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
         <div className="flex flex-row justify-start items-center gap-4">
           <Image
             src={session.user?.image || "/defaultAvatar.png"}
@@ -77,28 +78,29 @@ export default function ProfilePage() {
           <div className="flex flex-row justify-between w-full">
             <p className="text-sm">Projects</p>
             {userProjects.length > 0 ? (
-              <CreateProjectForm onProjectAdded={fetchProjects} />
+              <ProjectForm onProjectAdded={fetchProjects} />
             ) : (
               <></>
             )}
           </div>
           {userProjects.length > 0 ? (
-            <ul>
+            <ul className="flex flex-col gap-4">
               {userProjects.map((project) => (
                 <div key={project.id}>
                   {!project.endDate == null ? (
-                    <p className="text-sm">
+                    <p>
                       {project.startDate} - {project.endDate}
                     </p>
                   ) : (
-                    <p className="text-sm">{project.startDate} - Present</p>
+                    <p>{project.startDate} - Present</p>
                   )}
                   <p>{project.title}</p>
+                  <p>{project.company}</p>
                 </div>
               ))}
             </ul>
           ) : (
-            <CreateProjectForm onProjectAdded={fetchProjects} />
+            <ProjectForm onProjectAdded={fetchProjects} />
           )}
         </div>
         <Separator className="my-4" />

@@ -28,22 +28,15 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { title } from "process";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
 type ProjectFormProps = {
   onProjectAdded: () => void;
-  onProjectUpdated?: () => void;
-  initialValues?: ProjectFormValues;
-  isEdit?: boolean;
 };
 
-export default function CreateProjectForm({
+export default function ProjectForm({
   onProjectAdded,
-  onProjectUpdated,
-  initialValues,
-  isEdit = false,
 }: ProjectFormProps) {
   const { data: session, status } = useSession();
   const [dialogOpen, setDialogOpen] = useState(false);
