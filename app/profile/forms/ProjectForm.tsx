@@ -36,7 +36,7 @@ import { projectSchema } from "@/lib/validation/ProjectSchema";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
@@ -45,7 +45,7 @@ type ProjectFormProps = {
 };
 
 export default function ProjectForm({ onProjectAdded }: ProjectFormProps) {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const form = useForm<ProjectFormValues>({
