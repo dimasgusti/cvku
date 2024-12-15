@@ -8,7 +8,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { generateMetaTags, defaultMeta } from "./metadata";
 import { Button } from "@/components/ui/button";
-import { FaSpinner } from "react-icons/fa6";
+// import { FaSpinner } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 
 const geistSans = localFont({

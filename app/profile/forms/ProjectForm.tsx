@@ -20,6 +20,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  // SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,9 +44,7 @@ type ProjectFormProps = {
   onProjectAdded: () => void;
 };
 
-export default function ProjectForm({
-  onProjectAdded,
-}: ProjectFormProps) {
+export default function ProjectForm({ onProjectAdded }: ProjectFormProps) {
   const { data: session, status } = useSession();
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -45,8 +52,7 @@ export default function ProjectForm({
     resolver: zodResolver(projectSchema),
     defaultValues: {
       title: "",
-      startDate: "",
-      endDate: "",
+      year: "",
       company: "",
       description: "",
       link: "",
@@ -54,6 +60,7 @@ export default function ProjectForm({
   });
 
   async function onSubmit(values: z.infer<typeof projectSchema>) {
+    console.log(values)
     try {
       const res = await fetch("/api/projects", {
         method: "POST",
@@ -102,36 +109,43 @@ export default function ProjectForm({
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="startDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>From*</FormLabel>
-                    <FormControl>
-                      <Input type="month" className="w-fit" {...field} />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>To</FormLabel>
-                    <FormControl>
-                      <Input type="month" className="w-fit" {...field} />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year*</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="w-fit">
+                        <SelectValue placeholder="Select a year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="ongoing">Ongoing</SelectItem>
+                          {Array.from(
+                            { length: new Date().getFullYear() - 1975 + 1 },
+                            (_, i) => {
+                              const year = new Date().getFullYear() - i; // Generate years in descending order
+                              return (
+                                <SelectItem key={year} value={String(year)}>
+                                  {year}
+                                </SelectItem>
+                              );
+                            }
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="company"

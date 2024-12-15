@@ -12,8 +12,7 @@ import ProjectForm from "./forms/ProjectForm";
 interface Project {
   id: string;
   title: string;
-  startDate?: string;
-  endDate?: string;
+  year: string;
   company?: string;
   description?: string;
   link?: string;
@@ -27,9 +26,7 @@ export default function ProfilePage() {
   const fetchProjects = async () => {
     if (session?.user?.id) {
       try {
-        const response = await fetch(
-          `/api/projects/${session.user.id}`
-        );
+        const response = await fetch(`/api/projects/${session.user.id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
@@ -58,7 +55,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-row justify-center items-center my-4">
-      <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
+      <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 p-4 md:p-0">
         <div className="flex flex-row justify-start items-center gap-4">
           <Image
             src={session.user?.image || "/defaultAvatar.png"}
@@ -69,8 +66,8 @@ export default function ProfilePage() {
             priority
           />
           <div>
-            <p>{session.user?.name}</p>
-            <p>{session.user?.email}</p>
+            <p className="text-sm">{session.user?.name}</p>
+            <p className="text-sm">{session.user?.email}</p>
           </div>
         </div>
         <Separator className="my-4" />
@@ -84,18 +81,25 @@ export default function ProfilePage() {
             )}
           </div>
           {userProjects.length > 0 ? (
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-4 w-full">
               {userProjects.map((project) => (
-                <div key={project.id}>
-                  {!project.endDate == null ? (
-                    <p>
-                      {project.startDate} - {project.endDate}
-                    </p>
-                  ) : (
-                    <p>{project.startDate} - Present</p>
-                  )}
-                  <p>{project.title}</p>
-                  <p>{project.company}</p>
+                <div key={project.id} className="w-full grid grid-cols-4">
+                  <div className="">
+                    {project.year == "ongoing" ? (
+                      <p className="text-sm">Ongoing</p>
+                    ) : (
+                      <p className="text-sm">{project.year}</p>
+                    )}
+                  </div>
+                  <div className="col-start-3 col-end-5">
+                    <p className="font-bold">{project.title}</p>
+                    {project.company ? (
+                      <p className="text-sm">at {project.company}</p>
+                    ) : (
+                      <p className="text-sm"></p>
+                    )}
+                    <p className="text-sm">{project.description}</p>
+                  </div>
                 </div>
               ))}
             </ul>

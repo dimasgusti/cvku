@@ -49,7 +49,7 @@ export default async function handler(req, res){
                 return res.status(401).json({ error: "Unauthorized. Invalid session." });
             }
 
-            const { title, startDate, endDate, company, description, link } = req.body;
+            const { title, year, company, description, link } = req.body;
 
             const project = await prisma.project.findUnique({
                 where: { id: parseInt(id) },
@@ -67,8 +67,7 @@ export default async function handler(req, res){
                 where: { id: parseInt(id) },
                 data: {
                     title,
-                    startDate,
-                    endDate,
+                    year,
                     company,
                     description,
                     link,

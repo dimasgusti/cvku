@@ -1,7 +1,6 @@
 'use server';
 
 import { PrismaClient } from "@prisma/client"
-import { getSession } from "next-auth/react";
 
 const prisma = new PrismaClient();
 
@@ -23,21 +22,18 @@ export default async function handler(req, res){
             return res.status(401).json({ error: "Unauthorized. Invalid session." });
         }
 
+        const { title, year, company, description, link } = req.body;
 
-        const { title, startDate, endDate, company, description, link } = req.body;
-
-        if (!title && !startDate) {
+        if (!title && !year) {
             return res.status(400).json({ error: "Title or date must be inserted" });
         }
 
         try {
-
             const newProject = await prisma.project.create({
                 data: {
                     userId: session.user.id,
                     title, 
-                    startDate,
-                    endDate,
+                    year,
                     company,
                     description,
                     link,
