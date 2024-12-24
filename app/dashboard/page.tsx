@@ -38,11 +38,26 @@ export default function Dashboard() {
     if (session?.user?.id) {
       try {
         const response = await fetch(`/api/records/${session.user.id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch records.");
-        }
-        const data = await response.json();
 
+        if (!response.ok) {
+          let errorMessage = "Failed to fetch records.";
+
+          if (response.status !== 204) {
+            const responseText = await response.text();
+            if (responseText) {
+              try {
+                const errorData = JSON.parse(responseText);
+                errorMessage = errorData.error || errorMessage;
+              } catch (err) {
+                console.error("Error parsing the error response:", err);
+              }
+            }
+          }
+
+          throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
         setProjects(data.filter((record: Record) => record.type === "project"));
         setAwards(data.filter((record: Record) => record.type === "award"));
         setCertification(

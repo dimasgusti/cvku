@@ -48,7 +48,7 @@ export default function AddProject() {
   });
 
   async function onSubmit(values: z.infer<typeof certificationSchema>) {
-    toast.loading("Submitting new project...");
+    toast("Submitting new project...");
     try {
       const response = await fetch("/api/records", {
         method: "POST",
@@ -58,8 +58,22 @@ export default function AddProject() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add the project.");
+        let errorMessage = "Failed to add the award.";
+
+        if (response.status !== 204) {
+          // 204 No Content
+          const responseText = await response.text();
+          if (responseText) {
+            try {
+              const errorData = JSON.parse(responseText);
+              errorMessage = errorData.error || errorMessage;
+            } catch (err) {
+              console.error("Error parsing the error response:", err);
+            }
+          }
+        }
+
+        throw new Error(errorMessage);
       }
       toast.success("New project added successfully!");
       router.push("/dashboard");
