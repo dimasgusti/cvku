@@ -30,7 +30,8 @@ export default async function handler(req, res){
             })
             res.status(200).json(projectsById);
         } catch (error) {
-            res.status(500).json({ error: "Error fetching records." });
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            res.status(500).json({ error: "Error fetching records.", details: error.message });
         }
     }
 }

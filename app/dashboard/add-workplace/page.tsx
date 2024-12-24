@@ -61,7 +61,6 @@ export default function AddProject() {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to add the project.");
       }
-      const data = await response.json();
       toast.success("New project added successfully!");
       router.push("/dashboard");
     } catch (error) {

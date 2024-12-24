@@ -50,6 +50,7 @@ export default async function handler(req, res){
 
             res.status(201).json(newRecords);
         } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             res.status(500).json({ error: "Error updating new records." });
         }
     } else if(req.method === "GET"){
@@ -57,6 +58,7 @@ export default async function handler(req, res){
             const records = await prisma.record.findMany();
             res.status(200).json(records);
         } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             res.status(500).json({ error: "Error fetching records." });
         }
     } else{
