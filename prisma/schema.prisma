@@ -41,16 +41,27 @@ model Session {
 }
 
 model Project {
-  id          String   @id @default(cuid()) @map("_id")
+  id          String  @id @default(cuid()) @map("_id")
   userId      String
+  type        String
   title       String
   year        String
   company     String?
+  url         String?
   description String?
-  link        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
+  User        User?   @relation(fields: [userId], references: [id])
+}
+
+model Award {
+  id          String  @id @default(cuid()) @map("_id")
+  userId      String
+  type        String
+  title       String
+  year        String
+  presentedBy String?
+  url         String?
+  description String?
+  User        User?   @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -69,6 +80,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   projects      Project[]
+  awards        Award[]
 }
 
 model VerificationRequest {

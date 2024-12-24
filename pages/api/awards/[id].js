@@ -23,12 +23,12 @@ export default async function handler(req, res){
                 return res.status(401).json({ error: "Unauthorized. Invalid session." });
             }
 
-            const projectsById = await prisma.project.findMany({
+            const awardsById = await prisma.award.findMany({
                 where: {
                     userId: session.user.id,
                 }
             })
-            res.status(200).json(projectsById);
+            res.status(200).json(awardsById);
         } catch (error) {
             res.status(500).json({ error: "Error fetching records." });
         }

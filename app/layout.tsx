@@ -10,6 +10,7 @@ import { generateMetaTags, defaultMeta } from "./metadata";
 import { Button } from "@/components/ui/button";
 // import { FaSpinner } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { Toaster } from "sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -63,6 +64,7 @@ export default function RootLayout({
                 <LoginButton />
               </header>
               {children}
+              <Toaster />
             </main>
           </SessionProvider>
         </SidebarProvider>

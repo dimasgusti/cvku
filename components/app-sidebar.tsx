@@ -23,8 +23,8 @@ const items = [
     icon: Globe,
   },
   {
-    title: "Profile",
-    url: "/profile",
+    title: "Dashboard",
+    url: "/dashboard",
     icon: User,
   },
   {

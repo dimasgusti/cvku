@@ -21,15 +21,14 @@ const linkUrlValidation = z
   );
 
 export const projectSchema = z.object({
+  type: z.string().default("project"),
   title: z
     .string()
-    .min(3, { message: "Title must be at least 3 characters." })
-    .max(32, { message: "Title must be at most 32 characters long." })
     .regex(/^[a-zA-Z\s-]+$/, {
       message: "Title can only contain letters, spaces, and hyphens.",
     }),
-  year: z.string().nonempty("Year is required"),
+  year: z.string().nonempty("Year must be filled."),
   company: z.string().optional(),
+  url: linkUrlValidation,
   description: z.string().max(150).optional(),
-  link: linkUrlValidation,
-})
+});
