@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res){
     if(req.method === "POST"){
-        const response = await fetch("http://localhost:3000/api/auth/session", {
+        const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/session`, {
             headers: {
-                cookie: req.headers.cookie || "",
+              cookie: req.headers.cookie || "",
             },
-        });
+          });
 
         if (!response.ok) {
             return res.status(401).json({ error: "Unauthorized. Unable to fetch session." });
@@ -27,7 +27,7 @@ export default async function handler(req, res){
         if(!type || !title){
             return res.status(400).json({ error: "Type must be inserted." })
         }
-
+ 
         try {
             const newRecords = await prisma.record.create({
                 data: {

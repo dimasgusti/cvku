@@ -61,7 +61,6 @@ export default function AddProject() {
         let errorMessage = "Failed to add the award.";
 
         if (response.status !== 204) {
-          // 204 No Content
           const responseText = await response.text();
           if (responseText) {
             try {
