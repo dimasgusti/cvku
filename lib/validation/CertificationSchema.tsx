@@ -20,15 +20,16 @@ const linkUrlValidation = z
     }
   );
 
-export const awardSchema = z.object({
-  type: z.string().default("award"),
+export const certificationSchema = z.object({
+  type: z.string().default("project"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {
       message: "Title can only contain letters, spaces, and hyphens.",
     }),
-  year: z.string().nonempty("Year must be filled."),
-  presentedBy: z.string().nonempty("Presented by must be filled."),
+  issued: z.string().nonempty("Issued must be filled."),
+  expires: z.string().nonempty("Expires must be filled."),
+  organization: z.string().nonempty("Organization must be filled."),
   url: linkUrlValidation,
   description: z.string().max(150).optional(),
 });

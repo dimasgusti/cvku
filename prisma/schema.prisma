@@ -64,6 +64,25 @@ model Award {
   User        User?   @relation(fields: [userId], references: [id])
 }
 
+model Record {
+  id           String  @id @default(cuid()) @map("_id")
+  userId       String?
+  type         String
+  title        String?
+  year         String?
+  issued       String?
+  expires      String?
+  from         String?
+  to           String?
+  company      String?
+  organization String?
+  location     String?
+  presentedBy  String?
+  url          String?
+  description  String?
+  User         User?   @relation(fields: [userId], references: [id])
+}
+
 model User {
   id            String    @id @default(cuid()) @map("_id")
   name          String?
@@ -81,6 +100,7 @@ model User {
   sessions      Session[]
   projects      Project[]
   awards        Award[]
+  records       Record[]
 }
 
 model VerificationRequest {

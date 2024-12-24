@@ -1,12 +1,10 @@
 'use client';
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface Record {
   id: string;
@@ -26,50 +24,51 @@ interface Record {
   description: string;
 }
 
-export default function Dashboard() {
-  const { data: session, status } = useSession();
+interface Props {
+  params: { id: string };
+}
+
+export default function UserProfilePage({ params }: Props) {
   const [projects, setProjects] = useState<Record[]>([]);
   const [awards, setAwards] = useState<Record[]>([]);
   const [certifications, setCertification] = useState<Record[]>([]);
   const [workplaces, setWorkplaces] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<{ name: string; image: string | null }>({
+    name: "Guest",
+    image: null,
+  });
 
   const fetchRecords = async () => {
-    if (session?.user?.id) {
-      try {
-        const response = await fetch(`/api/records/${session.user.id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch records.");
-        }
-        const data = await response.json();
-
-        const projects = data.filter((record: Record) => record.type === "project");
-        const awards = data.filter((record: Record) => record.type === "award");
-        const certifications = data.filter((record: Record) => record.type === "certification");
-        const workplaces = data.filter((record: Record) => record.type === "workplace");
-
-        setProjects(projects);
-        setAwards(awards);
-        setCertification(certifications);
-        setWorkplaces(workplaces);
-      } catch (error) {
-        console.error("Error fetching records:", error);
-      } finally {
-        setLoading(false);
+    try {
+      const response = await fetch(`/api/records/${params.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch records.");
       }
+      const data = await response.json();
+
+      const projects = data.filter((record: Record) => record.type === "project");
+      const awards = data.filter((record: Record) => record.type === "award");
+      const certifications = data.filter((record: Record) => record.type === "certification");
+      const workplaces = data.filter((record: Record) => record.type === "workplace");
+
+      setProjects(projects);
+      setAwards(awards);
+      setCertification(certifications);
+      setWorkplaces(workplaces);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchRecords();
-  }, [session]);
+  }, [params.id]);
 
-  if (status === "loading" || loading) {
+  if (loading) {
     return <h1>Loading...</h1>;
-  }
-
-  if (!session) {
-    redirect("/auth/signin");
   }
 
   return (
@@ -77,16 +76,16 @@ export default function Dashboard() {
       <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
         <div className="flex flex-row justify-start items-center gap-4">
           <Image
-            src={session.user?.image || "/defaultAvatar.png"}
+            src={user.image || "/defaultAvatar.png"}
             width={100}
             height={100}
-            alt={session.user?.name || "Guest Avatar"}
+            alt={user.name || "Guest Avatar"}
             className="rounded-full"
             priority
           />
           <div>
-            <p>{session.user?.name}</p>
-            <p>{session.user?.email}</p>
+            <p>{user.name}</p>
+            <p>{params.id}</p>
           </div>
         </div>
 
@@ -95,9 +94,12 @@ export default function Dashboard() {
         {/* Projects Section */}
         <div className="flex flex-row justify-between items-center">
           <p>Projects</p>
+          {/* Only show Add Project button if logged in */}
+          {/* {session && ( */}
           <Link href="/dashboard/add-project">
             <Button variant="outline">Add Project</Button>
           </Link>
+          {/* )} */}
         </div>
         {projects.length > 0 ? (
           projects.map((project) => (
@@ -150,9 +152,12 @@ export default function Dashboard() {
         {/* Awards Section */}
         <div className="flex flex-row justify-between items-center">
           <p>Awards</p>
+          {/* Add Award button if logged in */}
+          {/* {session && ( */}
           <Link href="/dashboard/add-award">
             <Button variant="outline">Add Award</Button>
           </Link>
+          {/* )} */}
         </div>
         {awards.length > 0 ? (
           awards.map((award) => (
@@ -202,7 +207,7 @@ export default function Dashboard() {
 
         <Separator className="my-4" />
 
-        {/* Awards Section */}
+        {/* Certifications Section */}
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
@@ -252,12 +257,12 @@ export default function Dashboard() {
             </div>
           ))
         ) : (
-          <p>No awards found.</p>
+          <p>No certifications found.</p>
         )}
 
         <Separator className="my-4" />
 
-        {/* Awards Section */}
+        {/* Workplaces Section */}
         <div className="flex flex-row justify-between items-center">
           <p>Workplaces</p>
           <Link href="/dashboard/add-workplace">
@@ -307,7 +312,7 @@ export default function Dashboard() {
             </div>
           ))
         ) : (
-          <p>No awards found.</p>
+          <p>No workplaces found.</p>
         )}
       </div>
     </div>

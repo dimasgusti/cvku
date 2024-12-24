@@ -26,27 +26,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import { redirect, useRouter } from "next/navigation";
-import { awardSchema } from "@/lib/validation/AwardSchema";
+import { workplaceSchema } from "@/lib/validation/WorkplaceSchema";
 
-type ProjectFormValues = z.infer<typeof awardSchema>;
+type ProjectFormValues = z.infer<typeof workplaceSchema>;
 
 export default function AddProject() {
   const router = useRouter();
 
   const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(awardSchema),
+    resolver: zodResolver(workplaceSchema),
     defaultValues: {
-      type: "award",
+      type: "workplace",
       title: "",
-      year: "",
-      presentedBy: "",
+      from: "",
+      to: "",
+      company: "",
+      location: "",
       url: "",
       description: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof awardSchema>) {
-    toast.loading("Submitting new award...");
+  async function onSubmit(values: z.infer<typeof workplaceSchema>) {
+    toast.loading("Submitting new project...");
     try {
       const response = await fetch("/api/records", {
         method: "POST",
@@ -57,10 +59,10 @@ export default function AddProject() {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add the award.");
+        throw new Error(errorData.error || "Failed to add the project.");
       }
       const data = await response.json();
-      toast.success("New award added successfully!");
+      toast.success("New project added successfully!");
       router.push("/dashboard");
     } catch (error) {
       toast.error(
@@ -75,27 +77,43 @@ export default function AddProject() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title*</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Fastest Keyboard Typer" {...field} />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name*</FormLabel>
+                      <FormControl>
+                        <Input placeholder="iOS Swift UI" {...field} />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>URL</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div className="grid grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="year"
+                  name="from"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Year*</FormLabel>
+                      <FormLabel>From*</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) => field.onChange(value)}
@@ -128,12 +146,37 @@ export default function AddProject() {
                 />
                 <FormField
                   control={form.control}
-                  name="url"
+                  name="to"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>URL</FormLabel>
+                      <FormLabel>Expires*</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Select
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a year" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="ongoing">
+                                Ongoing
+                              </SelectItem>
+                              {Array.from(
+                                { length: new Date().getFullYear() - 1975 + 1 },
+                                (_, i) => {
+                                  const year = new Date().getFullYear() - i;
+                                  return (
+                                    <SelectItem key={year} value={String(year)}>
+                                      {year}
+                                    </SelectItem>
+                                  );
+                                }
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -143,12 +186,26 @@ export default function AddProject() {
               </div>
               <FormField
                 control={form.control}
-                name="presentedBy"
+                name="company"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Presented by*</FormLabel>
+                    <FormLabel>Organization*</FormLabel>
                     <FormControl>
-                      <Input placeholder="MyMom" {...field} />
+                      <Input placeholder="Coursera" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Indonesia, Bogor" {...field} />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />

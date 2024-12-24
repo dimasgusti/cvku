@@ -80,7 +80,7 @@ export default function AddProject() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Title*</FormLabel>
                     <FormControl>
                       <Input placeholder="Fastest Keyboard Typer" {...field} />
                     </FormControl>

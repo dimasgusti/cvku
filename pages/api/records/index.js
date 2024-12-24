@@ -4,8 +4,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default async function handler(req, res) {
-    if (req.method === "POST") {
+export default async function handler(req, res){
+    if(req.method === "POST"){
         const response = await fetch("http://localhost:3000/api/auth/session", {
             headers: {
                 cookie: req.headers.cookie || "",
@@ -22,60 +22,44 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: "Unauthorized. Invalid session." });
         }
 
-        const { type, title, year, company, url, description, presentedBy } = req.body;
+        const { type, title, year, issued, expires, from, to, company, organization, location, presentedBy, url, description } = req.body;
 
-        if (!type || !title || !year) {
-            return res.status(400).json({ error: "Type, title, and year must be provided." });
+        if(!type || !title){
+            return res.status(400).json({ error: "Type must be inserted." })
         }
 
         try {
-            let newRecord;
+            const newRecords = await prisma.record.create({
+                data: {
+                    userId: session.user.id,
+                    type,
+                    title,
+                    year, 
+                    issued,
+                    expires,
+                    from,
+                    to,
+                    company,
+                    organization, 
+                    location,
+                    presentedBy,
+                    url,
+                    description,
+                }
+            });
 
-            if (type === "project") {
-                newRecord = await prisma.project.create({
-                    data: {
-                        userId: session.user.id,
-                        type,
-                        title,
-                        year,
-                        company,
-                        url,
-                        description,
-                    },
-                });
-            }
-            else if (type === "award") {
-                newRecord = await prisma.award.create({
-                    data: {
-                        userId: session.user.id,
-                        type,
-                        title,
-                        year,
-                        presentedBy,
-                        url,
-                        description,
-                    },
-                });
-            } else {
-                return res.status(400).json({ error: "Invalid type. Must be 'project' or 'award'." });
-            }
-
-            res.status(201).json(newRecord);
+            res.status(201).json(newRecords);
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: "Error creating new record." });
+            res.status(500).json({ error: "Error updating new records." });
         }
-    } else if (req.method === "GET") {
+    } else if(req.method === "GET"){
         try {
-            const projects = await prisma.project.findMany();
-            const awards = await prisma.award.findMany();
-
-            res.status(200).json({ projects, awards });
+            const records = await prisma.record.findMany();
+            res.status(200).json(records);
         } catch (error) {
-            console.error(error);
             res.status(500).json({ error: "Error fetching records." });
         }
-    } else {
-        res.status(405).json({ error: "Method not allowed." });
+    } else{
+        res.status(405).json({ error: "Sorry, method not allowed." });
     }
 }

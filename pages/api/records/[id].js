@@ -23,7 +23,7 @@ export default async function handler(req, res){
                 return res.status(401).json({ error: "Unauthorized. Invalid session." });
             }
 
-            const projectsById = await prisma.project.findMany({
+            const projectsById = await prisma.record.findMany({
                 where: {
                     userId: session.user.id,
                 }
