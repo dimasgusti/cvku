@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface Record {
   id: string;
@@ -34,7 +34,7 @@ export default function Dashboard() {
   const [workplaces, setWorkplaces] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchRecords = async () => {
+  const fetchRecords = useCallback(async () => {
     if (session?.user?.id) {
       try {
         const response = await fetch(`/api/records/${session.user.id}`);
@@ -43,32 +43,25 @@ export default function Dashboard() {
         }
         const data = await response.json();
 
-        const projects = data.filter(
-          (record: Record) => record.type === "project"
+        setProjects(data.filter((record: Record) => record.type === "project"));
+        setAwards(data.filter((record: Record) => record.type === "award"));
+        setCertification(
+          data.filter((record: Record) => record.type === "certification")
         );
-        const awards = data.filter((record: Record) => record.type === "award");
-        const certifications = data.filter(
-          (record: Record) => record.type === "certification"
+        setWorkplaces(
+          data.filter((record: Record) => record.type === "workplace")
         );
-        const workplaces = data.filter(
-          (record: Record) => record.type === "workplace"
-        );
-
-        setProjects(projects);
-        setAwards(awards);
-        setCertification(certifications);
-        setWorkplaces(workplaces);
       } catch (error) {
         console.error("Error fetching records:", error);
       } finally {
         setLoading(false);
       }
     }
-  };
+  }, [session?.user?.id]);
 
   useEffect(() => {
     fetchRecords();
-  }, [session]);
+  }, [fetchRecords]);
 
   if (status === "loading" || loading) {
     return <h1>Loading...</h1>;
