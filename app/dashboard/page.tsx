@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -43,10 +43,16 @@ export default function Dashboard() {
         }
         const data = await response.json();
 
-        const projects = data.filter((record: Record) => record.type === "project");
+        const projects = data.filter(
+          (record: Record) => record.type === "project"
+        );
         const awards = data.filter((record: Record) => record.type === "award");
-        const certifications = data.filter((record: Record) => record.type === "certification");
-        const workplaces = data.filter((record: Record) => record.type === "workplace");
+        const certifications = data.filter(
+          (record: Record) => record.type === "certification"
+        );
+        const workplaces = data.filter(
+          (record: Record) => record.type === "workplace"
+        );
 
         setProjects(projects);
         setAwards(awards);
@@ -103,7 +109,11 @@ export default function Dashboard() {
           projects.map((project) => (
             <div key={project.id} className="grid grid-cols-4 mt-2">
               <div>
-                {project.year === 'ongoing' ? (<p>In Development</p>) : (<p>{project.year}</p>)}
+                {project.year === "ongoing" ? (
+                  <p>In Development</p>
+                ) : (
+                  <p>{project.year}</p>
+                )}
               </div>
               <div className="col-start-2 col-end-5">
                 <p>
@@ -158,7 +168,11 @@ export default function Dashboard() {
           awards.map((award) => (
             <div key={award.id} className="grid grid-cols-4 mt-2">
               <div>
-                {award.year === 'ongoing' ? (<p>In Development</p>) : (<p>{award.year}</p>)}
+                {award.year === "ongoing" ? (
+                  <p>In Development</p>
+                ) : (
+                  <p>{award.year}</p>
+                )}
               </div>
               <div className="col-start-2 col-end-5">
                 <p>
@@ -213,7 +227,11 @@ export default function Dashboard() {
           certifications.map((certification) => (
             <div key={certification.id} className="grid grid-cols-4 mt-2">
               <div>
-                {certification.issued === 'ongoing' ? (<p>In Development</p>) : (<p>{certification.issued}</p>)}
+                {certification.issued === "ongoing" ? (
+                  <p>In Development</p>
+                ) : (
+                  <p>{certification.issued}</p>
+                )}
               </div>
               <div className="col-start-2 col-end-5">
                 <p>
@@ -268,7 +286,11 @@ export default function Dashboard() {
           workplaces.map((workplace) => (
             <div key={workplace.id} className="grid grid-cols-4 mt-2">
               <div>
-                {workplace.from === 'ongoing' ? (<p>Present</p>) : (<p>{workplace.from}</p>)}
+                {workplace.from === "ongoing" ? (
+                  <p>Present</p>
+                ) : (
+                  <p>{workplace.from}</p>
+                )}
               </div>
               <div className="col-start-2 col-end-5">
                 <p>

@@ -1,7 +1,5 @@
-// app/page.tsx
-
 import Head from "next/head";
-import { generateMetaTags } from "./metadata"; // Import your SEO functions
+import { generateMetaTags } from "./metadata";
 
 export default function HomePage() {
   const meta = generateMetaTags({

@@ -26,7 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { projectSchema } from "@/lib/validation/ProjectSchema";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
