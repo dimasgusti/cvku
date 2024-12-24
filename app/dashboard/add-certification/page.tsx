@@ -32,6 +32,7 @@ type ProjectFormValues = z.infer<typeof certificationSchema>;
 
 export default function AddProject() {
   const router = useRouter();
+  const [charCount, setCharCount] = useState(0);
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(certificationSchema),
@@ -199,34 +200,30 @@ export default function AddProject() {
               <FormField
                 control={form.control}
                 name="description"
-                render={({ field }) => {
-                  const [charCount, setCharCount] = useState(0);
-
-                  const handleChange = (e: any) => {
-                    const value = e.target.value;
-                    setCharCount(value.length);
-                    field.onChange(e);
-                  };
-
-                  return (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Describe your project in all its glory!"
-                          maxLength={150}
-                          {...field}
-                          value={field.value}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        {charCount}/150 characters
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your project in all its glory!"
+                        maxLength={150}
+                        {...field}
+                        value={field.value}
+                        onChange={(
+                          e: React.ChangeEvent<HTMLTextAreaElement>
+                        ) => {
+                          const value = e.target.value;
+                          setCharCount(value.length);
+                          field.onChange(value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {charCount}/150 characters
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <Button type="submit">Submit</Button>
             </form>
