@@ -25,14 +25,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { awardSchema } from "@/lib/validation/AwardSchema";
+import { useSession } from "next-auth/react";
 
 type ProjectFormValues = z.infer<typeof awardSchema>;
 
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0); // Pindahkan useState ke tingkat atas
+  const { data: session } = useSession();
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(awardSchema),
@@ -82,6 +84,10 @@ export default function AddProject() {
         error instanceof Error ? error.message : "An unexpected error occurred."
       );
     }
+  }
+
+  if (!session) {
+    redirect("/auth/signin");
   }
 
   return (

@@ -37,7 +37,7 @@ export default function Dashboard() {
   const fetchRecords = useCallback(async () => {
     if (session?.user?.id) {
       try {
-        const response = await fetch(`/api/records/${session.user.id}`);
+        const response = await fetch(`/api/records/getRecordById?userId=${session.user.id}`);
 
         if (!response.ok) {
           let errorMessage = "Failed to fetch records.";

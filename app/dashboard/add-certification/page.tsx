@@ -25,14 +25,16 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { certificationSchema } from "@/lib/validation/CertificationSchema";
+import { useSession } from "next-auth/react";
 
 type ProjectFormValues = z.infer<typeof certificationSchema>;
 
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
+  const { data: session } = useSession();
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(certificationSchema),
@@ -81,6 +83,10 @@ export default function AddProject() {
         error instanceof Error ? error.message : "An unexpected error occured."
       );
     }
+  }
+
+  if (!session) {
+    redirect("/auth/signin");
   }
 
   return (

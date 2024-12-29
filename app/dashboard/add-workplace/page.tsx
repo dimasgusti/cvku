@@ -25,14 +25,16 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { workplaceSchema } from "@/lib/validation/WorkplaceSchema";
+import { useSession } from "next-auth/react";
 
 type ProjectFormValues = z.infer<typeof workplaceSchema>;
 
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
+  const { data: session } = useSession();
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(workplaceSchema),
@@ -82,6 +84,10 @@ export default function AddProject() {
         error instanceof Error ? error.message : "An unexpected error occured."
       );
     }
+  }
+
+  if (!session) {
+    redirect("/auth/signin");
   }
 
   return (
@@ -173,9 +179,7 @@ export default function AddProject() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="ongoing">
-                                Ongoing
-                              </SelectItem>
+                              <SelectItem value="ongoing">Ongoing</SelectItem>
                               {Array.from(
                                 { length: new Date().getFullYear() - 1975 + 1 },
                                 (_, i) => {
@@ -226,31 +230,33 @@ export default function AddProject() {
                 )}
               />
               <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe your project in all its glory!"
-                      maxLength={150}
-                      {...field}
-                      value={field.value}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                        const value = e.target.value;
-                        setCharCount(value.length);
-                        field.onChange(value);
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    {charCount}/150 characters
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your project in all its glory!"
+                        maxLength={150}
+                        {...field}
+                        value={field.value}
+                        onChange={(
+                          e: React.ChangeEvent<HTMLTextAreaElement>
+                        ) => {
+                          const value = e.target.value;
+                          setCharCount(value.length);
+                          field.onChange(value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {charCount}/150 characters
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit">Submit</Button>
             </form>
           </Form>
