@@ -2,7 +2,6 @@
 
 import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
-import localFont from "next/font/local";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -10,18 +9,6 @@ import { generateMetaTags, defaultMeta } from "./metadata";
 import { Button } from "@/components/ui/button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export default function RootLayout({
   children,
