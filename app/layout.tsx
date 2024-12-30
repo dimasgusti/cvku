@@ -57,7 +57,7 @@ export default function RootLayout({
           <AppSidebar />
           <SessionProvider session={session}>
             <main
-              className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen w-full`}
+              className={`font-mono text-sm antialiased flex flex-col min-h-screen w-full`}
             >
               <header className="w-full flex flex-row justify-between border-b my-1 p-4">
                 <SidebarTrigger />

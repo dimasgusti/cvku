@@ -37,7 +37,9 @@ export default function Dashboard() {
   const fetchRecords = useCallback(async () => {
     if (session?.user?.id) {
       try {
-        const response = await fetch(`/api/records/getRecordById?userId=${session.user.id}`);
+        const response = await fetch(
+          `/api/records/getRecordById?userId=${session.user.id}`
+        );
 
         if (!response.ok) {
           let errorMessage = "Failed to fetch records.";
@@ -98,9 +100,16 @@ export default function Dashboard() {
             className="rounded-full"
             priority
           />
-          <div>
-            <p>{session.user?.name}</p>
-            <p>{session.user?.email}</p>
+          <div className="flex flex-row justify-between w-full">
+            <div>
+              <p>{session.user?.name}</p>
+              <p>{session.user?.email}</p>
+            </div>
+            <div>
+              <Link href="/dashboard/profile-settings">
+                <Button variant="outline" size='sm'>Profile Settings</Button>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -110,7 +119,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Projects</p>
           <Link href="/dashboard/add-project">
-            <Button variant="outline">Add Project</Button>
+            <Button variant="outline" size='sm'>Add Project</Button>
           </Link>
         </div>
         {projects.length > 0 ? (
@@ -169,7 +178,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Awards</p>
           <Link href="/dashboard/add-award">
-            <Button variant="outline">Add Award</Button>
+            <Button variant="outline" size='sm'>Add Award</Button>
           </Link>
         </div>
         {awards.length > 0 ? (
@@ -228,7 +237,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
-            <Button variant="outline">Add Certification</Button>
+            <Button variant="outline" size='sm'>Add Certification</Button>
           </Link>
         </div>
         {certifications.length > 0 ? (
@@ -287,7 +296,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Workplaces</p>
           <Link href="/dashboard/add-workplace">
-            <Button variant="outline">Add Workplace</Button>
+            <Button variant="outline" size='sm'>Add Workplace</Button>
           </Link>
         </div>
         {workplaces.length > 0 ? (
