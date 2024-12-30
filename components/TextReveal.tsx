@@ -4,9 +4,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import LoginButton from "./ui/login-btn";
-import { FaSignInAlt } from "react-icons/fa";
-import { signIn } from "next-auth/react";
 
 const TextReveal = () => {
   const shareItems = [
@@ -19,7 +16,6 @@ const TextReveal = () => {
     "Gallery",
   ];
   return (
-    // <div className="overflow-hidden w-72 lg:w-full my-2 lg:my-4 lg:text-center">
     <div>
       {shareItems.map((text, index) => (
         <motion.div
