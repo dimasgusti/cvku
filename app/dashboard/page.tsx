@@ -106,7 +106,7 @@ export default function Dashboard() {
               <p>{session.user?.email}</p>
             </div>
             <div>
-              <Link href="/dashboard/profile-settings">
+              <Link href="/dashboard/profile">
                 <Button variant="outline" size='sm'>Profile Settings</Button>
               </Link>
             </div>
