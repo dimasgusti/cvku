@@ -6,9 +6,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterCountries } from "./helpers";
-// @ts-expect-error
+// @ts-ignore
 import countryRegionData from "country-region-data/dist/data-umd";
 import { useEffect, useState } from "react";
+
+type CountryRegionData = {
+  countryName: string;
+  countryShortCode: string;
+  regions: { name: string; shortCode: string }[];
+};
+
+const countries: CountryRegionData[] = countryRegionData;
 
 export interface Region {
   name: string;

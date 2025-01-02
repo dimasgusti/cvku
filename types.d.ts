@@ -13,3 +13,13 @@ declare module 'next-auth/jwt/types' {
     uid: string;
   }
 }
+
+declare module 'country-region-data/dist/data-umd' {
+  const countryRegionData: {
+    countryName: string;
+    countryShortCode: string;
+    regions: { name: string; shortCode: string }[];
+  }[];
+
+  export default countryRegionData;
+}
