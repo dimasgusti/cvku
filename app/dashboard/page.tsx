@@ -16,7 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FaGear, FaPlus, FaTrash } from "react-icons/fa6";
+import {
+  FaDeleteLeft,
+  FaGear,
+  FaPlus,
+} from "react-icons/fa6";
 
 interface Profile {
   username: string;
@@ -44,6 +48,8 @@ interface Record {
   presentedBy: string;
   description: string;
 }
+
+// TO-DO: Add education, skill, publication, volunteer, conferences, references
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -220,13 +226,109 @@ export default function Dashboard() {
 
         <Separator className="my-4" />
 
+        {/* Experience Section */}
+        <div className="flex flex-row justify-between items-center">
+          <p>Experience</p>
+          <Link href="/dashboard/add-workplace">
+            <FaPlus size={14} />
+          </Link>
+        </div>
+        {workplaces.length > 0 ? (
+          workplaces.map((workplace) => (
+            <div key={workplace.id} className="grid grid-cols-4 mt-2">
+              <div>
+                <p>
+                  {workplace.from === "ongoing" ? (
+                    <span>Ongoing</span>
+                  ) : (
+                    <span>{workplace.from}</span>
+                  )}
+                  {workplace.to && (
+                    <span>
+                      {" "}
+                      - {workplace.to === "ongoing" ? "Ongoing" : workplace.to}
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className="col-start-2 col-end-5">
+                <div className="flex flex-row justify-between">
+                  <p>
+                    {workplace.title}{" "}
+                    <span>
+                      {workplace.url && workplace.company ? (
+                        <>
+                          at{" "}
+                          <a
+                            href={workplace.url}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {workplace.company}
+                          </a>
+                        </>
+                      ) : workplace.company ? (
+                        <span>at {workplace.company}</span>
+                      ) : workplace.url ? (
+                        <a
+                          href={workplace.url}
+                          target="_blank"
+                          className="underline"
+                        >
+                          Visit Link
+                        </a>
+                      ) : null}
+
+                      {workplace.location && (
+                        <>
+                          {" "}
+                          - <span>{workplace.location}</span>
+                        </>
+                      )}
+                    </span>
+                  </p>
+
+                  <Dialog>
+                    <DialogTrigger>
+                      <FaDeleteLeft size={14} color="red" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your workplace from our records.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleRemove(workplace.id, "workplace")
+                          }
+                          className="bg-red-500 text-white"
+                        >
+                          Remove
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                <p>{workplace.description}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No experience found.</p>
+        )}
+
+        <Separator className="my-4" />
+
         {/* Projects Section */}
         <div className="flex flex-row justify-between items-center">
-          <p>Projects</p>
+          <p>Portfolio</p>
           <Link href="/dashboard/add-project">
-            <Button variant="outline">
-              <FaPlus />
-            </Button>
+            <FaPlus size={14} />
           </Link>
         </div>
         {projects.length > 0 ? (
@@ -240,63 +342,53 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="col-start-2 col-end-5">
-                <p>
-                  {project.title}{" "}
-                  <span>
-                    {project.url && project.company ? (
-                      <>
-                        at{" "}
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          className="underline"
+                <div className="flex flex-row justify-between">
+                  <p className="flex flex-row items-center gap-2">
+                    {project.title}{" "}
+                    <span>
+                      {project.company && project.url ? (
+                        <>
+                          at{" "}
+                          <a href={project.url} className="underline">
+                            {project.company}
+                          </a>
+                        </>
+                      ) : project.company ? (
+                        <>at {project.company}</>
+                      ) : project.url ? (
+                        <>
+                          <a href={project.url} className="underline">
+                            Visit Link
+                          </a>
+                        </>
+                      ) : null}
+                    </span>
+                  </p>
+                  <Dialog>
+                    <DialogTrigger>
+                      <FaDeleteLeft size={14} color="red" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your project from our servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleRemove(project.id, "project")}
+                          className="bg-red-500 text-white"
                         >
-                          {project.company}
-                        </a>
-                      </>
-                    ) : project.company ? (
-                      <span>at {project.company}</span>
-                    ) : project.url ? (
-                      <span>
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          className="underline"
-                        >
-                          Visit Link
-                        </a>
-                      </span>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                </p>
+                          Remove
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <p>{project.description}</p>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button color="white">
-                      <FaTrash />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Are you sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your project from our servers.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() => handleRemove(project.id, "project")}
-                        className="bg-red-500 text-white"
-                      >
-                        Remove
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
               </div>
             </div>
           ))
@@ -308,11 +400,9 @@ export default function Dashboard() {
 
         {/* Awards Section */}
         <div className="flex flex-row justify-between items-center">
-          <p>Awards</p>
+          <p>Achievements</p>
           <Link href="/dashboard/add-award">
-            <Button variant="outline">
-              <FaPlus />
-            </Button>
+            <FaPlus size={14} />
           </Link>
         </div>
         {awards.length > 0 ? (
@@ -326,24 +416,24 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="col-start-2 col-end-5">
-                <p>
-                  {award.title}{" "}
-                  <span>
-                    {award.url && award.presentedBy ? (
-                      <>
-                        awarded by{" "}
-                        <a
-                          href={award.url}
-                          target="_blank"
-                          className="underline"
-                        >
-                          {award.presentedBy}
-                        </a>
-                      </>
-                    ) : award.presentedBy ? (
-                      <span>awarded by {award.presentedBy}</span>
-                    ) : award.url ? (
-                      <span>
+                <div className="flex flex-row justify-between">
+                  <p>
+                    {award.title}{" "}
+                    <span>
+                      {award.url && award.presentedBy ? (
+                        <>
+                          awarded by{" "}
+                          <a
+                            href={award.url}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {award.presentedBy}
+                          </a>
+                        </>
+                      ) : award.presentedBy ? (
+                        <span>awarded by {award.presentedBy}</span>
+                      ) : award.url ? (
                         <a
                           href={award.url}
                           target="_blank"
@@ -351,12 +441,33 @@ export default function Dashboard() {
                         >
                           Visit Link
                         </a>
-                      </span>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                </p>
+                      ) : null}
+                    </span>
+                  </p>
+                  <Dialog>
+                    <DialogTrigger>
+                      <FaDeleteLeft size={14} color="red" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your award from our servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleRemove(award.id, "award")}
+                          className="bg-red-500 text-white"
+                        >
+                          Remove
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <p>{award.description}</p>
               </div>
             </div>
@@ -371,9 +482,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
-            <Button variant="outline">
-              <FaPlus />
-            </Button>
+            <FaPlus size={14} />
           </Link>
         </div>
         {certifications.length > 0 ? (
@@ -398,24 +507,24 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="col-start-2 col-end-5">
-                <p>
-                  {certification.title}{" "}
-                  <span>
-                    {certification.url && certification.organization ? (
-                      <>
-                        certified by{" "}
-                        <a
-                          href={certification.url}
-                          target="_blank"
-                          className="underline"
-                        >
-                          {certification.organization}
-                        </a>
-                      </>
-                    ) : certification.organization ? (
-                      <span>certified by {certification.organization}</span>
-                    ) : certification.url ? (
-                      <span>
+                <div className="flex flex-row justify-between">
+                  <p>
+                    {certification.title}{" "}
+                    <span>
+                      {certification.url && certification.organization ? (
+                        <>
+                          certified by{" "}
+                          <a
+                            href={certification.url}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {certification.organization}
+                          </a>
+                        </>
+                      ) : certification.organization ? (
+                        <span>certified by {certification.organization}</span>
+                      ) : certification.url ? (
                         <a
                           href={certification.url}
                           target="_blank"
@@ -423,40 +532,36 @@ export default function Dashboard() {
                         >
                           Visit Link
                         </a>
-                      </span>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                </p>
+                      ) : null}
+                    </span>
+                  </p>
+                  <Dialog>
+                    <DialogTrigger>
+                      <FaDeleteLeft size={14} color="red" />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your project from our servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleRemove(certification.id, "certification")
+                          }
+                          className="bg-red-500 text-white"
+                        >
+                          Remove
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <p>{certification.description}</p>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button color="white">
-                      <FaTrash />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Are you sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your certification from our servers.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() =>
-                          handleRemove(certification.id, "certification")
-                        }
-                        className="bg-red-500 text-white"
-                      >
-                        Remove
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
               </div>
             </div>
           ))
@@ -465,104 +570,6 @@ export default function Dashboard() {
         )}
 
         <Separator className="my-4" />
-
-        {/* Awards Section */}
-        <div className="flex flex-row justify-between items-center">
-          <p>Workplaces</p>
-          <Link href="/dashboard/add-workplace">
-            <Button variant="outline">
-              <FaPlus />
-            </Button>
-          </Link>
-        </div>
-        {workplaces.length > 0 ? (
-          workplaces.map((workplace) => (
-            <div key={workplace.id} className="grid grid-cols-4 mt-2">
-              <div>
-                <p>
-                  {workplace.from === "ongoing" ? (
-                    <span>Ongoing</span>
-                  ) : (
-                    <span>{workplace.from}</span>
-                  )}
-                  {workplace.to && (
-                    <span>
-                      {" "}
-                      - {workplace.to === "ongoing" ? "Ongoing" : workplace.to}
-                    </span>
-                  )}
-                </p>
-              </div>
-              <div className="col-start-2 col-end-5">
-                <p>
-                  {workplace.title}{" "}
-                  <span>
-                    {workplace.url && workplace.company ? (
-                      <>
-                        at{" "}
-                        <a
-                          href={workplace.url}
-                          target="_blank"
-                          className="underline"
-                        >
-                          {workplace.company}
-                        </a>
-                      </>
-                    ) : workplace.company ? (
-                      <span>at {workplace.company}</span>
-                    ) : workplace.url ? (
-                      <span>
-                        <a
-                          href={workplace.url}
-                          target="_blank"
-                          className="underline"
-                        >
-                          Visit Link
-                        </a>
-                      </span>
-                    ) : (
-                      <></>
-                    )}
-                    {workplace.location && (
-                      <>
-                        {" "}
-                        - <span>{workplace.location}</span>
-                      </>
-                    )}
-                  </span>
-                </p>
-                <p>{workplace.description}</p>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button color="white">
-                      <FaTrash />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Are you sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your project from our servers.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() => handleRemove(workplace.id, "workplace")}
-                        className="bg-red-500 text-white"
-                      >
-                        Remove
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No awards found.</p>
-        )}
       </div>
     </div>
   );
