@@ -162,9 +162,11 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchRecords();
-    fetchUsers();
-  }, [fetchRecords, fetchUsers]);
+    if (session) {
+      fetchUsers();
+      fetchRecords();
+    }
+  }, [session, fetchUsers, fetchRecords]);
 
   if (status === "loading" || loading) {
     return <h1>Loading...</h1>;
@@ -447,7 +449,9 @@ export default function Dashboard() {
                     <DialogFooter>
                       <Button
                         variant="outline"
-                        onClick={() => handleRemove(certification.id, "certification")}
+                        onClick={() =>
+                          handleRemove(certification.id, "certification")
+                        }
                         className="bg-red-500 text-white"
                       >
                         Remove

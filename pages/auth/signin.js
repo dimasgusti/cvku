@@ -46,48 +46,55 @@ export default function SignIn() {
     };
 
     return (
-        <>
-            <div className="w-full h-screen flex flex-col justify-center items-center">
-                <Card className="w-[360px]">
-                    <CardHeader className="w-full flex flex-col justify-center items-center">
-                        <CardTitle>Sign In</CardTitle>
-                        <CardDescription className="text-center">
-                            Welcome back! Please sign in to access your portfolio.
-                        </CardDescription>
-                    </CardHeader>
+        <div className="w-full h-screen flex flex-col justify-center items-center bg-gray-50">
+            <Card className="w-[360px] p-6 shadow-lg rounded-lg">
+                <CardHeader className="flex flex-col items-center mb-6">
+                    <CardTitle className="text-2xl font-semibold">Sign In</CardTitle>
+                    <CardDescription className="text-center text-gray-600">
+                        Welcome back! Please sign in to access your portfolio.
+                    </CardDescription>
+                </CardHeader>
 
-                    <CardContent className="w-full flex flex-row justify-center">
-                        <Button onClick={() => handleSignIn('github')}>
-                            <FaGithub /> Login with Github
-                        </Button>
-                    </CardContent>
+                <CardContent className="space-y-4">
+                    <Button 
+                        variant="outline" 
+                        onClick={() => handleSignIn('github')} 
+                        className="w-full flex justify-center items-center"
+                    >
+                        <FaGithub className="mr-2" /> Login with GitHub
+                    </Button>
 
-                    <CardContent className="w-full flex flex-row justify-center">
-                        <Button onClick={() => handleSignIn('google')}>
-                            <FaGoogle /> Login with Google
-                        </Button>
-                    </CardContent>
+                    <Button 
+                        variant="outline" 
+                        onClick={() => handleSignIn('google')} 
+                        className="w-full flex justify-center items-center"
+                    >
+                        <FaGoogle className="mr-2" /> Login with Google
+                    </Button>
 
-                    <CardContent className="w-full flex flex-col gap-2 justify-center">
+                    <div className="flex flex-col items-center gap-2">
                         <input 
-                            type="email"
+                            type="email" 
                             placeholder="Enter your email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border p-2 rounded"
+                            className="border p-2 rounded w-full mb-2"
                         />
-                        <Button onClick={() => handleSignIn('email')}>
-                            <FaEnvelope /> Login with Email
+                        <Button 
+                            onClick={() => handleSignIn('email')} 
+                            className="w-full flex justify-center items-center"
+                        >
+                            <FaEnvelope className="mr-2" /> Login with Email
                         </Button>
-                    </CardContent>
+                    </div>
+                </CardContent>
 
-                    {error && (
-                        <CardFooter className="w-full flex justify-center items-center mt-4 text-red-600 text-xs text-center">
-                            <p>{error}</p>
-                        </CardFooter>
-                    )}
-                </Card>
-            </div>
-        </>
+                {error && (
+                    <CardFooter className="w-full flex justify-center items-center mt-4 text-red-600 text-xs text-center">
+                        <p>{error}</p>
+                    </CardFooter>
+                )}
+            </Card>
+        </div>
     );
 }
