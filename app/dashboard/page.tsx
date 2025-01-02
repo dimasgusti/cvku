@@ -189,12 +189,24 @@ export default function Dashboard() {
             priority
           />
           <div className="flex flex-row justify-between w-full">
-            <div>
-              <p>{session.user?.name}</p>
-              <p>{userData?.username}</p>
-              <p>{userData?.title}</p>
-              <p>{userData?.country}</p>
-              <p>{userData?.bio}</p>
+            <div className="pr-8">
+              {!userData?.username ? (
+                <p>
+                  {session.user?.name}
+                  <br />
+                  <span>
+                    {userData?.title} from {userData?.country}
+                  </span>
+                </p>
+              ) : (
+                <p>
+                  {userData.username}
+                  <br />
+                  <span>
+                    {userData?.title} from {userData?.country}
+                  </span>
+                </p>
+              )}
             </div>
             <div>
               <Link href="/dashboard/profile">
@@ -319,7 +331,7 @@ export default function Dashboard() {
                   <span>
                     {award.url && award.presentedBy ? (
                       <>
-                        at{" "}
+                        awarded by{" "}
                         <a
                           href={award.url}
                           target="_blank"
@@ -329,7 +341,7 @@ export default function Dashboard() {
                         </a>
                       </>
                     ) : award.presentedBy ? (
-                      <span>at {award.presentedBy}</span>
+                      <span>awarded by {award.presentedBy}</span>
                     ) : award.url ? (
                       <span>
                         <a
@@ -346,31 +358,6 @@ export default function Dashboard() {
                   </span>
                 </p>
                 <p>{award.description}</p>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button color="white">
-                      <FaTrash />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Are you sure?</DialogTitle>
-                      <DialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your award from our servers.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() => handleRemove(award.id, "award")}
-                        className="bg-red-500 text-white"
-                      >
-                        Remove
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
               </div>
             </div>
           ))
@@ -380,7 +367,7 @@ export default function Dashboard() {
 
         <Separator className="my-4" />
 
-        {/* Awards Section */}
+        {/* Certifications Section */}
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
@@ -393,11 +380,22 @@ export default function Dashboard() {
           certifications.map((certification) => (
             <div key={certification.id} className="grid grid-cols-4 mt-2">
               <div>
-                {certification.issued === "ongoing" ? (
-                  <p>In Development</p>
-                ) : (
-                  <p>{certification.issued}</p>
-                )}
+                <p>
+                  {certification.issued === "ongoing" ? (
+                    <span>Ongoing</span>
+                  ) : (
+                    <span>{certification.issued}</span>
+                  )}
+                  {certification.expires && (
+                    <span>
+                      {" "}
+                      -{" "}
+                      {certification.expires === "doesNotExpire"
+                        ? "Indefinate"
+                        : certification.expires}
+                    </span>
+                  )}
+                </p>
               </div>
               <div className="col-start-2 col-end-5">
                 <p>
@@ -405,7 +403,7 @@ export default function Dashboard() {
                   <span>
                     {certification.url && certification.organization ? (
                       <>
-                        at{" "}
+                        certified by{" "}
                         <a
                           href={certification.url}
                           target="_blank"
@@ -415,7 +413,7 @@ export default function Dashboard() {
                         </a>
                       </>
                     ) : certification.organization ? (
-                      <span>at {certification.organization}</span>
+                      <span>certified by {certification.organization}</span>
                     ) : certification.url ? (
                       <span>
                         <a
@@ -481,11 +479,19 @@ export default function Dashboard() {
           workplaces.map((workplace) => (
             <div key={workplace.id} className="grid grid-cols-4 mt-2">
               <div>
-                {workplace.from === "ongoing" ? (
-                  <p>Present</p>
-                ) : (
-                  <p>{workplace.from}</p>
-                )}
+                <p>
+                  {workplace.from === "ongoing" ? (
+                    <span>Ongoing</span>
+                  ) : (
+                    <span>{workplace.from}</span>
+                  )}
+                  {workplace.to && (
+                    <span>
+                      {" "}
+                      - {workplace.to === "ongoing" ? "Ongoing" : workplace.to}
+                    </span>
+                  )}
+                </p>
               </div>
               <div className="col-start-2 col-end-5">
                 <p>
@@ -516,6 +522,12 @@ export default function Dashboard() {
                       </span>
                     ) : (
                       <></>
+                    )}
+                    {workplace.location && (
+                      <>
+                        {" "}
+                        - <span>{workplace.location}</span>
+                      </>
                     )}
                   </span>
                 </p>

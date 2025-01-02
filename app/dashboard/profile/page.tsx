@@ -20,6 +20,7 @@ import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { userSchema } from "@/lib/validation/UserSchema";
 import { Textarea } from "@/components/ui/textarea";
+import CountrySelect from "@/components/country-select";
 
 type UserFormValues = z.infer<typeof userSchema>;
 
@@ -35,6 +36,7 @@ interface Profile {
 export default function Profile() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [charCount, setCharCount] = useState(0);
   const [userData, setUserData] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -132,7 +134,7 @@ export default function Profile() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <p>{userData?.username || "No usernmae"}</p>
+              <p>{userData?.username || "No username"}</p>
               <FormField
                 control={form.control}
                 name="email"
@@ -189,7 +191,41 @@ export default function Profile() {
                   <FormItem>
                     <FormLabel>Bio</FormLabel>
                     <FormControl>
-                      <Textarea {...field} value={field.value || ""} />
+                      <Textarea
+                        {...field}
+                        value={field.value || ""}
+                        onChange={(
+                          e: React.ChangeEvent<HTMLTextAreaElement>
+                        ) => {
+                          const value = e.target.value;
+                          setCharCount(value.length);
+                          field.onChange(value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {charCount > 100 ? (
+                        <span className="text-red-500">{charCount} / 100</span>
+                      ) : (
+                        <span>{charCount} / 100</span>
+                      )}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <CountrySelect
+                        {...field}
+                        value={field.value || ""}
+                        className="flex-1"
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
