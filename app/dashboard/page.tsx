@@ -8,6 +8,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 
+interface Profile {
+  username: string;
+  title: string;
+  country: string;
+  bio: string;
+  email: string;
+  image: string;
+}
+
 interface Record {
   id: string;
   type: string;
@@ -28,11 +37,32 @@ interface Record {
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
+  const [userData, setUserData] = useState<Profile | null>(null);
   const [projects, setProjects] = useState<Record[]>([]);
   const [awards, setAwards] = useState<Record[]>([]);
   const [certifications, setCertification] = useState<Record[]>([]);
   const [workplaces, setWorkplaces] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchUsers = useCallback(async () => {
+    if (session?.user?.id) {
+      try {
+        const response = await fetch(
+          `/api/users/getUserByEmail?email=${session.user.email}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch records.");
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching records:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [session?.user?.id]);
 
   const fetchRecords = useCallback(async () => {
     if (session?.user?.id) {
@@ -78,7 +108,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchRecords();
-  }, [fetchRecords]);
+    fetchUsers();
+  }, [fetchRecords, fetchUsers]);
 
   if (status === "loading" || loading) {
     return <h1>Loading...</h1>;
@@ -103,11 +134,16 @@ export default function Dashboard() {
           <div className="flex flex-row justify-between w-full">
             <div>
               <p>{session.user?.name}</p>
-              <p>{session.user?.email}</p>
+              <p>{userData?.username}</p>
+              <p>{userData?.title}</p>
+              <p>{userData?.country}</p>
+              <p>{userData?.bio}</p>
             </div>
             <div>
               <Link href="/dashboard/profile">
-                <Button variant="outline" size='sm'>Profile Settings</Button>
+                <Button variant="outline" size="sm">
+                  Profile Settings
+                </Button>
               </Link>
             </div>
           </div>
@@ -119,7 +155,9 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Projects</p>
           <Link href="/dashboard/add-project">
-            <Button variant="outline" size='sm'>Add Project</Button>
+            <Button variant="outline" size="sm">
+              Add Project
+            </Button>
           </Link>
         </div>
         {projects.length > 0 ? (
@@ -178,7 +216,9 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Awards</p>
           <Link href="/dashboard/add-award">
-            <Button variant="outline" size='sm'>Add Award</Button>
+            <Button variant="outline" size="sm">
+              Add Award
+            </Button>
           </Link>
         </div>
         {awards.length > 0 ? (
@@ -237,7 +277,9 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
-            <Button variant="outline" size='sm'>Add Certification</Button>
+            <Button variant="outline" size="sm">
+              Add Certification
+            </Button>
           </Link>
         </div>
         {certifications.length > 0 ? (
@@ -296,7 +338,9 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Workplaces</p>
           <Link href="/dashboard/add-workplace">
-            <Button variant="outline" size='sm'>Add Workplace</Button>
+            <Button variant="outline" size="sm">
+              Add Workplace
+            </Button>
           </Link>
         </div>
         {workplaces.length > 0 ? (

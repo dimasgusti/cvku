@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { userSchema } from "@/lib/validation/UserSchema";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,6 +33,7 @@ interface Profile {
 }
 
 export default function Profile() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const [userData, setUserData] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,7 +80,38 @@ export default function Profile() {
 
   async function onSubmit(values: z.infer<typeof userSchema>) {
     toast("Updating profile...");
-    console.log(values);
+    try {
+      const response = await fetch("/api/users/updateUserByEmail", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      if (!response.ok) {
+        let errorMessage = "Failed to update profile.";
+
+        if (response.status !== 204) {
+          const responseText = await response.text();
+          if (responseText) {
+            try {
+              const errorData = JSON.parse(responseText);
+              errorMessage = errorData.error || errorMessage;
+            } catch (err) {
+              console.error("Error parsing the error response:", err);
+            }
+          }
+        }
+
+        throw new Error(errorMessage);
+      }
+      toast.success("Profile updated successfully!");
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occured."
+      );
+    }
   }
 
   useEffect(() => {
@@ -100,6 +132,21 @@ export default function Profile() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <p>{userData?.username || "No usernmae"}</p>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} disabled />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="username"
@@ -107,11 +154,14 @@ export default function Profile() {
                   <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                      {/* Ensure value is controlled */}
-                      <Input
-                        {...field}
-                        value={field.value || ""}  
-                      />
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-500">cvku.id/</span>
+                        <Input
+                          {...field}
+                          value={field.value || ""}
+                          className="flex-1"
+                        />
+                      </div>
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -125,10 +175,7 @@ export default function Profile() {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value || ""}  
-                      />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -142,10 +189,7 @@ export default function Profile() {
                   <FormItem>
                     <FormLabel>Bio</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
-                        value={field.value || ""}  
-                      />
+                      <Textarea {...field} value={field.value || ""} />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
