@@ -7,6 +7,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { FaGear, FaPlus, FaTrash } from "react-icons/fa6";
 
 interface Profile {
   username: string;
@@ -47,17 +57,18 @@ export default function Dashboard() {
   const fetchUsers = useCallback(async () => {
     if (session?.user?.id) {
       try {
+        setLoading(true);
         const response = await fetch(
           `/api/users/getUserByEmail?email=${session.user.email}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch records.");
+          throw new Error("Failed to fetch user data.");
         }
 
         const data = await response.json();
         setUserData(data);
       } catch (error) {
-        console.error("Error fetching records:", error);
+        console.error("Error fetching user data:", error);
       } finally {
         setLoading(false);
       }
@@ -67,6 +78,7 @@ export default function Dashboard() {
   const fetchRecords = useCallback(async () => {
     if (session?.user?.id) {
       try {
+        setLoading(true);
         const response = await fetch(
           `/api/records/getRecordById?userId=${session.user.id}`
         );
@@ -106,6 +118,49 @@ export default function Dashboard() {
     }
   }, [session?.user?.id]);
 
+  const handleRemove = async (recordId: string, recordType: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/records/deleteRecord?recordId=${recordId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete record.");
+      }
+
+      if (recordType === "project") {
+        setProjects((prevProjects) =>
+          prevProjects.filter((project) => project.id !== recordId)
+        );
+      } else if (recordType === "award") {
+        setAwards((prevAwards) =>
+          prevAwards.filter((award) => award.id !== recordId)
+        );
+      } else if (recordType === "certification") {
+        setCertification((prevCertifications) =>
+          prevCertifications.filter((cert) => cert.id !== recordId)
+        );
+      } else if (recordType === "workplace") {
+        setWorkplaces((prevWorkplaces) =>
+          prevWorkplaces.filter((workplace) => workplace.id !== recordId)
+        );
+      }
+
+      fetchRecords();
+    } catch (error) {
+      console.error("Error removing record:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchRecords();
     fetchUsers();
@@ -141,8 +196,8 @@ export default function Dashboard() {
             </div>
             <div>
               <Link href="/dashboard/profile">
-                <Button variant="outline" size="sm">
-                  Profile Settings
+                <Button variant="outline">
+                  <FaGear />
                 </Button>
               </Link>
             </div>
@@ -155,8 +210,8 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Projects</p>
           <Link href="/dashboard/add-project">
-            <Button variant="outline" size="sm">
-              Add Project
+            <Button variant="outline">
+              <FaPlus />
             </Button>
           </Link>
         </div>
@@ -203,6 +258,31 @@ export default function Dashboard() {
                   </span>
                 </p>
                 <p>{project.description}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button color="white">
+                      <FaTrash />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your project from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleRemove(project.id, "project")}
+                        className="bg-red-500 text-white"
+                      >
+                        Remove
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           ))
@@ -216,8 +296,8 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Awards</p>
           <Link href="/dashboard/add-award">
-            <Button variant="outline" size="sm">
-              Add Award
+            <Button variant="outline">
+              <FaPlus />
             </Button>
           </Link>
         </div>
@@ -264,6 +344,31 @@ export default function Dashboard() {
                   </span>
                 </p>
                 <p>{award.description}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button color="white">
+                      <FaTrash />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your award from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleRemove(award.id, "award")}
+                        className="bg-red-500 text-white"
+                      >
+                        Remove
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           ))
@@ -277,8 +382,8 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
-            <Button variant="outline" size="sm">
-              Add Certification
+            <Button variant="outline">
+              <FaPlus />
             </Button>
           </Link>
         </div>
@@ -325,6 +430,31 @@ export default function Dashboard() {
                   </span>
                 </p>
                 <p>{certification.description}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button color="white">
+                      <FaTrash />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your certification from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleRemove(certification.id, "certification")}
+                        className="bg-red-500 text-white"
+                      >
+                        Remove
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           ))
@@ -338,8 +468,8 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Workplaces</p>
           <Link href="/dashboard/add-workplace">
-            <Button variant="outline" size="sm">
-              Add Workplace
+            <Button variant="outline">
+              <FaPlus />
             </Button>
           </Link>
         </div>
@@ -386,6 +516,31 @@ export default function Dashboard() {
                   </span>
                 </p>
                 <p>{workplace.description}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button color="white">
+                      <FaTrash />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your project from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleRemove(workplace.id, "workplace")}
+                        className="bg-red-500 text-white"
+                      >
+                        Remove
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           ))
