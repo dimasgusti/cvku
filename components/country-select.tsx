@@ -6,17 +6,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterCountries } from "./helpers";
-// @ts-ignore
+// @ts-expect-error
 import countryRegionData from "country-region-data/dist/data-umd";
 import { useEffect, useState } from "react";
-
-type CountryRegionData = {
-  countryName: string;
-  countryShortCode: string;
-  regions: { name: string; shortCode: string }[];
-};
-
-const countries: CountryRegionData[] = countryRegionData;
 
 export interface Region {
   name: string;
@@ -54,7 +46,7 @@ function CountrySelect({
     setCountries(
       filterCountries(countryRegionData, priorityOptions, whitelist, blacklist)
     );
-  }, []);
+  }, [priorityOptions, whitelist, blacklist]); // Added missing dependencies
 
   return (
     <Select value={value} onValueChange={(value: string) => onChange(value)}>
