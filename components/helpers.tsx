@@ -15,7 +15,7 @@ export interface Region {
     whitelist: string[],
     blacklist: string[],
   ): CountryRegion[] => {
-    let countriesListedFirst: any[] = [];
+    const countriesListedFirst: CountryRegion[] = [];  
     let filteredCountries = countries;
   
     if (whitelist.length > 0) {
@@ -29,7 +29,7 @@ export interface Region {
     }
   
     if (priorityCountries.length > 0) {
-      // ensure the countries are added in the order in which they are specified by the user
+      
       priorityCountries.forEach((slug) => {
         const result = filteredCountries.find(
           ({ countryShortCode }) => countryShortCode === slug,
@@ -55,8 +55,8 @@ export interface Region {
     priorityRegions: string[],
     whitelist: string[],
     blacklist: string[],
-  ) => {
-    let regionsListedFirst: any[] = [];
+  ): Region[] => {  
+    const regionsListedFirst: Region[] = [];  
     let filteredRegions = regions;
   
     if (whitelist.length > 0) {
@@ -70,7 +70,7 @@ export interface Region {
     }
   
     if (priorityRegions.length > 0) {
-      // ensure the Regions are added in the order in which they are specified by the user
+      
       priorityRegions.forEach((slug) => {
         const result = filteredRegions.find(
           ({ shortCode }) => shortCode === slug,
@@ -89,4 +89,3 @@ export interface Region {
       ? [...regionsListedFirst, ...filteredRegions]
       : filteredRegions;
   };
-  

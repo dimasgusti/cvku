@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { filterCountries } from "./helpers";
-// @ts-ignore
+// @ts-expect-error
 import countryRegionData from "country-region-data/dist/data-umd";
 import { useEffect, useState } from "react";
 
@@ -34,7 +34,7 @@ interface CountrySelectProps {
 function CountrySelect({
   priorityOptions = [],
   whitelist = [],
-  blacklist = [],
+  blacklist = ["IL", "IR", "SY", "SD", "CU", "UA", "VE"],
   onChange = () => {},
   value,
   className,
