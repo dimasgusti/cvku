@@ -33,10 +33,10 @@ export default function HomePage() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <div className="flex flex-col mx-2">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif">
-              Build, Share, and Grow
+              Tampilkan Karya Anda!
             </h1>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif">
-              The Ultimate Platform for Portfolios and More
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif pt-2">
+              Buat CV online yang mudah dibagikan.
             </h2>
             <TextReveal />
           </div>

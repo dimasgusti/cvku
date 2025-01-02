@@ -7,16 +7,16 @@ import Link from "next/link";
 
 const TextReveal = () => {
   const shareItems = [
-    "Portfolio",
-    "Services",
-    "Products",
-    "Events",
-    "Community",
-    "Blog",
-    "Gallery",
+    "Pendidikan",
+    "Keahlian",
+    "Sertifikasi",
+    "Proyek",
+    "Prestasi",
+    "Kontak",
+    "Pengalaman",
   ];
   return (
-    <div>
+    <div className="overflow-hidden w-72 lg:w-full my-2 lg:my-4 lg:text-center">
       {shareItems.map((text, index) => (
         <motion.div
           key={index}
@@ -44,7 +44,7 @@ const TextReveal = () => {
           className="my-4 flex gap-4 flex-row lg:flex-col items-center"
         >
           <Link href="/explore" className="w-fit">
-            <Button>Explore</Button>
+            <Button>Jelajahi</Button>
           </Link>
         </motion.div>
       </div>
