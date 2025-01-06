@@ -8,13 +8,11 @@ import { ArrowRight } from "lucide-react";
 
 const TextReveal = () => {
   const shareItems = [
-    "Kontak",
-    "Pendidikan",
-    "Pekerjaan",
-    "Skills",
-    "Sertifikasi",
-    "Portofolio",
-    "Referensi",
+    "Template Profesional",
+    "URL Ekslusif",
+    "Terjangkau",
+    "Format PDF",
+    "Tanpa Ribet",
   ];
   return (
     <div className="overflow-hidden w-72 lg:w-full my-2 lg:text-center">
@@ -33,7 +31,7 @@ const TextReveal = () => {
           style={{ display: "inline-block", whiteSpace: "nowrap" }}
           className="mr-[1rem] text-black/70"
         >
-          <p className="text-base md:text-lg">
+          <p className="text-base">
             {text}
           </p>
         </motion.div>
@@ -44,10 +42,10 @@ const TextReveal = () => {
           animate={{ opacity: 1 }}
           className="my-4 flex gap-4 flex-row lg:flex-col items-center"
         >
-          <Link href="/explore" className="w-fit">
+          <Link href="/auth/signin" className="w-fit">
             <Button>
               <ArrowRight />
-              Coba Sekarang
+              Daftar Sekarang
             </Button>
           </Link>
         </motion.div>

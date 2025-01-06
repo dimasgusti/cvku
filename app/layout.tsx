@@ -77,7 +77,7 @@ function LoginButton() {
       <>
         <Button variant="outline" onClick={() => signOut()} size="sm">
           <FaSignOutAlt />
-          Logout
+          Keluar
         </Button>
       </>
     );
@@ -87,7 +87,7 @@ function LoginButton() {
     <>
       <Button onClick={() => signIn()} size="sm">
         <FaSignInAlt />
-        Login
+        Masuk
       </Button>
     </>
   );

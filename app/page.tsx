@@ -31,23 +31,11 @@ export default function HomePage() {
       </Head>
       <section className="min-h-[30rem] w-full flex justify-center items-center font-serif">
         <div className="flex flex-col mx-2">
-          <h1 className="text-3xl md:text-4xl">
-            Buat, Bagikan, dan Kembangkan
-          </h1>
+          <h1 className="text-3xl md:text-4xl">CV Profesional Gapake Ribet!</h1>
           <h2 className="text-xl md:text-2xl">
-            Buat CV Profesional Kurang dari 10 Menit!
+            Tampil Memukau, Raih Pekerjaan
           </h2>
           <TextReveal />
-        </div>
-      </section>
-      <section className="w-full flex justify-center items-center font-serif">
-        <div className="flex flex-col mx-2">
-          <h2 className="text-base md:text-lg">
-            CVKU.id adalah platform yang memudahkan Anda membuat, membagikan,
-            dan mengelola CV profesional dengan cepat dan mudah, semua dalam
-            satu tempat. Tingkatkan peluang karier Anda hanya dalam beberapa
-            menit!
-          </h2>
         </div>
       </section>
     </>
