@@ -4,19 +4,20 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const TextReveal = () => {
   const shareItems = [
-    "Pendidikan",
-    "Keahlian",
-    "Sertifikasi",
-    "Proyek",
-    "Prestasi",
-    "Kontak",
-    "Pengalaman",
+    "Profesional",
+    "Fleksibel",
+    "Mudah",
+    "Cepat",
+    "Terpercaya",
+    "Modern",
+    "Responsif",
   ];
   return (
-    <div className="overflow-hidden w-72 lg:w-full my-2 lg:my-4 lg:text-center">
+    <div className="overflow-hidden w-72 lg:w-full my-2 lg:text-center">
       {shareItems.map((text, index) => (
         <motion.div
           key={index}
@@ -32,7 +33,7 @@ const TextReveal = () => {
           style={{ display: "inline-block", whiteSpace: "nowrap" }}
           className="mr-[1rem] text-black/70"
         >
-          <p className="text-base md:text-lg lg:text-xl text-black/70">
+          <p className="text-base md:text-lg">
             {text}
           </p>
         </motion.div>
@@ -44,7 +45,10 @@ const TextReveal = () => {
           className="my-4 flex gap-4 flex-row lg:flex-col items-center"
         >
           <Link href="/explore" className="w-fit">
-            <Button>Jelajahi</Button>
+            <Button>
+              <ArrowRight />
+              Coba Sekarang
+            </Button>
           </Link>
         </motion.div>
       </div>

@@ -29,17 +29,15 @@ export default function HomePage() {
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </Head>
-      <section className="flex flex-row justify-center items-center py-8">
-        <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
-          <div className="flex flex-col mx-2">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif">
-              Tampilkan Karya Anda!
-            </h1>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif pt-2">
-              Buat CV online yang mudah dibagikan.
-            </h2>
-            <TextReveal />
-          </div>
+      <section className="min-h-[30rem] w-full flex justify-center items-center font-serif">
+        <div className="flex flex-col mx-2">
+          <h1 className="text-3xl md:text-4xl">
+            Buat, Bagikan, dan Kembangkan
+          </h1>
+          <h2 className="text-xl md:text-2xl">
+            Buat CV Profesional dalam Hitungan Menit.
+          </h2>
+          <TextReveal />
         </div>
       </section>
     </>

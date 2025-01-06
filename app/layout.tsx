@@ -9,6 +9,7 @@ import { generateMetaTags, defaultMeta } from "./metadata";
 import { Button } from "@/components/ui/button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
+import { Loader } from "lucide-react";
 
 export default function RootLayout({
   children,
@@ -29,7 +30,7 @@ export default function RootLayout({
         <meta name="robots" content={meta.robots} />
         <link rel="canonical" href={meta.canonical} />
         <meta property="og:title" content={meta.title} />
-        <meta property="oshoug:description" content={meta.description} />
+        <meta property="og:description" content={meta.description} />
         <meta property="og:image" content={meta.image} />
         <meta property="og:url" content={meta.canonical} />
         <meta name="twitter:title" content={meta.title} />
@@ -42,9 +43,7 @@ export default function RootLayout({
         <SidebarProvider>
           <AppSidebar />
           <SessionProvider session={session}>
-            <main
-              className={`font-mono text-sm antialiased flex flex-col min-h-screen w-full`}
-            >
+            <main className="text-sm antialiased flex flex-col min-h-screen w-full">
               <header className="w-full flex flex-row justify-between border-b my-1 p-4">
                 <SidebarTrigger />
                 <LoginButton />
@@ -63,7 +62,14 @@ function LoginButton() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <div className="h-8"></div>;
+    return (
+      <>
+        <Button variant="outline" disabled size="sm">
+          <Loader className="animate-spin" />
+          Loading
+        </Button>
+      </>
+    );
   }
 
   if (session) {

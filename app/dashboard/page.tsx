@@ -16,11 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  FaDeleteLeft,
-  FaGear,
-  FaPlus,
-} from "react-icons/fa6";
+import { 
+  Trash2,
+  Settings,
+  PlusCircle,
+} from 'lucide-react'
 
 interface Profile {
   username: string;
@@ -217,7 +217,7 @@ export default function Dashboard() {
             <div>
               <Link href="/dashboard/profile">
                 <Button variant="outline">
-                  <FaGear />
+                  <Settings />
                 </Button>
               </Link>
             </div>
@@ -230,7 +230,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Experience</p>
           <Link href="/dashboard/add-workplace">
-            <FaPlus size={14} />
+            <PlusCircle size={14} />
           </Link>
         </div>
         {workplaces.length > 0 ? (
@@ -290,7 +290,7 @@ export default function Dashboard() {
 
                   <Dialog>
                     <DialogTrigger>
-                      <FaDeleteLeft size={14} color="red" />
+                      <Trash2 size={14} color="red" />
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
@@ -328,7 +328,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Portfolio</p>
           <Link href="/dashboard/add-project">
-            <FaPlus size={14} />
+            <PlusCircle size={14} />
           </Link>
         </div>
         {projects.length > 0 ? (
@@ -366,7 +366,7 @@ export default function Dashboard() {
                   </p>
                   <Dialog>
                     <DialogTrigger>
-                      <FaDeleteLeft size={14} color="red" />
+                      <Trash2 size={14} color="red" />
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
@@ -402,7 +402,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Achievements</p>
           <Link href="/dashboard/add-award">
-            <FaPlus size={14} />
+            <PlusCircle size={14} />
           </Link>
         </div>
         {awards.length > 0 ? (
@@ -446,7 +446,7 @@ export default function Dashboard() {
                   </p>
                   <Dialog>
                     <DialogTrigger>
-                      <FaDeleteLeft size={14} color="red" />
+                      <Trash2 size={14} color="red" />
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
@@ -482,7 +482,7 @@ export default function Dashboard() {
         <div className="flex flex-row justify-between items-center">
           <p>Certifications</p>
           <Link href="/dashboard/add-certification">
-            <FaPlus size={14} />
+            <PlusCircle size={14} />
           </Link>
         </div>
         {certifications.length > 0 ? (
@@ -537,7 +537,7 @@ export default function Dashboard() {
                   </p>
                   <Dialog>
                     <DialogTrigger>
-                      <FaDeleteLeft size={14} color="red" />
+                      <Trash2 size={14} color="red" />
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>

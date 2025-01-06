@@ -8,10 +8,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { DollarSign, Globe, Home, User } from "lucide-react"
+import { DollarSign, Globe, Home, User, Zap } from "lucide-react"
 
 // Menu items.
 const items = [
+  {
+    title: "Get Started",
+    url: "/get-started",
+    icon: Zap
+  },
   {
     title: "Home",
     url: "/",
@@ -23,7 +28,7 @@ const items = [
     icon: Globe,
   },
   {
-    title: "Dashboard",
+    title: "Profile",
     url: "/dashboard",
     icon: User,
   },
@@ -39,7 +44,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>CVKU.id</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "./button";
-import { FaSpinner } from "react-icons/fa6";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { Loader } from "lucide-react";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();
@@ -10,7 +10,7 @@ export default function LoginButton() {
     return (
       <>
         <Button size="sm">
-          <FaSpinner className="animate-spin" />
+          <Loader className="animate-spin" />
           Loading...
         </Button>
       </>
