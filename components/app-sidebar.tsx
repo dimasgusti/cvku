@@ -17,10 +17,10 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SessionProvider } from "next-auth/react";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -81,8 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <a href="/dashboard">
+                <Link href="/" className="flex flex-row gap-2 items-center">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>
@@ -90,8 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <span className="truncate font-semibold">CVKU.id</span>
                     <span className="truncate text-xs">Cool</span>
                   </div>
-                </a>
-              </SidebarMenuButton>
+                </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>

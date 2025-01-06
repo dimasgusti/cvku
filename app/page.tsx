@@ -35,9 +35,19 @@ export default function HomePage() {
             Buat, Bagikan, dan Kembangkan
           </h1>
           <h2 className="text-xl md:text-2xl">
-            Buat CV Profesional dalam Hitungan Menit.
+            Buat CV Profesional Kurang dari 10 Menit!
           </h2>
           <TextReveal />
+        </div>
+      </section>
+      <section className="w-full flex justify-center items-center font-serif">
+        <div className="flex flex-col mx-2">
+          <h2 className="text-base md:text-lg">
+            CVKU.id adalah platform yang memudahkan Anda membuat, membagikan,
+            dan mengelola CV profesional dengan cepat dan mudah, semua dalam
+            satu tempat. Tingkatkan peluang karier Anda hanya dalam beberapa
+            menit!
+          </h2>
         </div>
       </section>
     </>

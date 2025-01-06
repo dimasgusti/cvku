@@ -8,13 +8,13 @@ import { ArrowRight } from "lucide-react";
 
 const TextReveal = () => {
   const shareItems = [
-    "Profesional",
-    "Fleksibel",
-    "Mudah",
-    "Cepat",
-    "Terpercaya",
-    "Modern",
-    "Responsif",
+    "Kontak",
+    "Pendidikan",
+    "Pekerjaan",
+    "Skills",
+    "Sertifikasi",
+    "Portofolio",
+    "Referensi",
   ];
   return (
     <div className="overflow-hidden w-72 lg:w-full my-2 lg:text-center">
