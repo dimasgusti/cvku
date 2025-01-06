@@ -1,66 +1,106 @@
+"use client";
+
+import * as React from "react";
+import {
+  Command,
+  Home,
+  LifeBuoy,
+  MessageCircleQuestion,
+  Send,
+  User,
+} from "lucide-react";
+
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { DollarSign, Globe, Home, User, Zap } from "lucide-react"
+} from "@/components/ui/sidebar";
+import { SessionProvider } from "next-auth/react";
 
-// Menu items.
-const items = [
-  {
-    title: "Get Started",
-    url: "/get-started",
-    icon: Zap
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
   },
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "Explore",
-    url: "/explore",
-    icon: Globe,
-  },
-  {
-    title: "Profile",
-    url: "/dashboard",
-    icon: User,
-  },
-  {
-    title: "Pricing",
-    url: "/pricing",
-    icon: DollarSign,
-  },
-]
+  navMain: [
+    {
+      title: "Home",
+      url: "/",
+      icon: Home,
+      isActive: true,
+      items: [
+        {
+          title: "Explore",
+          url: "/explore",
+        },
+        {
+          title: "Templates",
+          url: "/templates",
+        },
+        {
+          title: "Pricing",
+          url: "/pricing",
+        },
+      ],
+    },
+    {
+      title: "Profile",
+      url: "/profile",
+      icon: User,
+    },
+    {
+      title: "About Us",
+      url: "/about-us",
+      icon: MessageCircleQuestion
+    }
+  ],
+  navSecondary: [
+    {
+      title: "Help",
+      url: "/help",
+      icon: LifeBuoy,
+    },
+    {
+      title: "Privacy and Policy",
+      url: "/legal",
+      icon: Send,
+    },
+  ],
+};
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>CVKU.id</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  )
+    <SessionProvider>
+      <Sidebar variant="inset" {...props}>
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" asChild>
+                <a href="/dashboard">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    <Command className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">CVKU.id</span>
+                    <span className="truncate text-xs">Cool</span>
+                  </div>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMain items={data.navMain} />
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
+        </SidebarContent>
+      </Sidebar>
+    </SessionProvider>
+  );
 }
