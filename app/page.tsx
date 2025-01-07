@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="flex flex-col justify-center items-start gap-4 mx-4">
           <h2 className="text-xl md:text-2xl">
             Dapatkan Diskon 50% untuk Pengguna Baru dengan Memasukkan Code{" "}
-            <span className="bg-red-500 text-white px-3">"COBADULU"</span>
+            <span className="bg-red-500 text-white px-3">&quot;COBADULU&quot;</span>
           </h2>
           <Link href="/auth/signin" className="w-fit mt-1">
             <Button>
