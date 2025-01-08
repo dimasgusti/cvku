@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "motion/react";
+import TextReveal from "@/components/TextReveal";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -35,39 +35,26 @@ export default function HomePage() {
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </Head>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="min-h-[30rem] w-full flex justify-center items-center font-serif"
-      >
-        <div className="flex flex-col mx-4">
-          <h1 className="text-3xl md:text-4xl">CV Profesional Gapake Ribet!</h1>
-          <h2 className="text-xl md:text-2xl">
-            Tampil Memukau, Tingkatkan Peluang
-          </h2>
-          <Link href="/auth/signin" className="w-fit mt-1">
-            <Button>
-              <ArrowRight />
-              Daftar Sekarang
-            </Button>
-          </Link>
-        </div>
-      </motion.div>
-      <Separator />
-      <section className="min-h-[15rem] w-full flex justify-center items-center font-serif">
-        <div className="flex flex-col justify-center items-start gap-4 mx-4">
-          <h2 className="text-xl md:text-2xl">
-            Dapatkan Diskon 50% untuk Pengguna Baru dengan Memasukkan Code{" "}
-            <span className="bg-red-500 text-white px-3">&quot;COBADULU&quot;</span>
-          </h2>
-          <Link href="/auth/signin" className="w-fit mt-1">
-            <Button>
-              <ArrowRight />
-              Daftar Sekarang
-            </Button>
-          </Link>
+      <section className="min-h-[50rem] bg-[#3098f3] text-white w-full flex justify-center items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 px-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-semibold">
+              Buat CV atau Portofolio.
+            </h1>
+            <h2 className="text-xl md:text-2xl">
+              Tunjukkan <span className="text-[#ffcc00] font-semibold">Kemampuanmu!</span>
+            </h2>
+            <TextReveal />
+            <Link href='/auth/signin'>
+              <Button variant='secondary'>
+                <ArrowRight />
+                Daftar Sekarang
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
+      <Separator />
       <Separator />
     </>
   );

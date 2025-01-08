@@ -10,6 +10,13 @@ import { Button } from "@/components/ui/button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
 import { Loader } from "lucide-react";
+import { Nunito_Sans } from "next/font/google";
+
+const playfair = Nunito_Sans({
+  weight: "400",
+  subsets: ["latin"],
+  display: 'swap',
+});
 
 export default function RootLayout({
   children,
@@ -39,12 +46,12 @@ export default function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </head>
-      <body>
+      <body className={playfair.className}>
         <SidebarProvider>
           <AppSidebar />
           <SessionProvider session={session}>
             <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-              <header className="w-full flex flex-row justify-between border-b my-1 p-4">
+              <header className="w-full flex flex-row justify-between p-4">
                 <SidebarTrigger />
                 <LoginButton />
               </header>

@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  Command,
   Home,
   LifeBuoy,
   MessageCircleQuestion,
@@ -52,7 +51,7 @@ const data = {
     },
     {
       title: "Profile",
-      url: "/profile",
+      url: "/dashboard",
       icon: User,
     },
     {
@@ -92,7 +91,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">CVKU.id</span>
+                    <span className="truncate">CVKU.id</span>
                     <span className="truncate text-xs">Cool</span>
                   </div>
                 </Link>
