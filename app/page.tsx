@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import { generateMetaTags } from "./metadata";
-import { ArrowRight, Layout, PenTool, Share2, UserPlus } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import TextReveal from "@/components/TextReveal";
@@ -34,7 +34,7 @@ export default function HomePage() {
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </Head>
-      <section className="min-h-[50rem] bg-[#3098f3] text-white w-full flex justify-center items-center">
+      <section className="min-h-[30rem] bg-[#3098f3] text-white w-full flex justify-center items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full md:max-w-4xl px-4">
           <div>
             <h1 className="text-3xl md:text-4xl font-semibold">
@@ -54,7 +54,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section className="min-h-[30rem] bg-white text-black w-full flex justify-center items-center">
+      {/* <section className="min-h-[30rem] bg-white text-black w-full flex justify-center items-center">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full md:max-w-4xl px-4 py-8">
           <div className="w-full col-span-4 pb-8">
             <div className="flex flex-row justify-between">
@@ -94,10 +94,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-      <section className="min-h-[50rem] bg-[#3098f3] text-white w-full flex justify-center items-center">
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full md:max-w-4xl px-4 py-8"></div>
-      </section>
+      </section> */}
     </>
   );
 }
