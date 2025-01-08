@@ -10,6 +10,7 @@ const TextReveal = () => {
     "Prestasi",
     "Bahasa",
     "Karya",
+    "Pekerjaan",
     "Dan banyak lagi!",
   ];
   return (
