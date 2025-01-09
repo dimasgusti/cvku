@@ -62,6 +62,26 @@ export default function Settings() {
 
   async function onSubmit(values: z.infer<typeof userSchema>) {
     setBtnLoading(true);
+    if (values.username !== userData?.username) {
+      try {
+        const usernameResponse = await fetch(
+          `/api/users/getUserByUsername?username=${values.username}`
+        );
+        const usernameData = await usernameResponse.json();
+
+        if (usernameData.exists) {
+          toast.error("Username is already taken. Please choose another.");
+          setBtnLoading(false);
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking username:", error);
+        toast.error("Error checking username.");
+        setBtnLoading(false);
+        return;
+      }
+    }
+    
     try {
       const response = await fetch("/api/users/updateUserByEmail", {
         method: "PUT",
@@ -130,18 +150,26 @@ export default function Settings() {
     fetchUserData();
   }, [session?.user?.email, form]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Loading user data...</p>
-      </div>
-    );
+  if (session || status === "loading") {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center min-h-screen">
+          <p>Loading user data...</p>
+        </div>
+      );
+    }
   }
 
-  if (status === "unauthenticated" || !session) {
+  if (!session) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p>Please log in to view your profile.</p>
+        <p>
+          Please{" "}
+          <Link href="/auth/signin" className="underline">
+            log in
+          </Link>{" "}
+          to view your profile.
+        </p>
       </div>
     );
   }

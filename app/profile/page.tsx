@@ -112,18 +112,26 @@ export default function Profile() {
     if (session?.user?.email) fetchAllData();
   }, [session?.user?.email]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Loading user data...</p>{" "}
-      </div>
-    );
+  if (session || status === "loading") {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center min-h-screen">
+          <p>Loading user data...</p>
+        </div>
+      );
+    }
   }
 
-  if (status === "unauthenticated" || !session) {
+  if (!session) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p>Please log in to view your profile.</p>
+        <p>
+          Please{" "}
+          <Link href="/auth/signin" className="underline">
+            log in
+          </Link>{" "}
+          to view your profile.
+        </p>
       </div>
     );
   }
@@ -142,13 +150,7 @@ export default function Profile() {
           />
           <div className="flex flex-row justify-between w-full">
             <div className="pr-4">
-              {!userData?.username ? (
-                <>
-                  <Link href="/profile/settings">
-                    <Button>Set Up Profile</Button>
-                  </Link>
-                </>
-              ) : (
+              {!userData?.username ? null : (
                 <p>
                   {userData?.username} <br />
                   <span>
@@ -158,11 +160,21 @@ export default function Profile() {
               )}
             </div>
             <div>
-              <Link href="/profile/settings">
-                <Button variant="outline">
-                  <Settings />
-                </Button>
-              </Link>
+              {!userData?.username ? (
+                <>
+                  <Link href="/profile/settings">
+                    <Button>Set Up Profile</Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/profile/settings">
+                    <Button variant="outline">
+                      <Settings />
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -87,10 +87,24 @@ export default function AddProject() {
     }
   }
 
-  if (status === "unauthenticated" || !session) {
+  if (session || status === "loading") {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p>Please log in to view your profile.</p>
+        <p>Loading user data...</p>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p>
+          Please{" "}
+          <Link href="/auth/signin" className="underline">
+            log in
+          </Link>{" "}
+          to view your profile.
+        </p>
       </div>
     );
   }
