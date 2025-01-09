@@ -135,7 +135,7 @@ export default function Profile() {
             <div className="pr-4">
               {!userData?.username ? (
                 <>
-                  <Link href="/">
+                  <Link href="/profile/settings">
                     <Button>Set Up Profile</Button>
                   </Link>
                 </>
@@ -157,6 +157,14 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        {userData?.bio ? (
+          <>
+            <div className="pb-4">
+              <p>About</p>
+              <p>{userData?.bio}</p>
+            </div>
+          </>
+        ) : null}
         <Separator />
         {!userData?.username ? (
           <>
