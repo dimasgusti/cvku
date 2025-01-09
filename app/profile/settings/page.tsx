@@ -14,11 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Toggle } from "@/components/ui/toggle";
 import { userSchema } from "@/lib/validation/UserSchema";
 import { fetchData } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Loader, Lock, Save } from "lucide-react";
+import { ArrowLeft, Loader, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
