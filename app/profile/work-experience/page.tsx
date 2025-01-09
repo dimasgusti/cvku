@@ -35,7 +35,7 @@ type ProjectFormValues = z.infer<typeof workplaceSchema>;
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
 
   const form = useForm<ProjectFormValues>({
