@@ -51,7 +51,7 @@ const data = {
     },
     {
       title: "Profile",
-      url: "/dashboard",
+      url: "/profile",
       icon: User,
     },
     {

@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
 import { Loader } from "lucide-react";
-import { Nunito_Sans } from "next/font/google";
+import { Manrope } from "next/font/google";
 
-const playfair = Nunito_Sans({
+const manrope = Manrope({
   weight: "400",
   subsets: ["latin"],
   display: 'swap',
@@ -46,12 +46,12 @@ export default function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </head>
-      <body className={playfair.className}>
+      <body className={manrope.className}>
         <SidebarProvider>
           <AppSidebar />
           <SessionProvider session={session}>
             <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-              <header className="w-full flex flex-row justify-between p-4">
+              <header className="w-full flex flex-row justify-between p-4 border-b">
                 <SidebarTrigger />
                 <LoginButton />
               </header>

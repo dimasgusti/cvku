@@ -30,7 +30,7 @@ const TextReveal = () => {
           style={{ display: "inline-block", whiteSpace: "nowrap" }}
           className="mr-[1rem] text-black/70"
         >
-          <p className="text-base text-white">
+          <p className="text-base text-black/70">
             {text}
           </p>
         </motion.div>
