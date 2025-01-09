@@ -12,12 +12,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { Toggle } from "@/components/ui/toggle";
 import { userSchema } from "@/lib/validation/UserSchema";
 import { fetchData } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader, Save } from "lucide-react";
+import { ArrowLeft, Loader, Lock, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -33,6 +36,7 @@ interface Profile {
   bio: string;
   email: string;
   image: string;
+  private: boolean;
 }
 
 export default function Settings() {
@@ -53,6 +57,7 @@ export default function Settings() {
       bio: "",
       email: "",
       image: "",
+      private: true,
     },
   });
 
@@ -111,6 +116,7 @@ export default function Settings() {
               bio: userData.bio || "",
               email: userData.email || "",
               image: userData.image || "",
+              private: userData.private ?? true,
             });
             formResetRef.current = true;
           }
@@ -125,18 +131,18 @@ export default function Settings() {
     fetchUserData();
   }, [session?.user?.email, form]);
 
-  if (status === "unauthenticated" || !session) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Please log in to view your profile.</p>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <p>Loading user data...</p>
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated" || !session) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p>Please log in to view your profile.</p>
       </div>
     );
   }
@@ -149,6 +155,16 @@ export default function Settings() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 py-4"
           >
+            <Link href="/profile">
+              <Button variant="outline">
+                <ArrowLeft />
+              </Button>
+            </Link>
+            {userData?.username ? (
+              <h2 className="text-xl md:text-2xl">Update Profile</h2>
+            ) : (
+              <h2 className="text-xl md:text-2xl">Set Up Your Profile</h2>
+            )}
             <FormField
               control={form.control}
               name="email"
@@ -224,15 +240,38 @@ export default function Settings() {
                 </FormItem>
               )}
             />
-            <FormField 
+            <FormField
               control={form.control}
               name="country"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Country</FormLabel>
                   <FormControl>
-                    <CountrySelect {...field} className="flex-1" />
+                    <CountrySelect
+                      {...field}
+                      value={field.value || ""}
+                      className="flex-1"
+                    />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="private"
+              render={({ field }) => (
+                <FormItem className="flex flex-row justify-start items-center gap-2">
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      aria-readonly
+                    />
+                  </FormControl>
+                  <FormDescription className="pb-2">
+                    {field.value ? "Private" : "Public"}
+                  </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />

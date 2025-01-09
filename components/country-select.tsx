@@ -26,15 +26,17 @@ interface CountrySelectProps {
   whitelist?: string[];
   blacklist?: string[];
   onChange?: (value: string) => void;
+  value?: string;
   className?: string;
   placeholder?: string;
 }
 
 function CountrySelect({
-  priorityOptions = [],
+  priorityOptions = ["ID"],
   whitelist = [],
-  blacklist = [],
+  blacklist = ["IL", "KP", "IR", "SY", "SD", "CU", "UA-CR", "VE", "ZW", "BY"],
   onChange = () => {},
+  value,
   className,
   placeholder = "Country",
 }: CountrySelectProps) {
@@ -48,6 +50,7 @@ function CountrySelect({
 
   return (
     <Select
+      value={value}
       onValueChange={(value: string) => {
         onChange(value);
       }}

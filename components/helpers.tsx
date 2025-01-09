@@ -13,25 +13,25 @@ export const filterCountries = (
   countries: CountryRegion[],
   priorityCountries: string[],
   whitelist: string[],
-  blacklist: string[],
+  blacklist: string[]
 ): CountryRegion[] => {
-  let countriesListedFirst: any[] = [];
+  const countriesListedFirst: CountryRegion[] = [];
   let filteredCountries = countries;
 
   if (whitelist.length > 0) {
     filteredCountries = countries.filter(
-      ({ countryShortCode }) => whitelist.indexOf(countryShortCode) > -1,
+      ({ countryShortCode }) => whitelist.indexOf(countryShortCode) > -1
     );
   } else if (blacklist.length > 0) {
     filteredCountries = countries.filter(
-      ({ countryShortCode }) => blacklist.indexOf(countryShortCode) === -1,
+      ({ countryShortCode }) => blacklist.indexOf(countryShortCode) === -1
     );
   }
 
   if (priorityCountries.length > 0) {
     priorityCountries.forEach((slug) => {
       const result = filteredCountries.find(
-        ({ countryShortCode }) => countryShortCode === slug,
+        ({ countryShortCode }) => countryShortCode === slug
       );
       if (result) {
         countriesListedFirst.push(result);
@@ -40,7 +40,7 @@ export const filterCountries = (
 
     filteredCountries = filteredCountries.filter(
       ({ countryShortCode }) =>
-        priorityCountries.indexOf(countryShortCode) === -1,
+        priorityCountries.indexOf(countryShortCode) === -1
     );
   }
 
@@ -53,25 +53,25 @@ export const filterRegions = (
   regions: Region[],
   priorityRegions: string[],
   whitelist: string[],
-  blacklist: string[],
-) => {
-  let regionsListedFirst: any[] = [];
+  blacklist: string[]
+): Region[] => {
+  const regionsListedFirst: Region[] = [];
   let filteredRegions = regions;
 
   if (whitelist.length > 0) {
     filteredRegions = regions.filter(
-      ({ shortCode }) => whitelist.indexOf(shortCode) > -1,
+      ({ shortCode }) => whitelist.indexOf(shortCode) > -1
     );
   } else if (blacklist.length > 0) {
     filteredRegions = regions.filter(
-      ({ shortCode }) => blacklist.indexOf(shortCode) === -1,
+      ({ shortCode }) => blacklist.indexOf(shortCode) === -1
     );
   }
 
   if (priorityRegions.length > 0) {
     priorityRegions.forEach((slug) => {
       const result = filteredRegions.find(
-        ({ shortCode }) => shortCode === slug,
+        ({ shortCode }) => shortCode === slug
       );
       if (result) {
         regionsListedFirst.push(result);
@@ -79,7 +79,7 @@ export const filterRegions = (
     });
 
     filteredRegions = filteredRegions.filter(
-      ({ shortCode }) => priorityRegions.indexOf(shortCode) === -1,
+      ({ shortCode }) => priorityRegions.indexOf(shortCode) === -1
     );
   }
 

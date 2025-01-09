@@ -42,14 +42,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    const { username, title, country, bio, image } = req.body;
+    const { username, title, country, bio, image, private: privateField } = req.body;
 
     const updateData = {};
     if (username) updateData.username = username;
-    if (title) updateData.title = title;
-    if (country) updateData.country = country;
-    if (bio) updateData.bio = bio;
+    if (title !== undefined && title !== null) updateData.title = title;
+    if (country !== undefined && country !== null) updateData.country = country;
+    if (bio !== undefined && bio !== null) updateData.bio = bio;
     if (image) updateData.image = image;
+    if (privateField !== undefined){
+      updateData.private = privateField;
+    }
+    
 
     if (Object.keys(updateData).length === 0) {
       return res

@@ -28,7 +28,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { workplaceSchema } from "@/lib/validation/WorkplaceSchema";
 import { useSession } from "next-auth/react";
-import { Loader, Save } from "lucide-react";
+import { ArrowLeft, Loader, Save } from "lucide-react";
+import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof workplaceSchema>;
 
@@ -102,6 +103,12 @@ export default function AddProject() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <Link href="/profile">
+                <Button>
+                  <ArrowLeft />
+                </Button>
+              </Link>
+              <h2 className="text-xl md:text-2xl">Add Work Experience</h2>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

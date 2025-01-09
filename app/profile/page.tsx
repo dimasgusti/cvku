@@ -55,6 +55,15 @@ export default function Profile() {
   const projects = recordData.filter((record) => record.type === "project");
   const workplace = recordData.filter((record) => record.type === "workplace");
 
+  const getFlagEmoji = (countryCode: string) => {
+    if (!countryCode) return "";
+    return String.fromCodePoint(
+      ...[...countryCode.toUpperCase()].map(
+        (c) => 0x1f1e6 - 65 + c.charCodeAt(0)
+      )
+    );
+  };
+
   const handleRemove = async (recordId: string) => {
     try {
       setBtnLoading(true);
@@ -103,18 +112,18 @@ export default function Profile() {
     if (session?.user?.email) fetchAllData();
   }, [session?.user?.email]);
 
-  if (status === "unauthenticated" || !session) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Please log in to view your profile.</p>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <p>Loading user data...</p>{" "}
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated" || !session) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p>Please log in to view your profile.</p>
       </div>
     );
   }
@@ -143,7 +152,7 @@ export default function Profile() {
                 <p>
                   {userData?.username} <br />
                   <span>
-                    {userData?.title} from {userData?.country}
+                    {userData?.title} from {getFlagEmoji(userData?.country)}
                   </span>
                 </p>
               )}
