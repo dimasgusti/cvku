@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 const uri = process.env.DATABASE_URL;
 const dbName = "cvku";
 
-async function getUserByUsername(username) {
+async function getUserAndRecordsByUsername(username) {
   if (!uri) {
     throw new Error("MongoDB URI is not defined in environment variables.");
   }
@@ -15,14 +15,34 @@ async function getUserByUsername(username) {
 
     const db = client.db(dbName);
     const usersCollection = db.collection("users");
+    const recordsCollection = db.collection("records");
 
-    const user = await usersCollection.findOne({ username }, {
-      projection: { username: 1 } 
-    });
+    // Fetch the user by username
+    const user = await usersCollection.findOne(
+      { username },
+      {
+        projection: {
+          username: 1,
+          title: 1,
+          country: 1,
+          bio: 1,
+          email: 1,
+          image: 1,
+        },
+      }
+    );
 
-    return user;
+    if (!user) {
+      return { user: null, records: [] };
+    }
+
+    const records = await recordsCollection
+      .find({ userId: user._id.toString() })
+      .toArray();
+
+    return { user, records };
   } catch (error) {
-    console.error("Error querying user by username:", error.message);
+    console.error("Error querying user and records:", error.message);
     throw error;
   } finally {
     await client.close();
@@ -38,15 +58,15 @@ export default async function handler(req, res) {
     }
 
     try {
-      const user = await getUserByUsername(username);
+      const { user, records } = await getUserAndRecordsByUsername(username);
 
-      if (user) {
-        return res.status(200).json({ exists: true, message: "Username is already taken" });
-      } else {
-        return res.status(200).json({ exists: false, message: "Username is available" });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
       }
+
+      return res.status(200).json({ user, records });
     } catch (error) {
-      console.error("Error querying user by username:", error.message);
+      console.error("Error querying user and records:", error.message);
       res.status(500).json({ error: "Internal server error" });
     }
   } else {

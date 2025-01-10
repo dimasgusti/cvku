@@ -14,4 +14,5 @@ export const userSchema = z.object({
   email: z.string().email("Invalid email format").optional(),
   image: z.string().optional(),
   private: z.boolean().default(true),
+  template: z.string().default("default"),
 });

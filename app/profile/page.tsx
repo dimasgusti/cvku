@@ -15,7 +15,6 @@ import {
   Download,
   Edit,
   Eye,
-  File,
   Loader,
   PlusCircle,
   Settings,
@@ -71,14 +70,14 @@ export default function Profile() {
     );
   };
 
-  const { data: userData, error: userError } = useSWR<Profile>(
+  const { data: userData } = useSWR<Profile>(
     session?.user?.email
       ? `/api/users/getUserByEmail?email=${session.user.email}`
       : null,
     fetcher
   );
 
-  const { data: fetchedRecordData, error: recordError } = useSWR<Record[]>(
+  const { data: fetchedRecordData } = useSWR<Record[]>(
     session?.user?.id
       ? `/api/records/getRecordById?userId=${session.user.id}`
       : null,
@@ -182,7 +181,7 @@ export default function Profile() {
                 <p>
                   {userData?.username} <br />
                   <span>
-                    {userData?.title} from {getFlagEmoji(userData?.country)}
+                    {userData?.title} 📍 {getFlagEmoji(userData?.country)}
                   </span>
                 </p>
               )}

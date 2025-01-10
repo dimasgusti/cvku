@@ -97,6 +97,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   social        Json
+  template      String?
   accounts      Account[]
   sessions      Session[]
   projects      Project[]
