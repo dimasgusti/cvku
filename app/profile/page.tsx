@@ -19,6 +19,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import useSWR from "swr";
 
 interface Profile {
   username: string;
@@ -47,18 +48,11 @@ interface Record {
   description: string;
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export default function Profile() {
   const { data: session, status } = useSession();
-  const [userData, setUserData] = useState<Profile | null>(null);
-  const [recordData, setRecordData] = useState<Record[]>([]);
-  const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
-  const projects = recordData.filter((record) => record.type === "project");
-  const workplace = recordData.filter((record) => record.type === "workplace");
-  const awards = recordData.filter((record) => record.type === "award");
-  const certifications = recordData.filter(
-    (record) => record.type === "certification"
-  );
 
   const getFlagEmoji = (countryCode: string) => {
     if (!countryCode) return "";
@@ -68,6 +62,28 @@ export default function Profile() {
       )
     );
   };
+
+  const { data: userData, error: userError } = useSWR<Profile>(
+    session?.user?.email
+      ? `/api/users/getUserByEmail?email=${session.user.email}`
+      : null,
+    fetcher
+  );
+
+  const { data: fetchedRecordData, error: recordError } = useSWR<Record[]>(
+    session?.user?.id
+      ? `/api/records/getRecordById?userId=${session.user.id}`
+      : null,
+    fetcher
+  );
+
+  const [recordData, setRecordData] = useState<Record[]>([]);
+
+  useEffect(() => {
+    if (fetchedRecordData) {
+      setRecordData(fetchedRecordData);
+    }
+  }, [fetchedRecordData]);
 
   const handleRemove = async (recordId: string) => {
     try {
@@ -97,40 +113,28 @@ export default function Profile() {
     }
   };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      if (status !== "authenticated" || !session?.user?.email) {
-        redirect("/auth/signin");
-      }
-      try {
-        const userData = await fetchData(
-          `/api/users/getUserByEmail?email=${session?.user?.email}`
-        );
-        const recordData = await fetchData(
-          `/api/records/getRecordById?userId=${session?.user?.id}`
-        );
-        setUserData(userData);
-        setRecordData(recordData);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (session?.user?.email) fetchAllData();
-  }, [session?.user?.email]);
-
   if (status === "unauthenticated") {
     redirect("/auth/signin");
-  } else {
-    if (loading) {
-      return (
-        <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
-          <Loader className="animate-spin" size={32} />
-          Please wait
-        </div>
-      );
-    }
   }
+
+  if (!userData || !recordData) {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
+  }
+
+  const projects =
+    recordData?.filter((record: Record) => record.type === "project") || [];
+  const workplace =
+    recordData?.filter((record: Record) => record.type === "workplace") || [];
+  const awards =
+    recordData?.filter((record: Record) => record.type === "award") || [];
+  const certifications =
+    recordData?.filter((record: Record) => record.type === "certification") ||
+    [];
 
   return (
     <div className="flex flex-row justify-center items-center">
