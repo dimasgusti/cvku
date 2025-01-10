@@ -269,7 +269,7 @@ export default function Settings() {
                     />
                   </FormControl>
                   <FormDescription className="pb-2">
-                    {field.value ? "Private" : "Public"}
+                    {field.value ? "Private Account" : "Public Account"}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

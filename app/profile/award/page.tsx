@@ -25,16 +25,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { awardSchema } from "@/lib/validation/AwardSchema";
 import { useSession } from "next-auth/react";
+import { Loader, Save } from "lucide-react";
+import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof awardSchema>;
 
 export default function AddProject() {
   const router = useRouter();
-  const [charCount, setCharCount] = useState(0); // Pindahkan useState ke tingkat atas
+  const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(awardSchema),
@@ -49,7 +52,7 @@ export default function AddProject() {
   });
 
   async function onSubmit(values: z.infer<typeof awardSchema>) {
-    toast("Submitting new award...");
+    setBtnLoading(true);
     try {
       const response = await fetch("/api/records", {
         method: "POST",
@@ -78,7 +81,7 @@ export default function AddProject() {
       }
 
       toast.success("New award added successfully!");
-      router.push("/dashboard");
+      router.push("/profile");
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "An unexpected error occurred."
@@ -87,7 +90,17 @@ export default function AddProject() {
   }
 
   if (!session) {
-    redirect("/auth/signin");
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p>
+          Please{" "}
+          <Link href="/auth/signin" className="underline">
+            log in
+          </Link>{" "}
+          to view your profile.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -195,7 +208,19 @@ export default function AddProject() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={btnLoading}>
+              {btnLoading ? (
+                <span className="flex flex-row items-center justify-center gap-2">
+                  <Loader className="animate-spin" />
+                  Saving Award
+                </span>
+              ) : (
+                <span className="flex flex-row justify-center items-center gap-2">
+                  <Save />
+                  Save
+                </span>
+              )}
+            </Button>
           </form>
         </Form>
       </div>
