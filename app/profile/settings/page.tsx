@@ -81,7 +81,7 @@ export default function Settings() {
         return;
       }
     }
-    
+
     try {
       const response = await fetch("/api/users/updateUserByEmail", {
         method: "PUT",
@@ -91,21 +91,7 @@ export default function Settings() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        let errorMessage = "Failed to update profile.";
-
-        if (response.status !== 204) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const errorData = JSON.parse(responseText);
-              errorMessage = errorData.error || errorMessage;
-            } catch (err) {
-              console.error("Error parsing the error response:", err);
-            }
-          }
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Failed to update profile.");
       }
       toast.success("Profile updated!");
       router.push("/profile");
@@ -150,30 +136,6 @@ export default function Settings() {
     fetchUserData();
   }, [session?.user?.email, form]);
 
-  if (session || status === "loading") {
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center min-h-screen">
-          <p>Loading user data...</p>
-        </div>
-      );
-    }
-  }
-
-  if (!session) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>
-          Please{" "}
-          <Link href="/auth/signin" className="underline">
-            log in
-          </Link>{" "}
-          to view your profile.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full wsm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
@@ -190,7 +152,7 @@ export default function Settings() {
             {userData?.username ? (
               <h2 className="text-xl md:text-2xl">Update Profile</h2>
             ) : (
-              <h2 className="text-xl md:text-2xl">Set Up Your Profile</h2>
+              <h2 className="text-xl md:text-2xl">Update Profile</h2>
             )}
             <FormField
               control={form.control}
@@ -199,7 +161,12 @@ export default function Settings() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ""} disabled />
+                    <Input
+                      {...field}
+                      value={loading ? "Loading..." : field.value || ""}
+                      className={loading ? "opacity-50 cursor-not-allowed" : ""}
+                      disabled
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -215,7 +182,8 @@ export default function Settings() {
                       <span className="text-gray-500">cvku.id/</span>
                       <Input
                         {...field}
-                        value={field.value || ""}
+                        value={loading ? "Loading..." : field.value || ""}
+                        disabled={loading}
                         className="flex-1"
                       />
                     </div>
@@ -232,7 +200,11 @@ export default function Settings() {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ""} />
+                    <Input
+                      {...field}
+                      value={loading ? "Loading..." : field.value || ""}
+                      disabled={loading}
+                    />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -248,7 +220,8 @@ export default function Settings() {
                   <FormControl>
                     <Textarea
                       {...field}
-                      value={field.value || ""}
+                      value={loading ? "Loading..." : field.value || ""}
+                      disabled={loading}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         const value = e.target.value;
                         setCharCount(value.length);
@@ -276,7 +249,7 @@ export default function Settings() {
                   <FormControl>
                     <CountrySelect
                       {...field}
-                      value={field.value || ""}
+                      value={loading ? "Loading..." : field.value || ""}
                       className="flex-1"
                     />
                   </FormControl>

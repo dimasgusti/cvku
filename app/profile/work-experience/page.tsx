@@ -89,14 +89,6 @@ export default function AddProject() {
     }
   }
 
-  if (session || status === "loading") {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>Loading user data...</p>
-      </div>
-    );
-  }
-
   if (!session) {
     return (
       <div className="flex justify-center items-center min-h-screen">
