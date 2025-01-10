@@ -25,10 +25,10 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { certificationSchema } from "@/lib/validation/CertificationSchema";
 import { useSession } from "next-auth/react";
-import { Loader, Save } from "lucide-react";
+import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof certificationSchema>;
@@ -108,6 +108,12 @@ export default function AddProject() {
         <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <Link href="/profile">
+                <Button>
+                  <ArrowLeft />
+                </Button>
+              </Link>
+              <h2 className="text-xl md:text-2xl">Add Project</h2>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}

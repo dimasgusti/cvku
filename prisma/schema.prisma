@@ -80,6 +80,7 @@ model Record {
   presentedBy  String?
   url          String?
   description  String?
+  image        String?
   User         User?   @relation(fields: [userId], references: [id])
 }
 
