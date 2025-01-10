@@ -51,7 +51,7 @@ export default function RootLayout({
           <AppSidebar />
           <SessionProvider session={session}>
             <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-              <header className="w-full flex flex-row justify-between p-4 border-b">
+              <header className="w-full flex flex-row justify-between p-4 border-b sticky bg-white z-10 top-0">
                 <SidebarTrigger />
                 <LoginButton />
               </header>

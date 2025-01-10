@@ -11,7 +11,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Edit, Loader, PlusCircle, Settings, Trash2 } from "lucide-react";
+import {
+  Download,
+  Edit,
+  Eye,
+  File,
+  Loader,
+  PlusCircle,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -138,6 +147,19 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full wsm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
+        <div className="flex flex-row justify-between items-center gap-4 py-4">
+          <Link href={`/${userData.username}`} target="_blank">
+            <Button>
+              <Eye /> Preview
+            </Button>
+          </Link>
+          <Link href="/profile/pdf">
+            <Button>
+              <Download />
+              Convert PDF
+            </Button>
+          </Link>
+        </div>
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Image
             src={session?.user?.image || "/defaultAvatar.png"}
