@@ -16,6 +16,7 @@ import { Loader, PlusCircle, Settings, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -94,6 +95,9 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchAllData = async () => {
+      if (status !== "authenticated" || !session?.user?.email) {
+        redirect('/auth/signin')
+      }
       try {
         const userData = await fetchData(
           `/api/users/getUserByEmail?email=${session?.user?.email}`
@@ -112,28 +116,10 @@ export default function Profile() {
     if (session?.user?.email) fetchAllData();
   }, [session?.user?.email]);
 
-  if (session || status === "loading") {
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center min-h-screen">
-          <p>Loading user data...</p>
-        </div>
-      );
-    }
-  }
-
-  if (!session) {
+  if(loading){
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>
-          Please{" "}
-          <Link href="/auth/signin" className="underline">
-            log in
-          </Link>{" "}
-          to view your profile.
-        </p>
-      </div>
-    );
+      <p>Loading...</p>
+    )
   }
 
   return (
@@ -187,217 +173,204 @@ export default function Profile() {
           </>
         ) : null}
         <Separator />
-        {!userData?.username ? (
-          <>
-            <div className="flex flex-col justify-center items-center h-96">
-              <h2 className="text-xl md:text-2xl text-center">
-                Thanks for signing up with cvku! <br /> Start by setting up your
-                profile to continue.
-              </h2>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-row justify-between items-center my-4">
-              <p>Project</p>
-              <Link href="/profile/project">
-                <PlusCircle size={14} />
-              </Link>
-            </div>
+        <>
+          <div className="flex flex-row justify-between items-center my-4">
+            <p>Project</p>
+            <Link href="/profile/project">
+              <PlusCircle size={14} />
+            </Link>
+          </div>
 
-            {projects.length > 0 ? (
-              <div>
-                {projects.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <div>
-                      {record.year && (
-                        <p>
-                          {record.year === "ongoing" ? "Ongoing" : record.year}
-                        </p>
-                      )}
-                    </div>
-                    <div className="col-start-2 col-end-5">
-                      <div className="flex flex-row justify-between">
-                        <p>
-                          {record.title}
-                          {record.company && record.url ? (
-                            <>
-                              {" "}
-                              at{" "}
-                              <a
-                                href={record.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                {record.company}
-                              </a>
-                            </>
-                          ) : record.company ? (
-                            <> at {record.company}</>
-                          ) : record.url ? (
-                            <>
-                              <a
-                                href={record.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                Visit Link
-                              </a>
-                            </>
-                          ) : null}
-                        </p>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Trash2 size={14} color="red" />
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle className="font-thin">
-                                Are you sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your project from our
-                                servers.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
-                                disabled={btnLoading}
-                              >
-                                {btnLoading ? (
-                                  <span className="flex flex-row items-center justify-center gap-2">
-                                    <Loader className="animate-spin" />
-                                    Removing...
-                                  </span>
-                                ) : (
-                                  <span>Remove</span>
-                                )}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                      <p>{record.description}</p>
-                    </div>
+          {projects.length > 0 ? (
+            <div>
+              {projects.map((record) => (
+                <div key={record.id} className="grid grid-cols-4 mt-2">
+                  <div>
+                    {record.year && (
+                      <p>
+                        {record.year === "ongoing" ? "Ongoing" : record.year}
+                      </p>
+                    )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <Link href="/profile/project">
-                <Button variant="outline" size="sm">
-                  Add Project
-                </Button>
-              </Link>
-            )}
-
-            <Separator className="my-4" />
-
-            <div className="flex flex-row justify-between items-center my-4">
-              <p>Work Experience</p>
-              <Link href="/profile/work-experience">
-                <PlusCircle size={14} />
-              </Link>
-            </div>
-
-            {workplace.length > 0 ? (
-              <div>
-                {workplace.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <p>
-                      {record.from === "ongoing" ? (
-                        <span>Ongoing</span>
-                      ) : (
-                        <span>{record.from}</span>
-                      )}
-                      {record.to && (
-                        <span>
-                          - {record.to === "ongoing" ? "Ongoing" : record.to}
-                        </span>
-                      )}
-                    </p>
-                    <div className="col-start-2 col-end-5">
-                      <div className="flex flex-row justify-between">
-                        <p>
-                          {record.title}
-                          {record.company && record.url ? (
-                            <>
-                              {" "}
-                              at{" "}
-                              <a
-                                href={record.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                {record.company}
-                              </a>
-                            </>
-                          ) : record.company ? (
-                            <> at {record.company}</>
-                          ) : record.url ? (
-                            <>
-                              <a
-                                href={record.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                Visit Link
-                              </a>
-                            </>
-                          ) : null}
-                        </p>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Trash2 size={14} color="red" />
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle className="font-thin">
-                                Are you sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your project from our
-                                servers.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
-                                disabled={btnLoading}
-                              >
-                                {btnLoading ? (
-                                  <span className="flex flex-row items-center justify-center gap-2">
-                                    <Loader className="animate-spin" />
-                                    Removing...
-                                  </span>
-                                ) : (
-                                  <span>Remove</span>
-                                )}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                      <p>{record.description}</p>
+                  <div className="col-start-2 col-end-5">
+                    <div className="flex flex-row justify-between">
+                      <p>
+                        {record.title}
+                        {record.company && record.url ? (
+                          <>
+                            {" "}
+                            at{" "}
+                            <a
+                              href={record.url}
+                              target="_blank"
+                              className="underline"
+                            >
+                              {record.company}
+                            </a>
+                          </>
+                        ) : record.company ? (
+                          <> at {record.company}</>
+                        ) : record.url ? (
+                          <>
+                            <a
+                              href={record.url}
+                              target="_blank"
+                              className="underline"
+                            >
+                              Visit Link
+                            </a>
+                          </>
+                        ) : null}
+                      </p>
+                      <Dialog>
+                        <DialogTrigger>
+                          <Trash2 size={14} color="red" />
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle className="font-thin">
+                              Are you sure?
+                            </DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your project from our servers.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button
+                              variant="outline"
+                              className="bg-red-500 text-white"
+                              onClick={() => handleRemove(record.id)}
+                              disabled={btnLoading}
+                            >
+                              {btnLoading ? (
+                                <span className="flex flex-row items-center justify-center gap-2">
+                                  <Loader className="animate-spin" />
+                                  Removing...
+                                </span>
+                              ) : (
+                                <span>Remove</span>
+                              )}
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     </div>
+                    <p>{record.description}</p>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <Link href="/profile/work-experience">
-                <Button variant="outline" size="sm">
-                  Add Project
-                </Button>
-              </Link>
-            )}
-          </>
-        )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Link href="/profile/project">
+              <Button variant="outline" size="sm">
+                Add Project
+              </Button>
+            </Link>
+          )}
+
+          <Separator className="my-4" />
+
+          <div className="flex flex-row justify-between items-center my-4">
+            <p>Work Experience</p>
+            <Link href="/profile/work-experience">
+              <PlusCircle size={14} />
+            </Link>
+          </div>
+
+          {workplace.length > 0 ? (
+            <div>
+              {workplace.map((record) => (
+                <div key={record.id} className="grid grid-cols-4 mt-2">
+                  <p>
+                    {record.from === "ongoing" ? (
+                      <span>Ongoing</span>
+                    ) : (
+                      <span>{record.from}</span>
+                    )}
+                    {record.to && (
+                      <span>
+                        - {record.to === "ongoing" ? "Ongoing" : record.to}
+                      </span>
+                    )}
+                  </p>
+                  <div className="col-start-2 col-end-5">
+                    <div className="flex flex-row justify-between">
+                      <p>
+                        {record.title}
+                        {record.company && record.url ? (
+                          <>
+                            {" "}
+                            at{" "}
+                            <a
+                              href={record.url}
+                              target="_blank"
+                              className="underline"
+                            >
+                              {record.company}
+                            </a>
+                          </>
+                        ) : record.company ? (
+                          <> at {record.company}</>
+                        ) : record.url ? (
+                          <>
+                            <a
+                              href={record.url}
+                              target="_blank"
+                              className="underline"
+                            >
+                              Visit Link
+                            </a>
+                          </>
+                        ) : null}
+                      </p>
+                      <Dialog>
+                        <DialogTrigger>
+                          <Trash2 size={14} color="red" />
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle className="font-thin">
+                              Are you sure?
+                            </DialogTitle>
+                            <DialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete your project from our servers.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <Button
+                              variant="outline"
+                              className="bg-red-500 text-white"
+                              onClick={() => handleRemove(record.id)}
+                              disabled={btnLoading}
+                            >
+                              {btnLoading ? (
+                                <span className="flex flex-row items-center justify-center gap-2">
+                                  <Loader className="animate-spin" />
+                                  Removing...
+                                </span>
+                              ) : (
+                                <span>Remove</span>
+                              )}
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                    <p>{record.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Link href="/profile/work-experience">
+              <Button variant="outline" size="sm">
+                Add Project
+              </Button>
+            </Link>
+          )}
+        </>
       </div>
     </div>
   );

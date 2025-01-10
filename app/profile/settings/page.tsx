@@ -40,7 +40,7 @@ interface Profile {
 
 export default function Settings() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [userData, setUserData] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
