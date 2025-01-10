@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { fetchData } from "@/utils/api";
 import { Edit, Loader, PlusCircle, Settings, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
