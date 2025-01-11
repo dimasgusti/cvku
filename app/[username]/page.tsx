@@ -16,24 +16,24 @@ interface Profile {
   email: string;
   image: string;
 }
-
-interface Record {
-  id: string;
-  type: string;
-  title: string;
-  name: string;
-  year: string;
-  issued: string;
-  expires: string;
-  from: string;
-  to: string;
-  url: string;
-  company: string;
-  organization: string;
-  location: string;
-  presentedBy: string;
-  description: string;
-}
+//face Record {
+//   id: string;
+//   type: string;
+//   title: string;
+//   name: string;
+//   year: string;
+//   issued: string;
+//   expires: string;
+//   from: string;
+//   to: string;
+//   url: string;
+//   company: string;
+//   organization: string;
+//   location: string;
+//   presentedBy: string;
+//   description: string;
+// }
+// inter
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
