@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 const uri = process.env.DATABASE_URL;
 const dbName = "cvku";
 
-async function getUserByUsername(username) {
+async function checkUsernameExists(username) {
   if (!uri) {
     throw new Error("MongoDB URI is not defined in environment variables.");
   }
@@ -16,11 +16,11 @@ async function getUserByUsername(username) {
     const db = client.db(dbName);
     const usersCollection = db.collection("users");
 
-    const user = await usersCollection.findOne({ username });
+    const userExists = await usersCollection.findOne({ username }, { projection: { _id: 1 } });
 
-    return user;
+    return !!userExists;
   } catch (error) {
-    console.error("Error querying user by username:", error.message);
+    console.error("Error checking username existence:", error.message);
     throw error;
   } finally {
     await client.close();
@@ -36,18 +36,14 @@ export default async function handler(req, res) {
     }
 
     try {
-      const user = await getUserByUsername(username);
+      const exists = await checkUsernameExists(username.trim().toLowerCase());
 
-      if (user) {
-        return res.status(200).json(user);
-      } else {
-        return res.status(404).json({ error: "User not found" });
-      }
+      return res.status(200).json({ exists });
     } catch (error) {
-      console.error("Error querying user by username:", error.message);
-      res.status(500).json({ error: "Internal server error" });
+      console.error("Error checking username:", error.message);
+      return res.status(500).json({ error: "Internal server error" });
     }
   } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 }

@@ -67,11 +67,11 @@ export default function Settings() {
     if (values.username !== userData?.username) {
       try {
         const usernameResponse = await fetch(
-          `/api/users/getUserByUsername?username=${values.username}`
+          `/api/users/checkUsernameExist?username=${values.username}`
         );
-        const usernameData = await usernameResponse.json();
+        const { exists } = await usernameResponse.json();
 
-        if (usernameData.exists) {
+        if (exists) {
           toast.error("Username is already taken. Please choose another.");
           setBtnLoading(false);
           return;
@@ -93,7 +93,7 @@ export default function Settings() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        throw new Error("Failed to update profile.");
+        throw new Error("Something went wrong. Please try again!");
       }
       toast.success("Profile updated!");
       router.push("/profile");
@@ -178,7 +178,7 @@ export default function Settings() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Username*</FormLabel>
                   <FormControl>
                     <div className="flex items-center space-x-2">
                       <span className="text-gray-500">cvku.id/</span>
@@ -247,7 +247,7 @@ export default function Settings() {
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Country*</FormLabel>
                   <FormControl>
                     <CountrySelect
                       {...field}
