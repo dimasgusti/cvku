@@ -1,19 +1,18 @@
-// paymentWebhook.js (Node.js with Express and body-parser)
+// pages/api/paymentWebhook.ts
 
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
-const port = 3000;
 
-// Middleware untuk mem-parsing JSON request body
+// Middleware to parse JSON request body
 app.use(bodyParser.json());
 
-// Endpoint untuk menerima webhook dari Mayar
-app.post('/webhook/payment', (req, res) => {
+// Webhook handler function
+const handleWebhook = (req: express.Request, res: express.Response) => {
   const { event, data } = req.body;
 
-  // Validasi data yang diterima
+  // Validate the request data
   if (!event || !data) {
     return res.status(400).json({ message: 'Invalid request data' });
   }
@@ -21,20 +20,17 @@ app.post('/webhook/payment', (req, res) => {
   const { 
     id, 
     status, 
-    merchantId, 
     merchantName, 
     merchantEmail, 
     customerName, 
     customerEmail, 
-    customerMobile, 
     amount, 
-    productId, 
     productName, 
     productType, 
     custom_field 
   } = data;
 
-  // Menangani webhook berdasarkan event
+  // Log the data for debugging purposes
   console.log(`Received webhook event: ${event}`);
   console.log(`Transaction ID: ${id}`);
   console.log(`Status: ${status}`);
@@ -43,30 +39,31 @@ app.post('/webhook/payment', (req, res) => {
   console.log(`Amount: ${amount}`);
   console.log(`Product: ${productName} (${productType})`);
 
-  // Proses custom_field jika ada
+  // Process custom fields if provided
   if (custom_field && custom_field.length > 0) {
-    custom_field.forEach(field => {
+    custom_field.forEach((field: { name: string, value: string }) => {
       console.log(`Custom field - ${field.name}: ${field.value}`);
     });
   }
 
-  // Tindakan berdasarkan status pembayaran
+  // Actions based on the payment status
   if (status === 'SUCCESS') {
-    // Tindakan jika pembayaran berhasil
     console.log('Payment successful, processing order...');
   } else if (status === 'FAILED') {
-    // Tindakan jika pembayaran gagal
     console.log('Payment failed, please retry...');
   } else {
-    // Tindakan jika status tidak dikenali
     console.log('Unknown payment status.');
   }
 
-  // Kirim respon sukses ke gateway
+  // Respond back to the gateway
   return res.status(200).json({ message: 'Webhook received successfully' });
-});
+};
 
-// Jalankan server pada port 3000
-app.listen(port, () => {
-  console.log(`Webhook server listening at http://localhost:${port}`);
-});
+// Next.js API route handler
+export default function handler(req: express.Request, res: express.Response) {
+  if (req.method === 'POST') {
+    handleWebhook(req, res);
+  } else {
+    res.status(405).json({ message: 'Method Not Allowed' });
+  }
+}
