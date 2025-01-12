@@ -2,6 +2,17 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 
+// Define the type for custom field items
+interface CustomField {
+  name: string;
+  description: string;
+  fieldType: string;
+  isRequired: boolean;
+  key: string;
+  type: string;
+  value: string;
+}
+
 const handleWebhook = (req: NextApiRequest, res: NextApiResponse) => {
   const { event, data } = req.body;
 
@@ -39,7 +50,7 @@ const handleWebhook = (req: NextApiRequest, res: NextApiResponse) => {
 
   // If custom fields exist, process them
   if (custom_field && custom_field.length > 0) {
-    custom_field.forEach((field:any) => {
+    custom_field.forEach((field: CustomField) => {
       console.log(`Custom field - ${field.name}: ${field.value}`);
     });
   }
