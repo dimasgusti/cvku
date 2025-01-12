@@ -17,7 +17,6 @@ async function getUserAndRecordsByUsername(username) {
     const usersCollection = db.collection("users");
     const recordsCollection = db.collection("records");
 
-    // Fetch the user by username
     const user = await usersCollection.findOne(
       { username },
       {

@@ -19,8 +19,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { SessionProvider } from "next-auth/react";
-import Link from "next/link";
-import Image from "next/image";
+// import Link from "next/link";
+// import Image from "next/image";
 
 const data = {
   user: {
@@ -81,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-                <Link href="/" className="flex flex-row gap-2 items-center">
+                {/* <Link href="/" className="flex flex-row gap-2 items-center">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Image 
                       src="CVKU_LOGO.svg"
@@ -94,7 +94,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <span className="truncate">CVKU.id</span>
                     <span className="truncate text-xs">Cool</span>
                   </div>
-                </Link>
+                </Link> */}
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
