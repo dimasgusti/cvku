@@ -62,6 +62,8 @@ export default function Settings() {
 
   async function onSubmit(values: z.infer<typeof userSchema>) {
     setBtnLoading(true);
+
+    values.username = values.username.trim().toLowerCase();
     if (values.username !== userData?.username) {
       try {
         const usernameResponse = await fetch(
