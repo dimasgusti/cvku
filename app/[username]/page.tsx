@@ -1,7 +1,7 @@
 export default function UserProfile(){
-    return(
-        <div>
-            <p>Username</p>
-        </div>
-    )
+  return(
+    <div>
+      <p></p>
+    </div>
+  )
 }

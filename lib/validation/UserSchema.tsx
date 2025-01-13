@@ -15,4 +15,5 @@ export const userSchema = z.object({
   image: z.string().optional(),
   private: z.boolean().default(true),
   template: z.string().default("default"),
+  viewCount: z.number().default(0),
 });

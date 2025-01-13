@@ -98,6 +98,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   social        Json
   template      String?
+  viewCount     Int       @default(0)
   accounts      Account[]
   sessions      Session[]
   projects      Project[]
