@@ -29,6 +29,8 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
+import { FaGithub } from "react-icons/fa";
+import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 
 countries.registerLocale(enLocale);
 
@@ -39,6 +41,9 @@ interface Profile {
   bio: string;
   email: string;
   image: string;
+  website: string;
+  linkedIn: string;
+  github: string;
 }
 
 interface Record {
@@ -631,114 +636,73 @@ export default function Profile() {
 
             <div className="flex flex-row justify-between items-center my-4">
               <p>Contact</p>
-              <Link href="/profile/contact">
+              <Link href="/profile/settings">
                 <PlusCircle size={14} />
               </Link>
             </div>
 
-            {contacts.length > 0 ? (
-              <div>
-                {contacts.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-4">
-                    <div className="col-start-2 col-end-5">
-                      <div className="flex flex-row justify-between">
-                        <p>
-                          {record.email && (
-                            <span>
-                              📧{" "}
-                              <a
-                                href={`mailto:${record.email}`}
-                                className="underline hover:text-blue-600"
-                              >
-                                {record.email}
-                              </a>
-                            </span>
-                          )}
-                          {record.website && (
-                            <span>
-                              🌐{" "}
-                              <a
-                                href={record.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="underline hover:text-blue-600"
-                              >
-                                Website
-                              </a>
-                            </span>
-                          )}
-                          {record.linkedIn && (
-                            <span>
-                              💼{" "}
-                              <a
-                                href={record.linkedIn}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="underline hover:text-blue-600"
-                              >
-                                LinkedIn
-                              </a>
-                            </span>
-                          )}
-                          {record.github && (
-                            <span>
-                              👨‍💻{" "}
-                              <a
-                                href={record.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="underline hover:text-blue-600"
-                              >
-                                GitHub
-                              </a>
-                            </span>
-                          )}
-                        </p>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Trash2 size={14} color="red" />
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle className="font-thin">
-                                Are you sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your contact information.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
-                                disabled={btnLoading}
-                              >
-                                {btnLoading ? (
-                                  <span className="flex flex-row items-center justify-center gap-2">
-                                    <Loader className="animate-spin" />
-                                    Removing...
-                                  </span>
-                                ) : (
-                                  <span>Remove</span>
-                                )}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    </div>
+            {userData.website ? (
+              <div className="grid grid-cols-4 mt-2">
+                <div>
+                  <FaLink size={18} />
+                </div>
+                <div className="col-start-2 col-end-5">
+                  <div className="flex flex-row justify-between">
+                    <p>
+                      <a
+                        href={userData.website}
+                        target="_blank"
+                        className="underline"
+                      >
+                        {userData.website}
+                      </a>
+                    </p>
                   </div>
-                ))}
+                </div>
               </div>
-            ) : (
-              <Link href="/profile/contact">
-                <Button variant="outline" size="sm">
-                  Add Contact
-                </Button>
-              </Link>
-            )}
+            ) : null}
+
+            {userData.linkedIn ? (
+              <div className="grid grid-cols-4 mt-2">
+                <div>
+                  <FaLinkedinIn size={18} />
+                </div>
+                <div className="col-start-2 col-end-5">
+                  <div className="flex flex-row justify-between">
+                    <p>
+                      <a
+                        href={userData.linkedIn}
+                        target="_blank"
+                        className="underline"
+                      >
+                        {userData.linkedIn}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {userData.github ? (
+              <div className="grid grid-cols-4 mt-2">
+                <div>
+                  <FaGithub size={19} />
+                </div>
+                <div className="col-start-2 col-end-5">
+                  <div className="flex flex-row justify-between">
+                    <p>
+                      <a
+                        href={userData.github}
+                        target="_blank"
+                        className="underline"
+                      >
+                        {userData.github}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </>
         )}
       </div>

@@ -17,9 +17,7 @@ async function getUserByEmail(email) {
     const usersCollection = db.collection("users"); 
 
     
-    const user = await usersCollection.findOne({ email }, {
-      projection: { name: 1, username: 1, title: 1, country: 1, email: 1, bio: 1 } 
-    });
+    const user = await usersCollection.findOne({ email });
 
     return user;
   } catch (error) {

@@ -35,6 +35,9 @@ interface Profile {
   bio: string;
   email: string;
   image: string;
+  website: string;
+  linkedIn: string;
+  github: string;
   private: boolean;
 }
 
@@ -46,6 +49,7 @@ export default function Settings() {
   const [btnLoading, setBtnLoading] = useState(false);
   const formResetRef = useRef(false);
   const [charCount, setCharCount] = useState(0);
+  const [isModified, setIsModified] = useState(false);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
@@ -56,6 +60,9 @@ export default function Settings() {
       bio: "",
       email: "",
       image: "",
+      website: "",
+      linkedIn: "",
+      github: "",
       private: true,
     },
   });
@@ -93,7 +100,7 @@ export default function Settings() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        throw new Error("Something went wrong. Please try again!");
+        throw new Error("There are no changes made. Please try again!");
       }
       toast.success("Profile updated!");
       router.push("/profile");
@@ -123,6 +130,9 @@ export default function Settings() {
               bio: userData.bio || "",
               email: userData.email || "",
               image: userData.image || "",
+              website: userData.website || "",
+              linkedIn: userData.linkedIn || "",
+              github: userData.github || "",
               private: userData.private ?? true,
             });
             formResetRef.current = true;
@@ -139,8 +149,8 @@ export default function Settings() {
   }, [session?.user?.email, form]);
 
   if (status === "unauthenticated") {
-      redirect("/auth/signin");
-    }
+    redirect("/auth/signin");
+  }
 
   return (
     <div className="flex flex-row justify-center items-center">
@@ -273,6 +283,60 @@ export default function Settings() {
                   <FormDescription className="pb-2">
                     {field.value ? "Private Account" : "Public Account"}
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <h2 className="text-xl md:text-2xl">Contact Information</h2>
+            <FormField
+              control={form.control}
+              name="website"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Website</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={loading ? "Loading..." : field.value || ""}
+                      disabled={loading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="linkedIn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>LinkedIn</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={loading ? "Loading..." : field.value || ""}
+                      disabled={loading}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="github"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>GitHub</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      value={loading ? "Loading..." : field.value || ""}
+                      disabled={loading}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

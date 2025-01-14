@@ -1,9 +1,3 @@
-
-
-
-
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -65,31 +59,23 @@ model Award {
 }
 
 model Record {
-  id           String   @id @default(cuid()) @map("_id")    
-  userId       String?  
-  type         String   
-  title        String?  
-  year         String?  
-  issued       String?  
-  expires      String?  
-  
-  from         String?  
-  to           String?  
-  company      String?  
-  organization String?  
-  location     String?  
-  presentedBy  String?  
-
-  url          String?  
-  description  String?  
-  image        String?  
-
-  email        String?  
-  website      String?  
-  linkedin     String?  
-  github       String?  
-
-  User         User?    @relation(fields: [userId], references: [id])  
+  id           String  @id @default(cuid()) @map("_id")
+  userId       String?
+  type         String
+  title        String?
+  year         String?
+  issued       String?
+  expires      String?
+  from         String?
+  to           String?
+  company      String?
+  organization String?
+  location     String?
+  presentedBy  String?
+  url          String?
+  description  String?
+  image        String?
+  User         User?   @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -105,6 +91,9 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   social        Json
+  website       String?
+  linkedin      String?
+  github        String?
   template      String?
   viewCount     Int       @default(0)
   accounts      Account[]
