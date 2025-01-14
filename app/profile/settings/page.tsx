@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -40,7 +40,7 @@ interface Profile {
 
 export default function Settings() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [userData, setUserData] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
@@ -138,6 +138,10 @@ export default function Settings() {
     fetchUserData();
   }, [session?.user?.email, form]);
 
+  if (status === "unauthenticated") {
+      redirect("/auth/signin");
+    }
+
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full wsm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
@@ -151,11 +155,7 @@ export default function Settings() {
                 <ArrowLeft />
               </Button>
             </Link>
-            {userData?.username ? (
-              <h2 className="text-xl md:text-2xl">Update Profile</h2>
-            ) : (
-              <h2 className="text-xl md:text-2xl">Update Profile</h2>
-            )}
+            <h2 className="text-xl md:text-2xl">Update Profile</h2>
             <FormField
               control={form.control}
               name="email"

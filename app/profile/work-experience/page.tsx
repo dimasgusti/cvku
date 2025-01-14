@@ -280,7 +280,7 @@ export default function AddProject() {
                 {btnLoading ? (
                   <span className="flex flex-row items-center justify-center gap-2">
                     <Loader className="animate-spin" />
-                    Saving Project
+                    Saving Work Experience
                   </span>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">

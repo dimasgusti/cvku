@@ -27,6 +27,10 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
+import countries from "i18n-iso-countries";
+import enLocale from "i18n-iso-countries/langs/en.json";
+
+countries.registerLocale(enLocale);
 
 interface Profile {
   username: string;
@@ -53,6 +57,10 @@ interface Record {
   location: string;
   presentedBy: string;
   description: string;
+  email: string;
+  website: string;
+  linkedIn: string;
+  github: string;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -61,13 +69,11 @@ export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
 
-  const getFlagEmoji = (countryCode: string) => {
-    if (!countryCode) return "";
-    return String.fromCodePoint(
-      ...[...countryCode.toUpperCase()].map(
-        (c) => 0x1f1e6 - 65 + c.charCodeAt(0)
-      )
-    );
+  const getCountryName = (countryCode: string): string => {
+    if (!countryCode) return "Unknown Country";
+
+    const upperCaseCode = countryCode.toUpperCase();
+    return countries.getName(upperCaseCode, "en") || "Unknown Country";
   };
 
   const { data: userData } = useSWR<Profile>(
@@ -142,6 +148,8 @@ export default function Profile() {
   const certifications =
     recordData?.filter((record: Record) => record.type === "certification") ||
     [];
+  const contacts =
+    recordData?.filter((record: Record) => record.type === "contact") || [];
 
   return (
     <div className="flex flex-row justify-center items-center">
@@ -178,12 +186,13 @@ export default function Profile() {
                   </div>
                 </>
               ) : (
-                <p>
-                  {userData?.username} <br />
-                  <span>
-                    {userData?.title} 📍 {getFlagEmoji(userData?.country)}
-                  </span>
-                </p>
+                <>
+                  <p>
+                    {userData?.username} <br />
+                  </p>
+                  {userData.title ? <p>💼 {userData.title}</p> : null}
+                  <p>📌 {getCountryName(userData.country)}</p>
+                </>
               )}
             </div>
             <div>
@@ -614,6 +623,119 @@ export default function Profile() {
               <Link href="/profile/certification">
                 <Button variant="outline" size="sm">
                   Add Award
+                </Button>
+              </Link>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
+              <p>Contact</p>
+              <Link href="/profile/contact">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {contacts.length > 0 ? (
+              <div>
+                {contacts.map((record) => (
+                  <div key={record.id} className="grid grid-cols-4 mt-4">
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {record.email && (
+                            <span>
+                              📧{" "}
+                              <a
+                                href={`mailto:${record.email}`}
+                                className="underline hover:text-blue-600"
+                              >
+                                {record.email}
+                              </a>
+                            </span>
+                          )}
+                          {record.website && (
+                            <span>
+                              🌐{" "}
+                              <a
+                                href={record.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-blue-600"
+                              >
+                                Website
+                              </a>
+                            </span>
+                          )}
+                          {record.linkedIn && (
+                            <span>
+                              💼{" "}
+                              <a
+                                href={record.linkedIn}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-blue-600"
+                              >
+                                LinkedIn
+                              </a>
+                            </span>
+                          )}
+                          {record.github && (
+                            <span>
+                              👨‍💻{" "}
+                              <a
+                                href={record.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-blue-600"
+                              >
+                                GitHub
+                              </a>
+                            </span>
+                          )}
+                        </p>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Trash2 size={14} color="red" />
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-thin">
+                                Are you sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your contact information.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                className="bg-red-500 text-white"
+                                onClick={() => handleRemove(record.id)}
+                                disabled={btnLoading}
+                              >
+                                {btnLoading ? (
+                                  <span className="flex flex-row items-center justify-center gap-2">
+                                    <Loader className="animate-spin" />
+                                    Removing...
+                                  </span>
+                                ) : (
+                                  <span>Remove</span>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Link href="/profile/contact">
+                <Button variant="outline" size="sm">
+                  Add Contact
                 </Button>
               </Link>
             )}

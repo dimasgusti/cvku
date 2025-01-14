@@ -22,7 +22,7 @@ export default async function handler(req, res){
             return res.status(401).json({ error: "Unauthorized. Invalid session." });
         }
 
-        const { type, title, year, issued, expires, from, to, company, organization, location, presentedBy, url, description } = req.body;
+        const { type, title, year, issued, expires, from, to, company, organization, location, presentedBy, url, description, image, email, website, linkedIn, github } = req.body;
 
         if(!type || !title){
             return res.status(400).json({ error: "Type must be inserted." })
@@ -45,6 +45,11 @@ export default async function handler(req, res){
                     presentedBy,
                     url,
                     description,
+                    image,
+                    email,
+                    website,
+                    linkedin,
+                    github,
                 }
             });
 
