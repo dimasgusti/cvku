@@ -48,7 +48,7 @@ export default async function handler(req, res){
                     image,
                     email,
                     website,
-                    linkedin,
+                    linkedIn,
                     github,
                 }
             });

@@ -49,7 +49,6 @@ export default function Settings() {
   const [btnLoading, setBtnLoading] = useState(false);
   const formResetRef = useRef(false);
   const [charCount, setCharCount] = useState(0);
-  const [isModified, setIsModified] = useState(false);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),

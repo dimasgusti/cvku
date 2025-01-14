@@ -153,8 +153,6 @@ export default function Profile() {
   const certifications =
     recordData?.filter((record: Record) => record.type === "certification") ||
     [];
-  const contacts =
-    recordData?.filter((record: Record) => record.type === "contact") || [];
 
   return (
     <div className="flex flex-row justify-center items-center">
