@@ -1,25 +1,42 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const { transactionId } = req.query;
+  if (req.method === 'GET') {
+    const { transactionId } = req.query;
 
-  const API_URL = 'https://api.mayar.id/hl/v1/payment/status';
-  const MAYAR_API_KEY = process.env.MAYAR_API_KEY;
+    if (!transactionId) {
+      return res.status(400).json({ success: false, error: 'Transaction ID is required' });
+    }
 
-  console.log('Checking payment status for transaction:', transactionId);  // Log the transaction ID
+    try {
+      const statusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/status/${transactionId}`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
+        },
+      });
 
-  try {
-    const response = await axios.get(API_URL, {
-      params: { transactionId },
-      headers: {
-        Authorization: `Bearer ${MAYAR_API_KEY}`,
+      console.log('Payment status response:', statusResponse.data);
+
+      const { statusCode, messages, data } = statusResponse.data;
+
+      if (statusCode === 200) {
+        if (messages === 'active') {
+          res.status(200).json({ success: true, status: 'Payment in progress' });
+        } else if (messages === 'closed') {
+          res.status(200).json({ success: true, status: 'Payment completed' });
+        } else if (messages === 'unlisted') {
+          res.status(400).json({ success: false, error: 'Payment no longer valid' });
+        } else {
+          res.status(400).json({ success: false, error: 'Unknown payment status' });
+        }
+      } else {
+        res.status(404).json({ success: false, error: 'Payment not found' });
       }
-    });
-
-    console.log('Mayar response:', response.data);  // Log the response from Mayar
-    return res.status(200).json(response.data);  // Send the response back to the client
-  } catch (error) {
-    console.error('Error checking payment status:', error);
-    return res.status(500).json({ error: 'Error checking payment status' });  // Return an error if the request fails
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  } else {
+    res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 }
