@@ -18,25 +18,35 @@ export default async function handler(req, res) {
         },
       });
 
-      console.log('Payment response:', paymentResponse.data);
+      console.log('Payment creation response:', paymentResponse.data);
 
       if (paymentResponse.data.status === 'SUCCESS') {
         const transactionId = paymentResponse.data.data.transaction_id;
         const paymentLink = paymentResponse.data.data.link;
 
-        const statusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/status/${transactionId}`, {
-          headers: {
-            'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
-          },
-        });
+        console.log('Payment link:', paymentLink);
 
-        console.log('Payment status:', statusResponse.data);
+        setTimeout(async () => {
+          try {
+            const statusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/status/${transactionId}`, {
+              headers: {
+                'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
+              },
+            });
 
-        if (statusResponse.data.status === 'SUCCESS') {
-          res.status(200).json({ success: true, transactionId, paymentLink });
-        } else {
-          res.status(400).json({ success: false, error: 'Payment not completed' });
-        }
+            console.log('Payment status:', statusResponse.data);
+
+            if (statusResponse.data.status === 'SUCCESS') {
+              res.status(200).json({ success: true, transactionId, paymentLink });
+            } else {
+              res.status(400).json({ success: false, error: 'Payment not completed yet' });
+            }
+          } catch (error) {
+            console.error('Error checking payment status:', error);
+            res.status(500).json({ success: false, error: 'Error checking payment status' });
+          }
+        }, 30000); 
+
       } else {
         res.status(400).json({ success: false, error: 'Payment creation failed' });
       }
