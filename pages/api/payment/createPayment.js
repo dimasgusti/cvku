@@ -20,7 +20,8 @@ export default async function handler(req, res) {
 
       console.log('Payment creation response:', paymentResponse.data);
 
-      if (paymentResponse.data.status === 'SUCCESS') {
+      // Check if payment creation was successful based on Mayar's response structure
+      if (paymentResponse.data.statusCode === 200 && paymentResponse.data.messages === 'success') {
         const transactionId = paymentResponse.data.data.transaction_id;
         const paymentLink = paymentResponse.data.data.link;
 
@@ -45,9 +46,10 @@ export default async function handler(req, res) {
             console.error('Error checking payment status:', error);
             res.status(500).json({ success: false, error: 'Error checking payment status' });
           }
-        }, 30000); 
+        }, 30000);
 
       } else {
+        console.error('Payment creation failed:', paymentResponse.data.messages);
         res.status(400).json({ success: false, error: 'Payment creation failed' });
       }
     } catch (error) {
