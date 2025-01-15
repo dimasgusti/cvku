@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { amount, customerName } = req.body;
+    const { amount, customerName, email, mobile, description } = req.body;
 
     console.log('Received data:', { amount, customerName, email, mobile, description });
 
@@ -10,9 +10,9 @@ export default async function handler(req, res) {
       const paymentResponse = await axios.post('https://api.mayar.id/hl/v1/payment/create', {
         amount,
         customerName,
-        email,      
-        mobile,     
-        description,
+        email,       
+        mobile,      
+        description, 
       }, {
         headers: {
           'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
