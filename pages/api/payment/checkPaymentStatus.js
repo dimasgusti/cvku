@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
       console.log('Payment status response:', statusResponse.data);
 
-      const { statusCode, messages, data } = statusResponse.data;
+      const { statusCode, messages } = statusResponse.data;
 
       if (statusCode === 200) {
         if (messages === 'active') {
