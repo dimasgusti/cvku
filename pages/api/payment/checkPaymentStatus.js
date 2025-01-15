@@ -11,27 +11,29 @@ export default async function handler(req, res) {
     try {
       console.log(`Checking payment status for transaction: ${transactionId}`);
 
-      const statusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/status/${transactionId}`, {
+      const paymentStatusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/${transactionId}`, {
         headers: {
           'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
         },
       });
       
-      console.log('Payment status response:', statusResponse.data);
+      console.log('Payment status response:', paymentStatusResponse.data);
       
-      if (statusResponse.data.status) {
-        if (statusResponse.data.status === 'active') {
+      if (paymentStatusResponse.data.statusCode === 200) {
+        const status = paymentStatusResponse.data.data.status;
+
+        if (status === 'active') {
           res.status(200).json({ success: true, status: 'Payment is active' });
-        } else if (statusResponse.data.status === 'closed') {
+        } else if (status === 'closed') {
           res.status(200).json({ success: true, status: 'Payment is completed' });
-        } else if (statusResponse.data.status === 'unlisted') {
+        } else if (status === 'unlisted') {
           res.status(200).json({ success: true, status: 'Payment is unlisted' });
         } else {
-          console.error('Unknown status from Mayar:', statusResponse.data.status);
+          console.error('Unknown status from Mayar:', status);
           res.status(400).json({ success: false, error: 'Unknown payment status from Mayar API' });
         }
       } else {
-        res.status(400).json({ success: false, error: 'Payment status not found in response' });
+        res.status(400).json({ success: false, error: 'Payment not found' });
       }
     } catch (error) {
       console.error('Error checking payment status:', error);
