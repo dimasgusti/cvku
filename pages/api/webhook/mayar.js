@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(request) {
+export default async function handler(request) {
   try {
     const body = await request.json();
     console.log('Data webhook diterima:', body);

@@ -3,7 +3,7 @@ const axios = require('axios');
 async function registerWebhook() {
   const API_URL = 'https://api.mayar.id/hl/v1/webhook/register';
   const MAYAR_API_KEY = process.env.API_KEY; 
-  const WEBHOOK_URL = 'https://https://cvku.vercel.app/api/webhook/mayar';
+  const WEBHOOK_URL = 'https://cvku.vercel.app/api/webhook/mayar';
 
   try {
     const response = await axios.post(
