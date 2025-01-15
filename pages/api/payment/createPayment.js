@@ -20,12 +20,13 @@ export default async function handler(req, res) {
 
       console.log('Payment creation response:', paymentResponse.data);
 
-      // Check if payment creation was successful based on Mayar's response structure
       if (paymentResponse.data.statusCode === 200 && paymentResponse.data.messages === 'success') {
         const transactionId = paymentResponse.data.data.transaction_id;
         const paymentLink = paymentResponse.data.data.link;
 
         console.log('Payment link:', paymentLink);
+
+        res.status(200).json({ success: true, transactionId, paymentLink });
 
         setTimeout(async () => {
           try {
@@ -36,15 +37,13 @@ export default async function handler(req, res) {
             });
 
             console.log('Payment status:', statusResponse.data);
-
             if (statusResponse.data.status === 'SUCCESS') {
-              res.status(200).json({ success: true, transactionId, paymentLink });
+              console.log(`Payment ${transactionId} completed successfully`);
             } else {
-              res.status(400).json({ success: false, error: 'Payment not completed yet' });
+              console.log(`Payment ${transactionId} not completed yet`);
             }
           } catch (error) {
             console.error('Error checking payment status:', error);
-            res.status(500).json({ success: false, error: 'Error checking payment status' });
           }
         }, 30000);
 
