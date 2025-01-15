@@ -2,14 +2,14 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
-    const { transactionId } = req.query;
+    const { email } = req.query;
 
-    if (!transactionId) {
-      return res.status(400).json({ success: false, error: 'Transaction ID is required' });
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required' });
     }
 
     try {
-      console.log(`Checking transaction status for transaction ID: ${transactionId}`);
+      console.log(`Checking transaction status for email: ${email}`);
 
       const transactionsResponse = await axios.get('https://api.mayar.id/hl/v1/transactions', {
         params: {
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
       console.log('Transactions response:', transactionsResponse.data);
 
-      const transaction = transactionsResponse.data.data.find(item => item.transaction_id === transactionId);
+      const transaction = transactionsResponse.data.data.find(item => item.customer.email === email);
 
       if (transaction) {
         const status = transaction.status;
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
           status: `Transaction status: ${status}`,
         });
       } else {
-        return res.status(404).json({ success: false, error: 'Transaction not found' });
+        return res.status(404).json({ success: false, error: 'Transaction not found for this email' });
       }
     } catch (error) {
       console.error('Error fetching transaction status:', error);
