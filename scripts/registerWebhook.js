@@ -2,8 +2,8 @@ const axios = require('axios');
 
 async function registerWebhook() {
   const API_URL = 'https://api.mayar.id/hl/v1/webhook/register';
-  const API_KEY = process.env.API_KEY; 
-  const WEBHOOK_URL = 'https://a93d-2001-448a-6102-7f35-485b-8e91-bdaf-3113.ngrok-free.app/api/webhook/mayar';
+  const MAYAR_API_KEY = process.env.API_KEY; 
+  const WEBHOOK_URL = 'https://https://cvku.vercel.app/api/webhook/mayar';
 
   try {
     const response = await axios.post(
@@ -11,7 +11,7 @@ async function registerWebhook() {
       { url: WEBHOOK_URL },
       {
         headers: {
-          Authorization: `Bearer ${API_KEY}`,
+          Authorization: `Bearer ${MAYAR_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
