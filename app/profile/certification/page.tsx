@@ -201,9 +201,9 @@ export default function AddProject() {
                                 Does not expire
                               </SelectItem>
                               {Array.from(
-                                { length: new Date().getFullYear() - 1975 + 1 },
+                                { length: 2050 - 1975 + 1 },
                                 (_, i) => {
-                                  const year = new Date().getFullYear() - i;
+                                  const year = 2050 - i;
                                   return (
                                     <SelectItem key={year} value={String(year)}>
                                       {year}

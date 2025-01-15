@@ -184,17 +184,17 @@ export default function Profile() {
               {!userData?.username ? (
                 <>
                   <div>
-                    <p>{userData?.email}</p>
-                    <p>Thank you for signing up with CVKU!</p>
+                    <p className="text-sm">{userData?.email}</p>
+                    <p className="text-xs">Thank you for signing up with CVKU!</p>
                   </div>
                 </>
               ) : (
                 <>
-                  <p>
+                  <p className="text-lg text-black/90">
                     {userData?.username} <br />
                   </p>
-                  {userData.title ? <p>💼 {userData.title}</p> : null}
-                  <p>📌 {getCountryName(userData.country)}</p>
+                  {userData.title ? <p className="text-sm text-black/70">💼 {userData.title}</p> : null}
+                  <p className="text-sm text-black/70">📌 {getCountryName(userData.country)}</p>
                 </>
               )}
             </div>
@@ -214,8 +214,8 @@ export default function Profile() {
         {userData?.bio ? (
           <>
             <div className="pb-4">
-              <p>About</p>
-              <p>{userData?.bio}</p>
+              <p className="text-lg text-black/70">About</p>
+              <p className="text-sm">{userData?.bio}</p>
             </div>
           </>
         ) : null}
@@ -236,7 +236,7 @@ export default function Profile() {
         ) : (
           <>
             <div className="flex flex-row justify-between items-center my-4">
-              <p>Project</p>
+              <p className="text-lg text-black/70">Project</p>
               <Link href="/profile/project">
                 <PlusCircle size={14} />
               </Link>
@@ -246,7 +246,7 @@ export default function Profile() {
               <div>
                 {projects.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <div>
+                    <div className="text-sm">
                       {record.year && (
                         <p>
                           {record.year === "ongoing" ? "Ongoing" : record.year}
@@ -318,7 +318,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p>{record.description}</p>
+                      <p className="text-sm text-black/70">{record.description}</p>
                     </div>
                   </div>
                 ))}
@@ -334,7 +334,7 @@ export default function Profile() {
             <Separator className="my-4" />
 
             <div className="flex flex-row justify-between items-center my-4">
-              <p>Work Experience</p>
+              <p className="text-lg text-black/70">Work Experience</p>
               <Link href="/profile/work-experience">
                 <PlusCircle size={14} />
               </Link>
@@ -344,7 +344,7 @@ export default function Profile() {
               <div>
                 {workplace.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <p>
+                    <p className="text-sm">
                       {record.from === "ongoing" ? (
                         <span>Ongoing</span>
                       ) : (
@@ -421,7 +421,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p>{record.description}</p>
+                      <p className="text-sm text-black/70">{record.description}</p>
                     </div>
                   </div>
                 ))}
@@ -437,7 +437,7 @@ export default function Profile() {
             <Separator className="my-4" />
 
             <div className="flex flex-row justify-between items-center my-4">
-              <p>Award</p>
+              <p className="text-lg text-black/70">Award</p>
               <Link href="/profile/award">
                 <PlusCircle size={14} />
               </Link>
@@ -447,7 +447,7 @@ export default function Profile() {
               <div>
                 {awards.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <div>{record.year}</div>
+                    <div className="text-sm">{record.year}</div>
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
@@ -513,7 +513,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p>{record.description}</p>
+                      <p className="text-sm text-black/70">{record.description}</p>
                     </div>
                   </div>
                 ))}
@@ -529,7 +529,7 @@ export default function Profile() {
             <Separator className="my-4" />
 
             <div className="flex flex-row justify-between items-center my-4">
-              <p>Certification</p>
+              <p className="text-lg text-black/70">Certification</p>
               <Link href="/profile/certification">
                 <PlusCircle size={14} />
               </Link>
@@ -540,7 +540,7 @@ export default function Profile() {
                 {certifications.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
                     <div>
-                      <p>
+                      <p className="text-sm">
                         {record.issued}
                         {record.expires && (
                           <span>
@@ -617,7 +617,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p>{record.description}</p>
+                      <p className="text-sm text-black/70">{record.description}</p>
                     </div>
                   </div>
                 ))}
@@ -632,73 +632,77 @@ export default function Profile() {
 
             <Separator className="my-4" />
 
-            <div className="flex flex-row justify-between items-center my-4">
-              <p>Contact</p>
-              <Link href="/profile/settings">
-                <PlusCircle size={14} />
-              </Link>
-            </div>
+            {userData.website || userData.linkedIn || userData.github ? (
+              <div>
+                <div className="flex flex-row justify-between items-center my-4">
+                  <p>Contact</p>
+                  <Link href="/profile/settings">
+                    <PlusCircle size={14} />
+                  </Link>
+                </div>
 
-            {userData.website ? (
-              <div className="grid grid-cols-4 mt-2">
-                <div>
-                  <FaLink size={18} />
-                </div>
-                <div className="col-start-2 col-end-5">
-                  <div className="flex flex-row justify-between">
-                    <p>
-                      <a
-                        href={userData.website}
-                        target="_blank"
-                        className="underline"
-                      >
-                        {userData.website}
-                      </a>
-                    </p>
+                {userData.website ? (
+                  <div className="grid grid-cols-4 mt-2">
+                    <div>
+                      <FaLink size={18} />
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          <a
+                            href={userData.website}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {userData.website}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : null}
+                ) : null}
 
-            {userData.linkedIn ? (
-              <div className="grid grid-cols-4 mt-2">
-                <div>
-                  <FaLinkedinIn size={18} />
-                </div>
-                <div className="col-start-2 col-end-5">
-                  <div className="flex flex-row justify-between">
-                    <p>
-                      <a
-                        href={userData.linkedIn}
-                        target="_blank"
-                        className="underline"
-                      >
-                        {userData.linkedIn}
-                      </a>
-                    </p>
+                {userData.linkedIn ? (
+                  <div className="grid grid-cols-4 mt-2">
+                    <div>
+                      <FaLinkedinIn size={18} />
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          <a
+                            href={userData.linkedIn}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {userData.linkedIn}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ) : null}
+                ) : null}
 
-            {userData.github ? (
-              <div className="grid grid-cols-4 mt-2">
-                <div>
-                  <FaGithub size={19} />
-                </div>
-                <div className="col-start-2 col-end-5">
-                  <div className="flex flex-row justify-between">
-                    <p>
-                      <a
-                        href={userData.github}
-                        target="_blank"
-                        className="underline"
-                      >
-                        {userData.github}
-                      </a>
-                    </p>
+                {userData.github ? (
+                  <div className="grid grid-cols-4 mt-2">
+                    <div>
+                      <FaGithub size={19} />
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          <a
+                            href={userData.github}
+                            target="_blank"
+                            className="underline"
+                          >
+                            {userData.github}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
             ) : null}
           </>
