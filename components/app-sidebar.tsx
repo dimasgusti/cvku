@@ -53,6 +53,16 @@ const data = {
       title: "Profile",
       url: "/profile",
       icon: User,
+      items: [
+        {
+          title: "Settings",
+          url: "/profile/settings"
+        },
+        {
+          title: "Billing",
+          url: "/profile/billing",
+        },
+      ]
     },
     {
       title: "About Us",
