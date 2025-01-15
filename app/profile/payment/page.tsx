@@ -13,7 +13,7 @@ interface Payment {
 }
 
 export default function Payment() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [paymentData, setPaymentData] = useState<Payment | null>(null);
 
   useEffect(() => {
