@@ -34,30 +34,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id])
 }
 
-model Project {
-  id          String  @id @default(cuid()) @map("_id")
-  userId      String
-  type        String
-  title       String
-  year        String
-  company     String?
-  url         String?
-  description String?
-  User        User?   @relation(fields: [userId], references: [id])
-}
-
-model Award {
-  id          String  @id @default(cuid()) @map("_id")
-  userId      String
-  type        String
-  title       String
-  year        String
-  presentedBy String?
-  url         String?
-  description String?
-  User        User?   @relation(fields: [userId], references: [id])
-}
-
 model Record {
   id           String  @id @default(cuid()) @map("_id")
   userId       String?
@@ -78,29 +54,42 @@ model Record {
   User         User?   @relation(fields: [userId], references: [id])
 }
 
+model Transaction {
+  id            String   @id @default(cuid()) @map("_id")
+  mayarId       String
+  userId        String
+  mobile        String?
+  status        String
+  paymentMethod String
+  membership    String
+  credit        Int
+  createdAt     DateTime
+  endsAt        DateTime
+  User          User?    @relation(fields: [userId], references: [id])
+}
+
 model User {
-  id            String    @id @default(cuid()) @map("_id")
+  id            String        @id @default(cuid()) @map("_id")
   name          String?
-  username      String?   @unique
+  username      String?       @unique
   title         String?
   country       String?
   bio           String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   social        Json
   website       String?
   linkedin      String?
   github        String?
   template      String?
-  viewCount     Int       @default(0)
+  viewCount     Int           @default(0)
   accounts      Account[]
   sessions      Session[]
-  projects      Project[]
-  awards        Award[]
   records       Record[]
+  transactions  Transaction[]
 }
 
 model VerificationRequest {

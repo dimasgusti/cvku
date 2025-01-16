@@ -153,7 +153,7 @@ export default function Settings() {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="w-full wsm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
