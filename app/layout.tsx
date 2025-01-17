@@ -3,14 +3,13 @@
 import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
 import { generateMetaTags, defaultMeta } from "./metadata";
 import { Button } from "@/components/ui/button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
 import { Loader } from "lucide-react";
 import { Manrope } from "next/font/google";
+import Navbar from "@/components/Navbar";
 
 const manrope = Manrope({
   weight: "400",
@@ -47,19 +46,13 @@ export default function RootLayout({
         <title>{meta.title}</title>
       </head>
       <body className={manrope.className}>
-        <SidebarProvider>
-          <AppSidebar />
-          <SessionProvider session={session}>
-            <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-              <header className="w-full flex flex-row justify-between p-4 border-b sticky bg-white z-10 top-0">
-                <SidebarTrigger />
-                <LoginButton />
-              </header>
-              {children}
-              <Toaster />
-            </main>
-          </SessionProvider>
-        </SidebarProvider>
+        <SessionProvider session={session}>
+          <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
+            <Navbar />
+            {children}
+            <Toaster />
+          </main>
+        </SessionProvider>
       </body>
     </html>
   );

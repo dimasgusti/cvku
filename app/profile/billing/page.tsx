@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 interface Transaction {
   email: string;
@@ -25,7 +26,7 @@ interface Transaction {
 }
 
 export default function Billing() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
 
@@ -51,6 +52,10 @@ export default function Billing() {
       fetchTransactionData();
     }
   }, [session?.user?.email]);
+
+  if (status === "unauthenticated") {
+      redirect("/auth/signin");
+    }
 
   if (loading) {
     return (
@@ -121,7 +126,7 @@ export default function Billing() {
               </tbody>
             </table>
             <p className="text-xs text-black/70">
-              Semua transaksi di atas berstatus "Berhasil".
+              Semua transaksi di atas berstatus &quot;Berhasil&quot;.
             </p>
           </div>
         ) : (

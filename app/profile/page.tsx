@@ -156,7 +156,7 @@ export default function Profile() {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-8">
         <div className="flex flex-row justify-between items-center gap-4 py-4">
           <Link href={`/${userData.username}`} target="_blank">
             <Button>
