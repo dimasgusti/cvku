@@ -33,7 +33,6 @@ const data = {
       title: "Home",
       url: "/",
       icon: Home,
-      isActive: true,
       items: [
         {
           title: "Explore",

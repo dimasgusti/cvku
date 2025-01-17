@@ -5,6 +5,7 @@ import { generateMetaTags } from "./metadata";
 import TextReveal from "@/components/TextReveal";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -42,14 +43,14 @@ export default function HomePage() {
             <h2 className="text-xl md:text-2xl">Platform Terbaik Membuat CV</h2>
             <TextReveal />
             <Link href="/auth/signin">
-              <Button>
-                Test
+              <Button className="animate-pulse hover:animate-none">
+                <ArrowRight />
+                Daftar Sekarang
               </Button>
             </Link>
           </div>
         </div>
       </section>
-      <section></section>
     </>
   );
 }

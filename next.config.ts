@@ -17,7 +17,12 @@ const nextConfig = {
             'avatars.githubusercontent.com',
             'lh3.googleusercontent.com',
         ]
-    }
+    },
+    i18n: { 
+        locales: ['en-US', 'id-ID'],
+        defaultLocale: 'en-US', 
+        localeDetection: true, 
+    },
 }
 
 module.exports = nextConfig

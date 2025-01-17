@@ -15,7 +15,7 @@ import { Manrope } from "next/font/google";
 const manrope = Manrope({
   weight: "400",
   subsets: ["latin"],
-  display: 'swap',
+  display: "swap",
 });
 
 export default function RootLayout({
