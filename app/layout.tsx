@@ -1,7 +1,7 @@
 "use client";
 
-// import { SessionProvider } from "next-auth/react";
-// import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { Session } from "next-auth";
 import "./globals.css";
 // import { Toaster } from "sonner";
 // import { Manrope } from "next/font/google";
@@ -15,22 +15,22 @@ import "./globals.css";
 
 export default function RootLayout({
   children,
-  // session,
+  session,
 }: {
   children: React.ReactNode; 
-  // session: Session | null; 
+  session: Session | null; 
 }) { 
   return (
     <html lang="en">
       {/* <body className={manrope.className}> */}
       <body>
-        {/* <SessionProvider session={session}> */}
+        <SessionProvider session={session}>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
             {/* <Navbar /> */}
             {children}
             {/* <Toaster /> */}
           </main>
-        {/* </SessionProvider> */}
+        </SessionProvider>
       </body>
     </html>
   );
