@@ -44,7 +44,6 @@ export default function RootLayout({
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
             <Navbar />
             {children}
-            <p>Test</p>
             <Toaster />
           </main>
         </SessionProvider>
