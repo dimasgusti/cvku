@@ -104,7 +104,7 @@ export default function AddProject() {
   return (
     <>
       <div className="flex flex-row justify-center items-center py-8">
-        <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
+        <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <Link href="/profile">
