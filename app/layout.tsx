@@ -17,8 +17,8 @@ export default function RootLayout({
   children,
   session,
 }: {
-  children: React.ReactNode; 
-  session: Session | null; 
+  children: React.ReactNode,
+  session: Session | null,
 }) { 
   return (
     <html lang="en">
