@@ -1,54 +1,25 @@
-import { MongoClient } from 'mongodb';
+// pages/api/webhook/mayar.js
+import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    // Verify secret for security
-    const secret = req.headers.authorization; // "Bearer my-secret-token"
-    if (secret !== `Bearer ${process.env.MAYAR_WEBHOOK_TOKEN}`) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Only POST requests are allowed' });
+  }
 
-    try {
-      // Extract the payload
-      const { event, data } = req.body;
+  try {
+    const { body } = req;
+    
+    // Establish MongoDB connection
+    const client = await clientPromise;
+    const db = client.db('cvku');  // Replace with your database name
+    const collection = db.collection('transaction');  // Replace with your collection name
 
-      // Log the incoming data (for debugging)
-      console.log('Received Event:', event);
-      console.log('Data:', data);
+    // Insert the incoming data into MongoDB
+    const result = await collection.insertOne(body);
 
-      // Connect to MongoDB
-      const client = await MongoClient.connect(process.env.MONGODB_URL);
-      const db = client.db('cvku');
-
-      // Save the full payload to a collection
-      await db.collection('maya_events').insertOne({
-        event,
-        data,
-        receivedAt: new Date(),
-      });
-
-      // Update user subscription if the status is SUCCESS
-      if (data.status === 'SUCCESS') {
-        await db.collection('users').updateOne(
-          { userId: data.customerEmail }, // Use customerEmail as user identifier
-          {
-            $set: {
-              subscriptionStatus: 'active',
-              updatedAt: new Date(),
-            },
-          },
-          { upsert: true } // Create the user if not exists
-        );
-      }
-
-      // Respond with success
-      res.status(200).json({ success: true });
-    } catch (error) {
-      console.error('Error handling webhook:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end('Method Not Allowed');
+    return res.status(200).json({ message: 'Data saved successfully', result });
+  } catch (error) {
+    console.error('Error saving data to MongoDB:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
