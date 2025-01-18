@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     const { event, amount, customer_id, status } = req.body;
 
     // 3. Save the data to MongoDB
-    const client = await MongoClient.connect(process.env.MONGODB_URI);
+    const client = await MongoClient.connect(process.env.MONGODB_URL);
     const db = client.db('cvku');
     await db.collection('maya_webhooks').insertOne({
       event,
