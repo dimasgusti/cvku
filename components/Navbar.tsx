@@ -40,7 +40,7 @@ const Navbar = () => {
         </Button>
       </Link>
       <Link href="/profile/billing">
-        <Button variant="ghost" className={isActive("profile/billing")}>
+        <Button variant="ghost" className={isActive("/profile/billing")}>
           <CreditCard />
           Billing
         </Button>

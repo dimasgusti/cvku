@@ -17,10 +17,10 @@ const manrope = Manrope({
 export default function RootLayout({
   children,
   session,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   session: Session | null;
-}) {
+}>) {
   const meta = generateMetaTags(defaultMeta);
 
   return (
@@ -45,7 +45,7 @@ export default function RootLayout({
       <body className={manrope.className}>
         <SessionProvider session={session}>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-            <Navbar />
+            {!session ? <Navbar /> : null}
             {children}
             <Toaster />
           </main>
