@@ -1,21 +1,38 @@
+import { MongoClient } from 'mongodb';
+
 export default async function handler(req, res) {
-    if (req.method === 'POST') {
-        try {
-            const webhookToken = process.env.MAYAR_WEBHOOK_TOKEN;
-            const signature = req.headers['x-mayar-signature'];
-
-            if (signature !== webhookToken) {
-                return res.status(400).json({ message: 'Invalid signature' });
-            }
-
-            const eventData = req.body; 
-            console.log(eventData);
-            
-            return res.status(200).json({ message: 'Success' });
-        } catch (error) {
-            return res.status(500).json({ message: 'Internal server error', error });
-        }
-    } else {
-        res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method === 'POST') {
+    // 1. Verify the secret token for security
+    const secret = req.headers.authorization; // "Bearer my-secret-token"
+    if (secret !== `Bearer ${process.env.MAYAR_WEBHOOK_TOKEN}`) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    // 2. Parse the data sent by Pipedream
+    const { event, amount, customer_id, status } = req.body;
+
+    // 3. Save the data to MongoDB
+    const client = await MongoClient.connect(process.env.MONGODB_URI);
+    const db = client.db('cvku');
+    await db.collection('maya_webhooks').insertOne({
+      event,
+      amount,
+      customer_id,
+      status,
+      receivedAt: new Date(),
+    });
+
+    // 4. (Optional) Update user subscription if payment is successful
+    if (event === 'payment.success' && status === 'success') {
+      await db.collection('users').updateOne(
+        { userId: customer_id },
+        { $set: { subscriptionStatus: 'active' } }
+      );
+    }
+
+    res.status(200).json({ success: true });
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end('Method Not Allowed');
+  }
 }

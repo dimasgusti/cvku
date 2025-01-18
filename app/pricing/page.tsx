@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 export default function Pricing() {
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="w-full min-h-96 px-4 space-y-4 py-4">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 space-y-4 py-4">
         <h2 className="text-xl md:text-2xl font-semibold">Pilih Paket yang Sesuai dengan Kebutuhanmu</h2>
         <p className="text-black/70">
           Paket harga kami dirancang untuk memberikan fleksibilitas dan fitur yang kamu butuhkan
