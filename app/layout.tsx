@@ -16,10 +16,10 @@ const manrope = Manrope({
 export default function RootLayout({
   children,
   session,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   session: Session | null;
-}) {
+}>) {
   return (
     <html lang="en">
       <body className={manrope.className}>
