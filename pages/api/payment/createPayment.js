@@ -18,41 +18,27 @@ export default async function handler(req, res) {
         },
       });
 
-      console.log('Payment creation response:', paymentResponse.data);
-
       if (paymentResponse.data.statusCode === 200 && paymentResponse.data.messages === 'success') {
-        const transactionId = paymentResponse.data.data.transaction_id;
-        const paymentLink = paymentResponse.data.data.link;
+        const { statusCode, messages, data } = paymentResponse.data;
+        const { id, transaction_id, link } = data;
 
-        console.log('Payment link:', paymentLink);
-
-        res.status(200).json({ success: true, transactionId, paymentLink });
-
-        setTimeout(async () => {
-          try {
-            const statusResponse = await axios.get(`https://api.mayar.id/hl/v1/payment/status/${transactionId}`, {
-              headers: {
-                'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
-              },
-            });
-
-            console.log('Payment status:', statusResponse.data);
-            if (statusResponse.data.status === 'SUCCESS') {
-              console.log(`Payment ${transactionId} completed successfully`);
-            } else {
-              console.log(`Payment ${transactionId} not completed yet`);
-            }
-          } catch (error) {
-            console.error('Error checking payment status:', error);
-          }
-        }, 30000);
+        res.status(200).json({
+          success: true,
+          statusCode,
+          messages,
+          data: {
+            id,
+            transaction_id,
+            link,
+          },
+        });
 
       } else {
         console.error('Payment creation failed:', paymentResponse.data.messages);
-        res.status(400).json({ success: false, error: 'Payment creation failed' });
+        res.status(400).json({ success: false, error: 'Payment creation failed', details: paymentResponse.data });
       }
     } catch (error) {
-      console.error('Error creating payment:', error);
+      console.error('Error creating payment:', error.response ? error.response.data : error.message);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
   } else {
