@@ -1,18 +1,29 @@
 "use client";
 
-import { Loader } from "lucide-react";
+import { Check, Copy, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { toast } from "sonner";
 
 interface Transaction {
   email: string;
@@ -29,6 +40,17 @@ export default function Billing() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!session?.user?.email) return;
+    navigator.clipboard.writeText(session.user.email);
+    setCopied(true);
+    toast("Email Copied.");
+    setTimeout(() => {
+      setCopied(false);
+    }, 5000);
+  };
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -54,8 +76,8 @@ export default function Billing() {
   }, [session?.user?.email]);
 
   if (status === "unauthenticated") {
-      redirect("/auth/signin");
-    }
+    redirect("/auth/signin");
+  }
 
   if (loading) {
     return (
@@ -66,13 +88,87 @@ export default function Billing() {
     );
   }
 
+  const latestTransaction = transactionData
+    .slice()
+    .sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    )[0];
+
+  const expirationDate = latestTransaction
+    ? new Date(
+        new Date(latestTransaction.created).setMonth(
+          new Date(latestTransaction.created).getMonth() + 1
+        )
+      )
+    : null;
+
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 space-y-4 py-4">
-        <h2 className="text-xl md:text-2xl">Informasi Penagihan</h2>
-        <Button>Verifikasi</Button>
+        <h2 className="text-xl md:text-2xl">Subscription</h2>
+        <Card>
+          <CardHeader>
+            <CardDescription>You are on</CardDescription>
+            <CardTitle>
+              {latestTransaction ? "CVKU Pro" : "CVKU Free"}
+            </CardTitle>
+          </CardHeader>
+          {latestTransaction ? (
+            <CardContent>
+              <CardDescription>Until</CardDescription>
+              <CardDescription>
+                {expirationDate ? expirationDate.toLocaleDateString() : "N/A"}
+              </CardDescription>
+            </CardContent>
+          ) : (
+            <CardContent>
+              <CardDescription className="flex flex-row gap-1">
+                Subscribe now
+                <Dialog>
+                  <DialogTrigger className="underline">Here</DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Important!</DialogTitle>
+                    <DialogDescription>
+                      Use your CVKU email{" "}
+                      <span
+                        onClick={() => {
+                          handleCopy();
+                        }}
+                        className="hover:cursor-pointer underline inline-flex items-center gap-1"
+                        title="Click to copy"
+                      >
+                        ({session?.user?.email}){" "}
+                        {copied ? (
+                          <Check size={14} className="text-green-500 mr-1" />
+                        ) : (
+                          <Copy size={14} className="text-gray-500 mr-1" />
+                        )}
+                      </span>
+                      on the payment page. <br />
+                      Failure to do so may prevent activation of your CVKU Pro
+                      account.
+                    </DialogDescription>
+                    <DialogFooter>
+                      <Link
+                        href="/https://cv-ku.myr.id/membership/cvku-29354"
+                        target="_blank"
+                      >
+                        <Button>Continue</Button>
+                      </Link>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </CardDescription>
+            </CardContent>
+          )}
+        </Card>
+        <Separator />
+        <h2 className="text-xl md:text-2xl">Verify your Payment</h2>
+
+        <Separator />
+        <h2 className="text-xl md:text-2xl">Payment History</h2>
         {transactionData ? (
-          <div className="space-y-4 py-4">
+          <div className="space-y-4">
             <table className="table-auto border-collapse border border-gray-300 w-full">
               <thead>
                 <tr className="bg-gray-200">
