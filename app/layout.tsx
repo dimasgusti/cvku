@@ -1,11 +1,10 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import { Session } from "next-auth";
 import "./globals.css";
-import { generateMetaTags, defaultMeta } from "./metadata";
-import { Toaster } from "sonner";
 import { Manrope } from "next/font/google";
+import { defaultMeta, generateMetaTags } from "./metadata";
+import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 
 const manrope = Manrope({
@@ -16,10 +15,8 @@ const manrope = Manrope({
 
 export default function RootLayout({
   children,
-  session,
 }: {
   children: React.ReactNode;
-  session: Session | null;
 }) {
   const meta = generateMetaTags(defaultMeta);
 
@@ -43,10 +40,11 @@ export default function RootLayout({
         <title>{meta.title}</title>
       </head>
       <body className={manrope.className}>
-        <SessionProvider session={session}>
+        <SessionProvider>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
             <Navbar />
             {children}
+            <p>Test</p>
             <Toaster />
           </main>
         </SessionProvider>
