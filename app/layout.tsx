@@ -17,10 +17,10 @@ const manrope = Manrope({
 export default function RootLayout({
   children,
   session,
-}: Readonly<{
+}: {
   children: React.ReactNode;
   session: Session | null;
-}>) {
+}) {
   const meta = generateMetaTags(defaultMeta);
 
   return (
