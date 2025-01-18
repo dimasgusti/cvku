@@ -5,7 +5,7 @@ import { Session } from "next-auth";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Manrope } from "next/font/google";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 
 const manrope = Manrope({
   weight: "400",
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={manrope.className}>
         <SessionProvider session={session}>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
             <Toaster />
           </main>
