@@ -21,7 +21,7 @@ const Navbar = () => {
       ? "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
       : "";
 
-  const pagesWithAuthenticatedMenu = ["/profile", "/analytics", "/billing", "/settings"];
+  const pagesWithAuthenticatedMenu = ["/profile", "/profile/analytics", "/profile/award", "/profile/certification", "/profile/project", "/profile/work-experience", "/profile/billing", "/profile/settings"];
 
   const isAuthenticatedMenu = pagesWithAuthenticatedMenu.includes(pathname ?? "");
 
@@ -33,8 +33,8 @@ const Navbar = () => {
           Profile
         </Button>
       </Link>
-      <Link href="/analytics">
-        <Button variant="ghost" className={isActive("/analytics")}>
+      <Link href="/profile/analytics">
+        <Button variant="ghost" className={isActive("/profile/analytics")}>
           <BarChart />
           Analytics
         </Button>
@@ -45,8 +45,8 @@ const Navbar = () => {
           Billing
         </Button>
       </Link>
-      <Link href="/settings">
-        <Button variant="ghost" className={isActive("/settings")}>
+      <Link href="/profile/settings">
+        <Button variant="ghost" className={isActive("/profile/settings")}>
           <Settings />
           Settings
         </Button>
