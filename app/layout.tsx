@@ -57,38 +57,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-function LoginButton() {
-  const { data: session, status } = useSession();
-
-  if (status === "loading") {
-    return (
-      <>
-        <Button variant="outline" disabled size="sm">
-          <Loader className="animate-spin" />
-          Loading
-        </Button>
-      </>
-    );
-  }
-
-  if (session) {
-    return (
-      <>
-        <Button variant="outline" onClick={() => signOut()} size="sm">
-          <FaSignOutAlt />
-          Keluar
-        </Button>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Button onClick={() => signIn()} size="sm">
-        <FaSignInAlt />
-        Masuk
-      </Button>
-    </>
-  );
-}

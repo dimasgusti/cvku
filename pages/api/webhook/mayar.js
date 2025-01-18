@@ -1,9 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-            // Memastikan webhook berasal dari Mayar
             const webhookToken = process.env.MAYAR_WEBHOOK_TOKEN;
             const signature = req.headers['x-mayar-signature'];
 
@@ -11,10 +8,8 @@ export default async function handler(req, res) {
                 return res.status(400).json({ message: 'Invalid signature' });
             }
 
-            const eventData = req.body;  // Data yang dikirim oleh Mayar
-
-            // Proses data transaksi
-            // Misalnya, simpan data transaksi ke database Anda atau lakukan logika lain
+            const eventData = req.body; 
+            console.log(eventData);
             
             return res.status(200).json({ message: 'Success' });
         } catch (error) {
