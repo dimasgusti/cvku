@@ -3,10 +3,10 @@
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import "./globals.css";
+import { generateMetaTags, defaultMeta } from "./metadata";
 import { Toaster } from "sonner";
 import { Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
-import { defaultMeta, generateMetaTags } from "./metadata";
 
 const manrope = Manrope({
   weight: "400",
