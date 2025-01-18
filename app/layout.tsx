@@ -1,7 +1,7 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import { getServerSession, Session } from "next-auth";
+import { Session } from "next-auth";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Manrope } from "next/font/google";
