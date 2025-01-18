@@ -1,5 +1,3 @@
-// app/metadata.ts
-
 interface MetaTags {
   title: string;
   description: string;

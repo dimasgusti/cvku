@@ -20,8 +20,6 @@ export default function RootLayout({
   children: React.ReactNode;
   session: Session | null;
 }) {
-  // const meta = generateMetaTags(defaultMeta);
-
   return (
     <html lang="en">
       <body className={manrope.className}>
