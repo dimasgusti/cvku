@@ -1,13 +1,10 @@
 "use client";
 
-import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import "./globals.css";
 import { generateMetaTags, defaultMeta } from "./metadata";
-import { Button } from "@/components/ui/button";
-import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { Toaster } from "sonner";
-import { Loader } from "lucide-react";
 import { Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 
