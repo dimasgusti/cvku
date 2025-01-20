@@ -21,14 +21,16 @@ const linkUrlValidation = z
   );
 
 export const workplaceSchema = z.object({
-  type: z.string().default("project"),
+  type: z.string().default("workplace"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {
       message: "Title can only contain letters, spaces, and hyphens.",
     }),
   from: z.string().nonempty("Year must be filled."),
+  fromMonth: z.string().nonempty("Month must be filled."),
   to: z.string().nonempty("Year must be filled."),
+  toMonth: z.string().optional(),
   company: z.string().nonempty("Company must be filled."),
   location: z.string().nonempty("Location must be filled"),
   url: linkUrlValidation,

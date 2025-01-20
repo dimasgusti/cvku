@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const { 
-            type, title, year, issued, expires, from, to, company, organization, location, 
+            type, title, year, issued, expires, from, fromMonth, to, toMonth, company, organization, location, 
             presentedBy, url, description, images
         } = req.body;
 
@@ -47,7 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     issued,
                     expires,
                     from,
+                    fromMonth,
                     to,
+                    toMonth,
                     company,
                     organization, 
                     location,

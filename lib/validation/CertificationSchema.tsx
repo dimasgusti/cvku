@@ -21,7 +21,7 @@ const linkUrlValidation = z
   );
 
 export const certificationSchema = z.object({
-  type: z.string().default("project"),
+  type: z.string().default("certification"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {

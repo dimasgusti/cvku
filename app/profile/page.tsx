@@ -58,7 +58,9 @@ interface Record {
   issued: string;
   expires: string;
   from: string;
+  fromMonth: string;
   to: string;
+  toMonth: string;
   url: string;
   company: string;
   organization: string;
@@ -361,6 +363,7 @@ export default function Profile() {
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
+                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -381,6 +384,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
+                                    unoptimized
                                   />
                                 </PhotoView>
                               </div>
@@ -414,14 +418,26 @@ export default function Profile() {
                 {workplace.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
                     <p className="text-sm">
-                      {record.from === "ongoing" ? (
-                        <span>Ongoing</span>
-                      ) : (
-                        <span>{record.from}</span>
-                      )}
+                      {new Date(`${record.fromMonth} 1`).toLocaleString(
+                        "en-US",
+                        { month: "short" }
+                      )}{" "}
+                      {record.from}
                       {record.to && (
                         <span>
-                          - {record.to === "ongoing" ? "Ongoing" : record.to}
+                          -{" "}
+                          {record.to === "ongoing" ? (
+                            "Ongoing"
+                          ) : (
+                            <p>
+                              {" "}
+                              {new Date(`${record.toMonth} 1`).toLocaleString(
+                                "en-US",
+                                { month: "short" }
+                              )}{" "}
+                              {record.to}
+                            </p>
+                          )}
                         </span>
                       )}
                     </p>

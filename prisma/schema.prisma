@@ -43,7 +43,9 @@ model Record {
   issued       String?
   expires      String?
   from         String?
+  fromMonth    String?
   to           String?
+  toMonth      String?
   company      String?
   organization String?
   location     String?

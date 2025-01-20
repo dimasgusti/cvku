@@ -31,21 +31,30 @@ import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
 
-type ProjectFormValues = z.infer<typeof workplaceSchema>;
+type WorkplaceFormValues = z.infer<typeof workplaceSchema>;
 
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [from, setFrom] = useState<string | undefined>();
+  const [fromMonth, setFromMonth] = useState<string | undefined>();
+  const [to, setTo] = useState<string | undefined>();
+  const [toMonth, setToMonth] = useState<string | undefined>();
 
-  const form = useForm<ProjectFormValues>({
+  const isToDisabled = !from || !fromMonth;
+  const currentYear = new Date().getFullYear();
+
+  const form = useForm<WorkplaceFormValues>({
     resolver: zodResolver(workplaceSchema),
     defaultValues: {
       type: "workplace",
       title: "",
       from: "",
+      fromMonth: "",
       to: "",
+      toMonth: "",
       company: "",
       location: "",
       url: "",
@@ -145,7 +154,7 @@ export default function AddProject() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="from"
@@ -184,6 +193,49 @@ export default function AddProject() {
                 />
                 <FormField
                   control={form.control}
+                  name="fromMonth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>From Month*</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a month" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {[
+                                "January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                              ].map((month, index) => (
+                                <SelectItem key={index} value={month}>
+                                  {month}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="to"
                   render={({ field }) => (
                     <FormItem>
@@ -210,6 +262,49 @@ export default function AddProject() {
                                   );
                                 }
                               )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="toMonth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>To Month</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a month" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {[
+                                "January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                              ].map((month, index) => (
+                                <SelectItem key={index} value={month}>
+                                  {month}
+                                </SelectItem>
+                              ))}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
