@@ -45,11 +45,8 @@ export default async function handler(req, res) {
     try {
       const transactions = await getTransactionsByEmail(email);
 
-      if (!transactions || transactions.length === 0) {
-        return res.status(404).json({ error: "Transactions not found" });
-      }
+      return res.status(200).json({ success: true, transactions: transactions.length > 0 ? transactions : [] });
 
-      res.status(200).json({ success: true, transactions });
     } catch (error) {
       console.error("Error querying transactions:", error.message);
       res.status(500).json({ error: "Internal server error" });

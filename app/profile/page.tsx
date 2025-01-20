@@ -74,7 +74,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
-  const { isProPlanActive, loading } = useIsProPlanActive(
+  const { isProPlanActive, loading, errorMessage } = useIsProPlanActive(
     session?.user?.email || ""
   );
 
@@ -146,6 +146,10 @@ export default function Profile() {
         Please wait
       </div>
     );
+  }
+
+  if(errorMessage) {
+    return <div>{errorMessage}</div>
   }
 
   const projects =

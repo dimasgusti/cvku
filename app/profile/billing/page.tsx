@@ -68,7 +68,7 @@ export default function Billing() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 1000,
+          amount: 19999,
           customerName: session.user?.name,
           email: session.user.email,
           mobile: "0000000000",
@@ -144,7 +144,21 @@ export default function Billing() {
               <CardHeader>
                 <CardTitle>
                   {isProPlanActive
-                    ? "You're on CVKU Pro Plan"
+                    ? `You're on CVKU Pro Plan until ${new Intl.DateTimeFormat(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      ).format(
+                        new Date(
+                          transactions.find(
+                            (transaction) =>
+                              new Date(transaction.endDate) >= new Date()
+                          )?.endDate || new Date()
+                        )
+                      )}`
                     : "You're on CVKU Free Plan"}
                 </CardTitle>
                 <CardDescription>
@@ -195,14 +209,13 @@ export default function Billing() {
                     <th className="border px-4 py-2">No</th>
                     <th className="border px-4 py-2">Start Date</th>
                     <th className="border px-4 py-2">End Date</th>
-                    <th className="border px-4 py-2">Status</th>
-                    <th className="border px-4 py-2">Payment Method</th>
                     <th className="border px-4 py-2">Amount</th>
+                    <th className="border px-4 py-2">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {transactions.length > 0 ? (
-                    transactions.map((transaction, index) => (
+                    transactions.map((transaction: any, index) => (
                       <tr key={transaction.id}>
                         <td className="border px-4 py-2">{index + 1}</td>
                         <td className="border px-4 py-2">
@@ -224,9 +237,6 @@ export default function Billing() {
                         </td>
                         <td className="border px-4 py-2">
                           {transaction.amount}
-                        </td>
-                        <td className="border px-4 py-2">
-                          {transaction.status}
                         </td>
                       </tr>
                     ))

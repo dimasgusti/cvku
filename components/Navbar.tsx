@@ -75,24 +75,24 @@ const Navbar = () => {
           <p className="hidden md:inline-block">Home</p>
         </Button>
       </Link>
-      <Link href="/explore">
+      {/* <Link href="/explore">
         <Button variant="ghost" className={isActive("/explore")}>
           <Compass />
           <p className="hidden md:inline-block">Explore</p>
         </Button>
-      </Link>
+      </Link> */}
       <Link href="/pricing">
         <Button variant="ghost" className={isActive("/pricing")}>
           <DollarSign />
           <p className="hidden md:inline-block">Pricing</p>
         </Button>
       </Link>
-      <Link href="/help">
+      {/* <Link href="/help">
         <Button variant="ghost" className={isActive("/help")}>
           <LifeBuoy />
           <p className="hidden md:inline-block">Help</p>
         </Button>
-      </Link>
+      </Link> */}
     </ul>
   );
 
