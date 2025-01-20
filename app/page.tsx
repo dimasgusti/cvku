@@ -7,7 +7,6 @@ import { ArrowRight } from "lucide-react";
 import Pricing from "./pricing/page";
 import { generateMetaTags } from "./metadata";
 import Head from "next/head";
-import MediaUpload from "@/components/MediaUpload";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -50,7 +49,6 @@ export default function HomePage() {
                 Daftar Sekarang
               </Button>
             </Link>
-            <MediaUpload />
           </div>
         </div>
       </section>
