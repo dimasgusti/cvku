@@ -57,13 +57,13 @@ export default function AddProject() {
 
   const handleFileValidation = (file: File) => {
     const maxSize = 5 * 1024 * 1024; 
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (file.size > maxSize) {
       toast.error("File size exceeds 5MB!");
       return false;
     }
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only images and videos are allowed.");
+      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
       return false;
     }
     return true;
@@ -307,7 +307,7 @@ export default function AddProject() {
                         disabled={btnLoading}
                         type="file"
                         multiple
-                        accept="image/*, video/*"
+                        accept="image/*"
                         onChange={(e) => {
                           const files = e.target.files
                             ? Array.from(e.target.files)
@@ -317,7 +317,7 @@ export default function AddProject() {
                       />
                     </FormControl>
                     <FormDescription>
-                      Max file size: 5MB, Allowed types: Images and Videos
+                      Max file size: 5MB, Allowed types: Images (jpeg, png, gif)
                     </FormDescription>
                     {field.value && field.value.length > 0 && (
                       <div className="overflow-x-auto flex flex-row space-x-4 border p-1 rounded-sm">
@@ -336,11 +336,7 @@ export default function AddProject() {
                                     className="preview-image w-32 h-32 object-cover"
                                   />
                                 ) : (
-                                  <video
-                                    src={url}
-                                    controls
-                                    className="preview-video w-32 h-32 object-cover"
-                                  />
+                                  null
                                 )}
                                 <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
                                   {file.name}
