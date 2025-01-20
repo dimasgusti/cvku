@@ -26,12 +26,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { certificationSchema } from "@/lib/validation/CertificationSchema";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
+import { educationSchema } from "@/lib/validation/educationSchema";
 
-type ProjectFormValues = z.infer<typeof certificationSchema>;
+type EducationFormValues = z.infer<typeof educationSchema>;
 
 export default function AddProject() {
   const router = useRouter();
@@ -39,20 +39,22 @@ export default function AddProject() {
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
 
-  const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(certificationSchema),
+  const form = useForm<EducationFormValues>({
+    resolver: zodResolver(educationSchema),
     defaultValues: {
-      type: "certification",
+      type: "education",
       title: "",
-      issued: "",
-      expires: "",
-      organization: "",
+      from: "",
+      to: "",
+      institution: "",
+      fieldOfStudy: "",
+      gpa: "",
       url: "",
       description: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof certificationSchema>) {
+  async function onSubmit(values: z.infer<typeof educationSchema>) {
     setBtnLoading(true);
     try {
       const response = await fetch("/api/records", {
@@ -63,7 +65,7 @@ export default function AddProject() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        let errorMessage = "Failed to add the certification.";
+        let errorMessage = "Failed to add the education.";
 
         if (response.status !== 204) {
           const responseText = await response.text();
@@ -113,14 +115,14 @@ export default function AddProject() {
                   <ArrowLeft />
                 </Button>
               </Link>
-              <h2 className="text-xl md:text-2xl">Add Project</h2>
+              <h2 className="text-xl md:text-2xl">Add Education</h2>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name*</FormLabel>
+                      <FormLabel>Degree*</FormLabel>
                       <FormControl>
                         <Input placeholder="iOS Swift UI" {...field} />
                       </FormControl>
@@ -147,7 +149,7 @@ export default function AddProject() {
               <div className="grid grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="issued"
+                  name="from"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Issued*</FormLabel>
@@ -183,10 +185,10 @@ export default function AddProject() {
                 />
                 <FormField
                   control={form.control}
-                  name="expires"
+                  name="to"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Expires*</FormLabel>
+                      <FormLabel>Graduated*</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) => field.onChange(value)}
@@ -197,9 +199,6 @@ export default function AddProject() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <SelectItem value="doesNotExpire">
-                                Does not expire
-                              </SelectItem>
                               {Array.from(
                                 { length: 2050 - 1975 + 1 },
                                 (_, i) => {
@@ -223,12 +222,46 @@ export default function AddProject() {
               </div>
               <FormField
                 control={form.control}
-                name="organization"
+                name="institution"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Organization*</FormLabel>
+                    <FormLabel>Intitution*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Coursera" {...field} />
+                      <Input placeholder="Harvard University" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="fieldOfStudy"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Field of Study*</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Computer Science" {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="gpa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GPA</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="3.85" 
+                        type="number"
+                        max={4}
+                        step='0.1'
+                        {...field} 
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />

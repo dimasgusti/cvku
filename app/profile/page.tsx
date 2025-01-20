@@ -64,6 +64,9 @@ interface Record {
   url: string;
   company: string;
   organization: string;
+  institution: string;
+  fieldOfStudy: string;
+  gpa: string;
   location: string;
   presentedBy: string;
   description: string;
@@ -162,6 +165,8 @@ export default function Profile() {
   const certifications =
     recordData?.filter((record: Record) => record.type === "certification") ||
     [];
+  const educations =
+    recordData?.filter((record: Record) => record.type === "education") || [];
 
   return (
     <div className="flex flex-row justify-center items-center">
@@ -727,6 +732,116 @@ export default function Profile() {
               <Link href="/profile/certification">
                 <Button variant="outline" size="sm">
                   Add Award
+                </Button>
+              </Link>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Education</p>
+              <Link href="/profile/education">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {educations.length > 0 ? (
+              <div>
+                {educations.map((record) => (
+                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                    <div>
+                      <p className="text-sm">
+                        {record.from}
+                        {record.to && (
+                          <span>
+                            {" - "}
+                            {parseInt(record.to) > new Date().getFullYear()
+                              ? `Expected ${record.to}`
+                              : record.to}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {record.title}
+                          {record.institution && record.url ? (
+                            <>
+                              {" "}
+                              at{" "}
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                {record.institution}
+                              </a>
+                            </>
+                          ) : record.institution ? (
+                            <> at {record.institution}</>
+                          ) : record.url ? (
+                            <>
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                Visit Link
+                              </a>
+                            </>
+                          ) : null}
+                        </p>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Trash2 size={14} color="red" />
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-thin">
+                                Are you sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your project from our
+                                servers.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                className="bg-red-500 text-white"
+                                onClick={() => handleRemove(record.id)}
+                                disabled={btnLoading}
+                              >
+                                {btnLoading ? (
+                                  <span className="flex flex-row items-center justify-center gap-2">
+                                    <Loader className="animate-spin" />
+                                    Removing...
+                                  </span>
+                                ) : (
+                                  <span>Remove</span>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      <p className="text-sm text-black/70">
+                        {record.description}{" "}
+                      </p>
+                      <p className="text-sm text-black/70">
+                        Field of Study: {record.fieldOfStudy} <br />
+                        {record.gpa && `GPA: ${record.gpa}`}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Link href="/profile/certification">
+                <Button variant="outline" size="sm">
+                  Add Education
                 </Button>
               </Link>
             )}

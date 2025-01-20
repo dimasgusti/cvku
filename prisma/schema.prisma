@@ -48,6 +48,9 @@ model Record {
   toMonth      String?
   company      String?
   organization String?
+  institution  String?
+  fieldOfStudy String?
+  gpa          String?
   location     String?
   presentedBy  String?
   url          String?

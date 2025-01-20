@@ -73,7 +73,7 @@ export default function AddProject() {
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        let errorMessage = "Failed to add the award.";
+        let errorMessage = "Failed to add the work experience.";
 
         if (response.status !== 204) {
           const responseText = await response.text();

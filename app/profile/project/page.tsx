@@ -130,7 +130,7 @@ export default function AddProject() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save project data.");
+        throw new Error("Failed to add the certification.");
       }
 
       toast.success("New project added successfully!");
