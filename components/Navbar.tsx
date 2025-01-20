@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import {
   BarChart,
-  Compass,
+  // Compass,
   CreditCard,
   DollarSign,
   Home,
-  LifeBuoy,
+  // LifeBuoy,
   Settings,
   User,
 } from "lucide-react";

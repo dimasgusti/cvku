@@ -215,7 +215,7 @@ export default function Billing() {
                 </thead>
                 <tbody>
                   {transactions.length > 0 ? (
-                    transactions.map((transaction: any, index) => (
+                    transactions.map((transaction, index) => (
                       <tr key={transaction.id}>
                         <td className="border px-4 py-2">{index + 1}</td>
                         <td className="border px-4 py-2">
@@ -233,10 +233,11 @@ export default function Billing() {
                           }).format(new Date(transaction.endDate))}
                         </td>
                         <td className="border px-4 py-2">
-                          {transaction.status}
+                        {transaction.amount}
+
                         </td>
                         <td className="border px-4 py-2">
-                          {transaction.amount}
+                          {transaction.status}
                         </td>
                       </tr>
                     ))
