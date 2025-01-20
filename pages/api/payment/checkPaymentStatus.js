@@ -9,8 +9,6 @@ export default async function handler(req, res) {
     }
 
     try {
-      console.log(`Fetching all transactions for email: ${email}`);
-
       let page = 1;
       let allTransactions = [];
       let moreTransactions = true;
@@ -23,10 +21,9 @@ export default async function handler(req, res) {
           },
           headers: {
             'Authorization': `Bearer ${process.env.MAYAR_API_KEY}`,
+            'Content-Type': 'application/json'
           },
         });
-
-        console.log(`Transactions response for page ${page}:`, transactionsResponse.data);
 
         const filteredTransactions = transactionsResponse.data.data.filter(item => item.customer.email === email);
 

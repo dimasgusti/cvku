@@ -55,17 +55,21 @@ model Record {
 }
 
 model Transaction {
-  id            String   @id @default(cuid()) @map("_id")
-  mayarId       String
-  userId        String
-  mobile        String?
-  status        String
-  paymentMethod String
-  membership    String
-  credit        Int
-  createdAt     DateTime
-  endsAt        DateTime
-  User          User?    @relation(fields: [userId], references: [id])
+  id                          String   @id @default(cuid()) @map("_id")
+  mayarId                     String
+  userId                      String
+  customerMobile              String?
+  status                      String
+  paymentMethod               String
+  productName                 String
+  productType                 String
+  membership                  String
+  credit                      Int
+  isAdminFeeBorneByCustomer   Boolean
+  isChannelFeeBorneByCustomer Boolean
+  createdAt                   DateTime @default(now())
+  endsAt                      DateTime
+  User                        User?    @relation(fields: [userId], references: [id])
 }
 
 model User {
