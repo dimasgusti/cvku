@@ -51,7 +51,7 @@ export default function AddProject() {
       company: "",
       url: "",
       description: "",
-      image: [],
+      images: [],
     },
   });
 
@@ -76,10 +76,10 @@ export default function AddProject() {
       const projectData = { ...values };
 
       
-      if (values.image && values.image.length > 0) {
+      if (values.images && values.images.length > 0) {
         const fileUrls: string[] = [];
 
-        for (const file of values.image) {
+        for (const file of values.images) {
           if (file instanceof File) {
             
             const isValid = handleFileValidation(file);
@@ -122,7 +122,7 @@ export default function AddProject() {
         }
 
         
-        projectData.image = fileUrls;
+        projectData.images = fileUrls;
       }
 
       
@@ -298,7 +298,7 @@ export default function AddProject() {
 
               <FormField
                 control={form.control}
-                name="image"
+                name="images"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Upload Images*</FormLabel>
