@@ -50,7 +50,7 @@ model Record {
   presentedBy  String?
   url          String?
   description  String?
-  images       String[] @default([])
+  image        String[] @default([])
   User         User?    @relation(fields: [userId], references: [id])
 }
 
