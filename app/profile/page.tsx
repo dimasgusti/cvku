@@ -63,7 +63,7 @@ interface Record {
   location: string;
   presentedBy: string;
   description: string;
-  images: (string | StaticImageData)[];
+  image: (string | StaticImageData)[];
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -339,10 +339,10 @@ export default function Profile() {
                       <p className="text-sm text-black/70">
                         {record.description}
                       </p>
-                      {record.images && (
+                      {record.image && (
                         <div className="overflow-x-auto flex flex-row space-x-4">
-                          {Array.isArray(record.images) ? (
-                            record.images.map((imageUrl, index) => (
+                          {Array.isArray(record.image) ? (
+                            record.image.map((imageUrl, index) => (
                               <div key={index} className="flex-shrink-0">
                                 <Image
                                   src={imageUrl}
@@ -355,7 +355,7 @@ export default function Profile() {
                           ) : (
                             <div className="flex-shrink-0">
                               <Image
-                                src={record.images}
+                                src={record.image}
                                 alt={`Image ${session?.user?.name}`}
                                 width={100}
                                 height={50}
