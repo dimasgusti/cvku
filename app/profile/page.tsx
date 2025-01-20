@@ -31,6 +31,7 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
+import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
 
 countries.registerLocale(enLocale);
 
@@ -73,6 +74,9 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
+  const { isProPlanActive, loading } = useIsProPlanActive(
+    session?.user?.email || ""
+  );
 
   const getCountryName = (countryCode: string): string => {
     if (!countryCode) return "Unknown Country";
@@ -135,7 +139,7 @@ export default function Profile() {
     redirect("/auth/signin");
   }
 
-  if (!userData || !recordData) {
+  if (!userData || !recordData || loading) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -157,14 +161,21 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-8">
+        <div className="flex flex-row justify-center w-full items-center">
+          {!isProPlanActive && (
+            <Link href="/profile/billing" className="w-full">
+              <Button className="w-full">Upgrade to CVKU Pro</Button>
+            </Link>
+          )}
+        </div>
         <div className="flex flex-row justify-between items-center gap-4 py-4">
           <Link href={`/${userData.username}`} target="_blank">
-            <Button>
+            <Button variant="secondary">
               <Eye /> Preview
             </Button>
           </Link>
           <Link href="/profile/pdf">
-            <Button>
+            <Button variant="secondary">
               <Download />
               Convert PDF
             </Button>
@@ -185,7 +196,9 @@ export default function Profile() {
                 <>
                   <div>
                     <p className="text-sm">{userData?.email}</p>
-                    <p className="text-xs">Thank you for signing up with CVKU!</p>
+                    <p className="text-xs">
+                      Thank you for signing up with CVKU!
+                    </p>
                   </div>
                 </>
               ) : (
@@ -193,8 +206,12 @@ export default function Profile() {
                   <p className="text-lg text-black/90">
                     {userData?.username} <br />
                   </p>
-                  {userData.title ? <p className="text-sm text-black/70">💼 {userData.title}</p> : null}
-                  <p className="text-sm text-black/70">📌 {getCountryName(userData.country)}</p>
+                  {userData.title ? (
+                    <p className="text-sm text-black/70">💼 {userData.title}</p>
+                  ) : null}
+                  <p className="text-sm text-black/70">
+                    📌 {getCountryName(userData.country)}
+                  </p>
                 </>
               )}
             </div>
@@ -318,7 +335,9 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">{record.description}</p>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -421,7 +440,9 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">{record.description}</p>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -513,7 +534,9 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">{record.description}</p>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -617,7 +640,9 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">{record.description}</p>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
                     </div>
                   </div>
                 ))}

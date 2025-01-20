@@ -157,7 +157,7 @@ export default function Settings() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 py-4"
+            className="space-y-4 pt-4 pb-16"
           >
             <Link href="/profile">
               <Button variant="outline">
@@ -267,25 +267,6 @@ export default function Settings() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="private"
-              render={({ field }) => (
-                <FormItem className="flex flex-row justify-start items-center gap-2">
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      aria-readonly
-                    />
-                  </FormControl>
-                  <FormDescription className="pb-2">
-                    {field.value ? "Private Account" : "Public Account"}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <h2 className="text-xl md:text-2xl">Contact Information</h2>
             <FormField
               control={form.control}
@@ -340,6 +321,27 @@ export default function Settings() {
                 </FormItem>
               )}
             />
+            <h2 className="text-xl md:text-2xl">Privacy Control</h2>
+            <FormField
+              control={form.control}
+              name="private"
+              render={({ field }) => (
+                <FormItem className="flex flex-row justify-start items-center gap-2">
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      aria-readonly
+                    />
+                  </FormControl>
+                  <FormDescription className="pb-2">
+                    {field.value ? "Private Account" : "Public Account"}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <Button type="submit" disabled={btnLoading}>
               {btnLoading ? (
                 <span className="flex flex-row items-center justify-center gap-2">
