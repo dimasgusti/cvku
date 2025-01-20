@@ -38,13 +38,6 @@ export default function AddProject() {
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
-  const [from, setFrom] = useState<string | undefined>();
-  const [fromMonth, setFromMonth] = useState<string | undefined>();
-  const [to, setTo] = useState<string | undefined>();
-  const [toMonth, setToMonth] = useState<string | undefined>();
-
-  const isToDisabled = !from || !fromMonth;
-  const currentYear = new Date().getFullYear();
 
   const form = useForm<WorkplaceFormValues>({
     resolver: zodResolver(workplaceSchema),
