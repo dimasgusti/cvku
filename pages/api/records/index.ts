@@ -47,6 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     issued,
                     expires,
                     from,
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     fromMonth: fromMonth,
                     to,
                     toMonth,

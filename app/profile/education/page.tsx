@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
-import { educationSchema } from "@/lib/validation/educationSchema";
+import { educationSchema } from "@/lib/validation/EducationSchema";
 
 type EducationFormValues = z.infer<typeof educationSchema>;
 
