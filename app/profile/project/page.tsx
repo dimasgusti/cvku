@@ -47,6 +47,7 @@ export default function AddProject() {
     defaultValues: {
       type: "project",
       title: "",
+      fromMonth: "",
       year: "",
       company: "",
       url: "",
@@ -56,7 +57,7 @@ export default function AddProject() {
   });
 
   const handleFileValidation = (file: File) => {
-    const maxSize = 5 * 1024 * 1024; 
+    const maxSize = 5 * 1024 * 1024;
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (file.size > maxSize) {
       toast.error("File size exceeds 5MB!");
@@ -72,24 +73,20 @@ export default function AddProject() {
   const onSubmit = async (values: z.infer<typeof projectSchema>) => {
     setBtnLoading(true);
     try {
-      
       const projectData = { ...values };
 
-      
       if (values.images && values.images.length > 0) {
         const fileUrls: string[] = [];
 
         for (const file of values.images) {
           if (file instanceof File) {
-            
             const isValid = handleFileValidation(file);
             if (!isValid) {
-              
               toast.error(
                 "One or more files are invalid. Please check the file size or type."
               );
               setBtnLoading(false);
-              return; 
+              return;
             }
 
             const storageRef = ref(storage, `uploads/${file.name}`);
@@ -101,16 +98,15 @@ export default function AddProject() {
                 (snapshot) => {
                   const progress =
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  setProgress(progress); 
+                  setProgress(progress);
                 },
                 (error) => {
                   console.error("Upload failed:", error);
                   reject(error);
                 },
                 () => {
-                  
                   getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                    fileUrls.push(url); 
+                    fileUrls.push(url);
                     resolve();
                   });
                 }
@@ -121,11 +117,9 @@ export default function AddProject() {
           }
         }
 
-        
         projectData.images = fileUrls;
       }
 
-      
       console.log(projectData);
       const response = await fetch("/api/records", {
         method: "POST",
@@ -194,7 +188,52 @@ export default function AddProject() {
                   </FormItem>
                 )}
               />
+
               <div className="grid grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="fromMonth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Month*</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a month" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {[
+                                "January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                              ].map((month, index) => (
+                                <SelectItem key={index} value={month}>
+                                  {month}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="year"
@@ -233,21 +272,23 @@ export default function AddProject() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>URL</FormLabel>
-                      <FormControl>
-                        <Input disabled={btnLoading} {...field} />
-                      </FormControl>
-                      <FormDescription />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
+
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL</FormLabel>
+                    <FormControl>
+                      <Input disabled={btnLoading} {...field} />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="company"
@@ -301,7 +342,7 @@ export default function AddProject() {
                 name="images"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Upload Images*</FormLabel>
+                    <FormLabel>Upload Images</FormLabel>
                     <FormControl>
                       <Input
                         disabled={btnLoading}
@@ -312,7 +353,7 @@ export default function AddProject() {
                           const files = e.target.files
                             ? Array.from(e.target.files)
                             : [];
-                          field.onChange(files); 
+                          field.onChange(files);
                         }}
                       />
                     </FormControl>
@@ -335,9 +376,7 @@ export default function AddProject() {
                                     alt={`Preview ${index}`}
                                     className="preview-image w-32 h-32 object-cover"
                                   />
-                                ) : (
-                                  null
-                                )}
+                                ) : null}
                                 <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
                                   {file.name}
                                 </p>

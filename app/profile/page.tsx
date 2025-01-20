@@ -271,7 +271,17 @@ export default function Profile() {
                     <div className="text-sm">
                       {record.year && (
                         <p>
-                          {record.year === "ongoing" ? "Ongoing" : record.year}
+                          {record.year === "ongoing" ? (
+                            "Ongoing"
+                          ) : (
+                            <span>
+                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                                "en-US",
+                                { month: "short" }
+                              )}{" "}
+                              {record.year}
+                            </span>
+                          )}
                         </p>
                       )}
                     </div>
@@ -429,14 +439,14 @@ export default function Profile() {
                           {record.to === "ongoing" ? (
                             "Ongoing"
                           ) : (
-                            <p>
+                            <span>
                               {" "}
                               {new Date(`${record.toMonth} 1`).toLocaleString(
                                 "en-US",
                                 { month: "short" }
                               )}{" "}
                               {record.to}
-                            </p>
+                            </span>
                           )}
                         </span>
                       )}
