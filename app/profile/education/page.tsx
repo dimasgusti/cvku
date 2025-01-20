@@ -33,7 +33,7 @@ import { educationSchema } from "@/lib/validation/educationSchema";
 
 type EducationFormValues = z.infer<typeof educationSchema>;
 
-export default function AddProject() {
+export default function AddEducation() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();

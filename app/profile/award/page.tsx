@@ -33,7 +33,7 @@ import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof awardSchema>;
 
-export default function AddProject() {
+export default function AddAward() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();

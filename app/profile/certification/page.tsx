@@ -33,7 +33,7 @@ import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof certificationSchema>;
 
-export default function AddProject() {
+export default function AddCertification() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();

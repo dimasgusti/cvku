@@ -26,70 +26,125 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { workplaceSchema } from "@/lib/validation/WorkplaceSchema";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebaseConfig";
+import { volunteerSchema } from "@/lib/validation/VolunteerSchema";
 
-type WorkplaceFormValues = z.infer<typeof workplaceSchema>;
+type VolunteerFormValues = z.infer<typeof volunteerSchema>;
 
-export default function AddWorkExperience() {
+export default function AddVolunteer() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  const form = useForm<WorkplaceFormValues>({
-    resolver: zodResolver(workplaceSchema),
+  const form = useForm<VolunteerFormValues>({
+    resolver: zodResolver(volunteerSchema),
     defaultValues: {
-      type: "workplace",
+      type: "volunteer",
       title: "",
-      from: "",
       fromMonth: "",
-      to: "",
+      from: "",
       toMonth: "",
-      company: "",
-      location: "",
+      to: "",
+      organization: "",
       url: "",
       description: "",
+      images: [],
     },
   });
 
-  async function onSubmit(values: z.infer<typeof workplaceSchema>) {
+  const handleFileValidation = (file: File) => {
+    const maxSize = 5 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (file.size > maxSize) {
+      toast.error("File size exceeds 5MB!");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
+      return false;
+    }
+    return true;
+  };
+
+  const onSubmit = async (values: z.infer<typeof volunteerSchema>) => {
     setBtnLoading(true);
     try {
+      const projectData = { ...values };
+
+      if (values.images && values.images.length > 0) {
+        const fileUrls: string[] = [];
+
+        for (const file of values.images) {
+          if (file instanceof File) {
+            const isValid = handleFileValidation(file);
+            if (!isValid) {
+              toast.error(
+                "One or more files are invalid. Please check the file size or type."
+              );
+              setBtnLoading(false);
+              return;
+            }
+
+            const storageRef = ref(storage, `uploads/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  setProgress(progress);
+                },
+                (error) => {
+                  console.error("Upload failed:", error);
+                  reject(error);
+                },
+                () => {
+                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    fileUrls.push(url);
+                    resolve();
+                  });
+                }
+              );
+            });
+          } else {
+            console.error("Invalid file type encountered:", file);
+          }
+        }
+
+        projectData.images = fileUrls;
+      }
+
+      console.log(projectData);
       const response = await fetch("/api/records", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(projectData),
       });
+
       if (!response.ok) {
-        let errorMessage = "Failed to add the work experience.";
-
-        if (response.status !== 204) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const errorData = JSON.parse(responseText);
-              errorMessage = errorData.error || errorMessage;
-            } catch (err) {
-              console.error("Error parsing the error response:", err);
-            }
-          }
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Failed to add the certification.");
       }
-      toast.success("New project added successfully!");
+
+      toast.success("New volunteer added successfully!");
       router.push("/profile");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "An unexpected error occured."
+        error instanceof Error ? error.message : "An unexpected error occurred."
       );
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
   if (!session) {
     return (
@@ -108,7 +163,7 @@ export default function AddWorkExperience() {
   return (
     <>
       <div className="flex flex-row justify-center items-center py-8">
-        <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96">
+        <div className="sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <Link href="/profile">
@@ -116,46 +171,36 @@ export default function AddWorkExperience() {
                   <ArrowLeft />
                 </Button>
               </Link>
-              <h2 className="text-xl md:text-2xl">Add Work Experience</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name*</FormLabel>
-                      <FormControl>
-                        <Input placeholder="iOS Swift UI" {...field} />
-                      </FormControl>
-                      <FormDescription />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>URL</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormDescription />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+              <h2 className="text-xl md:text-2xl">Add Volunteer</h2>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role*</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Fastest Keyboard Typer"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="from"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>From*</FormLabel>
+                      <FormLabel>Year*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -184,12 +229,13 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="fromMonth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>From Month*</FormLabel>
+                      <FormLabel>Month*</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) => field.onChange(value)}
@@ -227,14 +273,16 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="to"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Expires*</FormLabel>
+                      <FormLabel>Year*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -264,12 +312,13 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="toMonth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>To Month</FormLabel>
+                      <FormLabel>Month</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) => field.onChange(value)}
@@ -308,28 +357,34 @@ export default function AddWorkExperience() {
                   )}
                 />
               </div>
+
               <FormField
                 control={form.control}
-                name="company"
+                name="url"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Organization*</FormLabel>
+                    <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="Coursera" {...field} />
+                      <Input disabled={btnLoading} {...field} />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="location"
+                name="organization"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location*</FormLabel>
+                    <FormLabel>Organization</FormLabel>
                     <FormControl>
-                      <Input placeholder="Indonesia, Bogor" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="MyMom"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -344,7 +399,8 @@ export default function AddWorkExperience() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Describe your project in all its glory!"
+                        disabled={btnLoading}
+                        placeholder="Describe your Responsibilites!"
                         maxLength={150}
                         {...field}
                         value={field.value}
@@ -364,12 +420,71 @@ export default function AddWorkExperience() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upload Images</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={btnLoading}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => {
+                          const files = e.target.files
+                            ? Array.from(e.target.files)
+                            : [];
+                          field.onChange(files);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Max file size: 5MB, Allowed types: Images (jpeg, png, gif)
+                    </FormDescription>
+                    {field.value && field.value.length > 0 && (
+                      <div className="overflow-x-auto flex flex-row space-x-4 border p-1 rounded-sm">
+                        {field.value.map((file, index) => {
+                          if (file instanceof File) {
+                            const url = URL.createObjectURL(file);
+                            return (
+                              <div
+                                key={index}
+                                className="flex-shrink-0 text-center"
+                              >
+                                {file.type.startsWith("image") ? (
+                                  <img
+                                    src={url}
+                                    alt={`Preview ${index}`}
+                                    className="preview-image w-32 h-32 object-cover"
+                                  />
+                                ) : null}
+                                <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
+                                  {file.name}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" disabled={btnLoading}>
                 {btnLoading ? (
-                  <span className="flex flex-row items-center justify-center gap-2">
-                    <Loader className="animate-spin" />
-                    Saving Work Experience
-                  </span>
+                  <>
+                    <span className="flex flex-row items-center justify-center gap-2">
+                      <Loader className="animate-spin" />
+                      Saving Volunteer Uploading {progress}%
+                    </span>
+                  </>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">
                     <Save />

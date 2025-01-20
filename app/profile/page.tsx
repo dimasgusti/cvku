@@ -167,6 +167,8 @@ export default function Profile() {
     [];
   const educations =
     recordData?.filter((record: Record) => record.type === "education") || [];
+  const volunteers =
+    recordData?.filter((record: Record) => record.type === "volunteer") || [];
 
   return (
     <div className="flex flex-row justify-center items-center">
@@ -842,6 +844,176 @@ export default function Profile() {
               <Link href="/profile/certification">
                 <Button variant="outline" size="sm">
                   Add Education
+                </Button>
+              </Link>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Volunteer</p>
+              <Link href="/profile/volunteer">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {volunteers.length > 0 ? (
+              <div>
+                {volunteers.map((record) => (
+                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                    <div className="text-sm">
+                      {record.from && (
+                        <p>
+                          {record.to ? (
+                            <span>
+                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                                "en-US",
+                                { month: "short" }
+                              )}{" "}
+                              {record.from} -{" "}
+                              {new Date(`${record.toMonth} 1`).toLocaleString(
+                                "en-US",
+                                { month: "short" }
+                              )}{" "}
+                              {record.to}
+                            </span>
+                          ) : (
+                            <span>
+                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                                "en-US",
+                                { month: "short" }
+                              )}{" "}
+                              {record.from} - Ongoing
+                            </span>
+                          )}
+                        </p>
+                      )}
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {record.title}
+                          {record.organization && record.url ? (
+                            <>
+                              {" "}
+                              at{" "}
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                {record.organization}
+                              </a>
+                            </>
+                          ) : record.organization ? (
+                            <> at {record.organization}</>
+                          ) : record.url ? (
+                            <>
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                Visit Link
+                              </a>
+                            </>
+                          ) : null}
+                        </p>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Trash2 size={14} color="red" />
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-thin">
+                                Are you sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your volunteer record from
+                                our servers.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                className="bg-red-500 text-white"
+                                onClick={() => handleRemove(record.id)}
+                                disabled={btnLoading}
+                              >
+                                {btnLoading ? (
+                                  <span className="flex flex-row items-center justify-center gap-2">
+                                    <Loader className="animate-spin" />
+                                    Removing...
+                                  </span>
+                                ) : (
+                                  <span>Remove</span>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
+                      {record.image && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(record.image) ? (
+                              record.image.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof record.image === "string"
+                                      ? record.image
+                                      : (record.image as StaticImageData).src
+                                  }
+                                >
+                                  <Image
+                                    src={record.image}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <Link href="/profile/volunteer">
+                <Button variant="outline" size="sm">
+                  Add Volunteer
                 </Button>
               </Link>
             )}
