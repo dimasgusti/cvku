@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     issued,
                     expires,
                     from,
-                    fromMonth,
+                    fromMonth: fromMonth,
                     to,
                     toMonth,
                     company,
