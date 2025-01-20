@@ -42,6 +42,8 @@ export default function AddProject() {
   const [btnLoading, setBtnLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
+
+
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
