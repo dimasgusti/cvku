@@ -32,7 +32,6 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
-import { Skeleton } from "@/components/ui/skeleton";
 
 countries.registerLocale(enLocale);
 
@@ -75,7 +74,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
-  const { isProPlanActive, loading, errorMessage } = useIsProPlanActive(
+  const { isProPlanActive, errorMessage } = useIsProPlanActive(
     session?.user?.email || ""
   );
 
