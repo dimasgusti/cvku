@@ -81,7 +81,7 @@ export default function AddEducation() {
 
         throw new Error(errorMessage);
       }
-      toast.success("New project added successfully!");
+      toast.success("New education added successfully!");
       router.push("/profile");
     } catch (error) {
       toast.error(
@@ -300,7 +300,7 @@ export default function AddEducation() {
                 {btnLoading ? (
                   <span className="flex flex-row items-center justify-center gap-2">
                     <Loader className="animate-spin" />
-                    Saving Certification
+                    Saving Education
                   </span>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">
