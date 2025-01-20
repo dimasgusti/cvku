@@ -30,6 +30,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../firebaseConfig";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
@@ -38,6 +40,7 @@ export default function AddProject() {
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
@@ -48,44 +51,104 @@ export default function AddProject() {
       company: "",
       url: "",
       description: "",
+      images: [],
     },
   });
 
-  async function onSubmit(values: z.infer<typeof projectSchema>) {
+  const handleFileValidation = (file: File) => {
+    const maxSize = 5 * 1024 * 1024; 
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
+    if (file.size > maxSize) {
+      toast.error("File size exceeds 5MB!");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only images and videos are allowed.");
+      return false;
+    }
+    return true;
+  };
+
+  const onSubmit = async (values: z.infer<typeof projectSchema>) => {
     setBtnLoading(true);
     try {
+      
+      const projectData = { ...values };
+
+      
+      if (values.images && values.images.length > 0) {
+        const fileUrls: string[] = [];
+
+        for (const file of values.images) {
+          if (file instanceof File) {
+            
+            const isValid = handleFileValidation(file);
+            if (!isValid) {
+              
+              toast.error(
+                "One or more files are invalid. Please check the file size or type."
+              );
+              setBtnLoading(false);
+              return; 
+            }
+
+            const storageRef = ref(storage, `uploads/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  setProgress(progress); 
+                },
+                (error) => {
+                  console.error("Upload failed:", error);
+                  reject(error);
+                },
+                () => {
+                  
+                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    fileUrls.push(url); 
+                    resolve();
+                  });
+                }
+              );
+            });
+          } else {
+            console.error("Invalid file type encountered:", file);
+          }
+        }
+
+        
+        projectData.images = fileUrls;
+      }
+
+      
+      console.log(projectData);
       const response = await fetch("/api/records", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(projectData),
       });
+
       if (!response.ok) {
-        let errorMessage = "Failed to add the project.";
-
-        if (response.status !== 204) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const errorData = JSON.parse(responseText);
-              errorMessage = errorData.error || errorMessage;
-            } catch (err) {
-              console.error("Error parsing the error response:", err);
-            }
-          }
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Failed to save project data.");
       }
+
       toast.success("New project added successfully!");
       router.push("/profile");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "An unexpected error occured."
+        error instanceof Error ? error.message : "An unexpected error occurred."
       );
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
   if (!session) {
     return (
@@ -120,7 +183,11 @@ export default function AddProject() {
                   <FormItem>
                     <FormLabel>Title*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Fastest Keyboard Typer" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Fastest Keyboard Typer"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -136,6 +203,7 @@ export default function AddProject() {
                       <FormLabel>Year*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -172,7 +240,7 @@ export default function AddProject() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input disabled={btnLoading} {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -187,7 +255,11 @@ export default function AddProject() {
                   <FormItem>
                     <FormLabel>Company</FormLabel>
                     <FormControl>
-                      <Input placeholder="MyMom" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="MyMom"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -202,6 +274,7 @@ export default function AddProject() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        disabled={btnLoading}
                         placeholder="Describe your project in all its glory!"
                         maxLength={150}
                         {...field}
@@ -222,12 +295,77 @@ export default function AddProject() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upload Images*</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={btnLoading}
+                        type="file"
+                        multiple
+                        accept="image/*, video/*"
+                        onChange={(e) => {
+                          const files = e.target.files
+                            ? Array.from(e.target.files)
+                            : [];
+                          field.onChange(files); 
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Max file size: 5MB, Allowed types: Images and Videos
+                    </FormDescription>
+                    {field.value && field.value.length > 0 && (
+                      <div className="overflow-x-auto flex flex-row space-x-4 border p-1 rounded-sm">
+                        {field.value.map((file, index) => {
+                          if (file instanceof File) {
+                            const url = URL.createObjectURL(file);
+                            return (
+                              <div
+                                key={index}
+                                className="flex-shrink-0 text-center"
+                              >
+                                {file.type.startsWith("image") ? (
+                                  <img
+                                    src={url}
+                                    alt={`Preview ${index}`}
+                                    className="preview-image w-32 h-32 object-cover"
+                                  />
+                                ) : (
+                                  <video
+                                    src={url}
+                                    controls
+                                    className="preview-video w-32 h-32 object-cover"
+                                  />
+                                )}
+                                <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
+                                  {file.name}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" disabled={btnLoading}>
                 {btnLoading ? (
-                  <span className="flex flex-row items-center justify-center gap-2">
-                    <Loader className="animate-spin" />
-                    Saving Project
-                  </span>
+                  <>
+                    <span className="flex flex-row items-center justify-center gap-2">
+                      <Loader className="animate-spin" />
+                      Saving Project Uploading {progress}%
+                    </span>
+                  </>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">
                     <Save />

@@ -21,7 +21,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -63,10 +63,7 @@ interface Record {
   location: string;
   presentedBy: string;
   description: string;
-  email: string;
-  website: string;
-  linkedIn: string;
-  github: string;
+  images: (string | StaticImageData)[];
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -342,6 +339,31 @@ export default function Profile() {
                       <p className="text-sm text-black/70">
                         {record.description}
                       </p>
+                      {record.images && (
+                        <div className="overflow-x-auto flex flex-row space-x-4">
+                          {Array.isArray(record.images) ? (
+                            record.images.map((imageUrl, index) => (
+                              <div key={index} className="flex-shrink-0">
+                                <Image
+                                  src={imageUrl}
+                                  alt={`Image ${session?.user?.name} ${index}`}
+                                  width={100}
+                                  height={50}
+                                />
+                              </div>
+                            ))
+                          ) : (
+                            <div className="flex-shrink-0">
+                              <Image
+                                src={record.images}
+                                alt={`Image ${session?.user?.name}`}
+                                width={100}
+                                height={50}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

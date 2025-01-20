@@ -35,10 +35,10 @@ model Session {
 }
 
 model Record {
-  id           String  @id @default(cuid()) @map("_id")
-  userId       String?
+  id           String   @id @default(cuid()) @map("_id")
+  userId       String
   type         String
-  title        String?
+  title        String
   year         String?
   issued       String?
   expires      String?
@@ -50,8 +50,8 @@ model Record {
   presentedBy  String?
   url          String?
   description  String?
-  image        String?
-  User         User?   @relation(fields: [userId], references: [id])
+  images       String[] @default([])
+  User         User?    @relation(fields: [userId], references: [id])
 }
 
 model Transaction {
