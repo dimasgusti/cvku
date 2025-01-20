@@ -50,7 +50,7 @@ model Record {
   organization String?
   institution  String?
   fieldOfStudy String?
-  gpa          String?
+  gpa          Float?
   location     String?
   presentedBy  String?
   url          String?
