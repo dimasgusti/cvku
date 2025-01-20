@@ -32,6 +32,8 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 
 countries.registerLocale(enLocale);
 
@@ -340,29 +342,51 @@ export default function Profile() {
                         {record.description}
                       </p>
                       {record.image && (
-                        <div className="overflow-x-auto flex flex-row space-x-4">
-                          {Array.isArray(record.image) ? (
-                            record.image.map((imageUrl, index) => (
-                              <div key={index} className="flex-shrink-0">
-                                <Image
-                                  src={imageUrl}
-                                  alt={`Image ${session?.user?.name} ${index}`}
-                                  width={100}
-                                  height={50}
-                                />
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(record.image) ? (
+                              record.image.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof record.image === "string"
+                                      ? record.image
+                                      : (record.image as StaticImageData).src
+                                  }
+                                >
+                                  <Image
+                                    src={record.image}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                  />
+                                </PhotoView>
                               </div>
-                            ))
-                          ) : (
-                            <div className="flex-shrink-0">
-                              <Image
-                                src={record.image}
-                                alt={`Image ${session?.user?.name}`}
-                                width={100}
-                                height={50}
-                              />
-                            </div>
-                          )}
-                        </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
                       )}
                     </div>
                   </div>
