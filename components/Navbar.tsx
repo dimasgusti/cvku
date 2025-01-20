@@ -5,11 +5,10 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import {
   BarChart,
-  // Compass,
   CreditCard,
   DollarSign,
   Home,
-  // LifeBuoy,
+  Layers,
   Settings,
   User,
 } from "lucide-react";
@@ -25,7 +24,7 @@ const Navbar = () => {
 
   const pagesWithAuthenticatedMenu = [
     "/profile",
-    "/profile/analytics",
+    "/profile/template",
     "/profile/award",
     "/profile/certification",
     "/profile/project",
@@ -46,10 +45,10 @@ const Navbar = () => {
           <p className="hidden md:inline-block">Profile</p>
         </Button>
       </Link>
-      <Link href="/profile/analytics">
-        <Button variant="ghost" className={isActive("/profile/analytics")}>
-          <BarChart />
-          <p className="hidden md:inline-block">Analytics</p>
+      <Link href="/profile/template">
+        <Button variant="ghost" className={isActive("/profile/template")}>
+          <Layers />
+          <p className="hidden md:inline-block">Template</p>
         </Button>
       </Link>
       <Link href="/profile/billing">
@@ -75,24 +74,12 @@ const Navbar = () => {
           <p className="hidden md:inline-block">Home</p>
         </Button>
       </Link>
-      {/* <Link href="/explore">
-        <Button variant="ghost" className={isActive("/explore")}>
-          <Compass />
-          <p className="hidden md:inline-block">Explore</p>
-        </Button>
-      </Link> */}
       <Link href="/pricing">
         <Button variant="ghost" className={isActive("/pricing")}>
           <DollarSign />
           <p className="hidden md:inline-block">Pricing</p>
         </Button>
       </Link>
-      {/* <Link href="/help">
-        <Button variant="ghost" className={isActive("/help")}>
-          <LifeBuoy />
-          <p className="hidden md:inline-block">Help</p>
-        </Button>
-      </Link> */}
     </ul>
   );
 

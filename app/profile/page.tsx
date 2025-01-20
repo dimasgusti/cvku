@@ -32,6 +32,7 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
+import { Skeleton } from "@/components/ui/skeleton";
 
 countries.registerLocale(enLocale);
 
@@ -139,7 +140,7 @@ export default function Profile() {
     redirect("/auth/signin");
   }
 
-  if (!userData || !recordData || loading) {
+  if (!userData || !recordData) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -148,8 +149,8 @@ export default function Profile() {
     );
   }
 
-  if(errorMessage) {
-    return <div>{errorMessage}</div>
+  if (errorMessage) {
+    return <div>{errorMessage}</div>;
   }
 
   const projects =
