@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const { 
             type, title, year, issued, expires, from, to, company, organization, location, 
-            presentedBy, url, description, images 
+            presentedBy, url, description, image
         } = req.body;
 
         if (!type || !title) {
@@ -34,8 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         try {
             let imageUrls = [];
-            if (images && images.length > 0) {
-                imageUrls = images; 
+            if (image && image.length > 0) {
+                imageUrls = image; 
             }
 
             const newRecord = await prisma.record.create({
