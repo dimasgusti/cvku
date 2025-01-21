@@ -7,15 +7,6 @@ const prisma = new PrismaClient();
 export default async function handler(req, res){
     if(req.method === "GET"){
         try {
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/session`, {
-                headers: {
-                  cookie: req.headers.cookie || "",
-                },
-              });
-    
-            if (!response.ok) {
-                return res.status(401).json({ error: "Unauthorized. Unable to fetch session." });
-            }
     
             const session = await response.json();
     
