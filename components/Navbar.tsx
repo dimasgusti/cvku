@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import {
   CreditCard,
-  Home,
   Layers,
   LogIn,
   Settings,
@@ -67,26 +66,15 @@ const Navbar = () => {
     </ul>
   );
 
-  const unauthenticated = (
-    <ul className="flex gap-2 flex-wrap md:flex-nowrap justify-center">
-      <Link href="/">
-        <Button variant="ghost" className={isActive("/")}>
-          <Home />
-          <p className="hidden md:inline-block">Home</p>
-        </Button>
-      </Link>
-    </ul>
-  );
-
   return (
     <header className="w-full flex flex-row justify-between p-4 border-b sticky bg-white z-10 top-0">
       <div>
         <Link href="/">
-          <Image src={CVKULogo} height={50} alt={CVKULogo} />
+          <Image src={CVKULogo} height={40} alt={CVKULogo} />
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        {isAuthenticatedMenu ? authenticated : unauthenticated}
+        {isAuthenticatedMenu ? authenticated : null}
       </div>
       <ul className="flex items-center gap-2">
         {isAuthenticatedMenu ? (
