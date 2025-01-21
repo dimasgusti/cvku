@@ -84,15 +84,6 @@ export default function Page() {
 
   if (error) return <div>Error loading user data.</div>;
 
-  if (!userData) {
-    return (
-      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
-        <Loader className="animate-spin" size={32} />
-        Please wait
-      </div>
-    );
-  }
-
   const projects =
     recordData?.filter((record: Record) => record.type === "project") || [];
   const workplace =
@@ -106,6 +97,15 @@ export default function Page() {
     recordData?.filter((record: Record) => record.type === "education") || [];
   const volunteers =
     recordData?.filter((record: Record) => record.type === "volunteer") || [];
+
+  if (!userData || !recordData.length) {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
+  }
 
   return (
     <>
@@ -132,6 +132,14 @@ export default function Page() {
               </p>
             </div>
           </div>
+          {userData?.bio ? (
+            <>
+              <div className="pb-4">
+                <p className="text-lg text-black/70">About</p>
+                <p className="text-sm">{userData?.bio}</p>
+              </div>
+            </>
+          ) : null}
 
           {projects.length > 0 ? (
             <>
@@ -302,6 +310,57 @@ export default function Page() {
                             </>
                           ) : record.company ? (
                             <> at {record.company}</>
+                          ) : record.url ? (
+                            <>
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                Visit Link
+                              </a>
+                            </>
+                          ) : null}
+                        </p>
+                      </div>
+                      <p className="text-sm text-black/70">
+                        {record.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+
+          {awards.length > 0 ? (
+            <>
+              <Separator className="my-4" />
+              <div className="flex flex-row justify-between items-center my-4">
+                <p className="text-lg text-black/70">Award</p>
+              </div>
+              <div>
+                {awards.map((record) => (
+                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                    <div className="text-sm">{record.year}</div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {record.title}
+                          {record.presentedBy && record.url ? (
+                            <>
+                              {" "}
+                              at{" "}
+                              <a
+                                href={record.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                {record.presentedBy}
+                              </a>
+                            </>
+                          ) : record.presentedBy ? (
+                            <> at {record.presentedBy}</>
                           ) : record.url ? (
                             <>
                               <a
