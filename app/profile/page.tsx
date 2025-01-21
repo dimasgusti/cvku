@@ -140,7 +140,7 @@ export default function Profile() {
   };
 
   if (status === "unauthenticated") {
-    redirect("/auth/signin");
+    redirect("/");
   }
 
   if (!userData || !recordData || !isProPlanActive) {

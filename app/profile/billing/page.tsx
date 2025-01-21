@@ -131,7 +131,7 @@ export default function Billing() {
   }
 
   if (status === "unauthenticated") {
-    redirect("/auth/signin");
+    redirect("/");
   }
 
   return (

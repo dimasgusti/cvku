@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import Pricing from "./pricing/page";
 import { generateMetaTags } from "./metadata";
 import Head from "next/head";
+import Features from "@/components/Features";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -44,7 +45,7 @@ export default function HomePage() {
             <h2 className="text-xl md:text-2xl">Platform Terbaik Membuat CV</h2>
             <TextReveal />
             <Link href="/auth/signin">
-              <Button className="animate-pulse hover:animate-none">
+              <Button>
                 <ArrowRight />
                 Daftar Sekarang
               </Button>
@@ -52,6 +53,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Features />
       <Pricing />
     </>
   );

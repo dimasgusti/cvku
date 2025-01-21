@@ -148,7 +148,7 @@ export default function Settings() {
   }, [session?.user?.email, form]);
 
   if (status === "unauthenticated") {
-    redirect("/auth/signin");
+    redirect("/");
   }
 
   return (

@@ -22,7 +22,7 @@ export default function LoginButton() {
       <>
         <Button variant="outline" onClick={() => signOut()} size="sm">
           <FaSignOutAlt />
-          Keluar
+          Sign Out
         </Button>
       </>
     );
@@ -32,7 +32,7 @@ export default function LoginButton() {
     <>
       <Button onClick={() => signIn()} size="sm">
         <FaSignInAlt />
-        Masuk
+        Try Now
       </Button>
     </>
   );
