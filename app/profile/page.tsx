@@ -98,7 +98,7 @@ export default function Profile() {
 
   const { data: fetchedRecordData } = useSWR<Record[]>(
     session?.user?.id
-      ? `/api/records/getRecordById?userId=${session.user.id}`
+      ? `/api/records/getRecord?userId=${session.user.id}`
       : null,
     fetcher
   );

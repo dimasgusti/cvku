@@ -42,8 +42,6 @@ export default function AddProject() {
   const [btnLoading, setBtnLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
-
-
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
@@ -194,6 +192,45 @@ export default function AddProject() {
               <div className="grid grid-cols-2">
                 <FormField
                   control={form.control}
+                  name="year"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year*</FormLabel>
+                      <FormControl>
+                        <Select
+                          disabled={btnLoading}
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Select a year" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="ongoing">Ongoing</SelectItem>
+                              {Array.from(
+                                { length: new Date().getFullYear() - 1975 + 1 },
+                                (_, i) => {
+                                  const year = new Date().getFullYear() - i;
+                                  return (
+                                    <SelectItem key={year} value={String(year)}>
+                                      {year}
+                                    </SelectItem>
+                                  );
+                                }
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="fromMonth"
                   render={({ field }) => (
                     <FormItem>
@@ -226,45 +263,6 @@ export default function AddProject() {
                                   {month}
                                 </SelectItem>
                               ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormDescription />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Year*</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={btnLoading}
-                          onValueChange={(value) => field.onChange(value)}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="ongoing">Ongoing</SelectItem>
-                              {Array.from(
-                                { length: new Date().getFullYear() - 1975 + 1 },
-                                (_, i) => {
-                                  const year = new Date().getFullYear() - i;
-                                  return (
-                                    <SelectItem key={year} value={String(year)}>
-                                      {year}
-                                    </SelectItem>
-                                  );
-                                }
-                              )}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
