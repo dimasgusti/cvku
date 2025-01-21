@@ -20,21 +20,25 @@ export default function Features() {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-start md:max-w-4xl px-4 gap-8">
-        <div className="flex flex-col justify-start items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-center md:max-w-4xl px-4 gap-8">
+        <div className="flex flex-col justify-center items-center">
           <Share2 size={32} />
           <h2 className="mt-4 font-bold">Membagikan dengan Mudah</h2>
-          <p>Gunakan URL ekslusif yang dapat diakses oleh semua orang.</p>
+          <p className="text-center">
+            Gunakan URL ekslusif yang dapat diakses oleh semua orang.
+          </p>
         </div>
-        <div className="flex flex-col justify-start items-start">
+        <div className="flex flex-col justify-center items-center">
           <Sliders size={32} />
           <h2 className="mt-4 font-bold">Personalisasi</h2>
-          <p>Pilih tema dan tata letak yang sesuai dengan gaya Anda.</p>
+          <p className="text-center">
+            Pilih tema dan tata letak yang sesuai dengan gaya Anda.
+          </p>
         </div>
-        <div className="flex flex-col justify-start items-start">
+        <div className="flex flex-col justify-center items-center">
           <Monitor size={32} />
           <h2 className="mt-4 font-bold">UI yang Ramah</h2>
-          <p>
+          <p className="text-center">
             Antarmuka yang menyesuaikan tampilan dengan perangkat yang
             digunakan.
           </p>
@@ -42,8 +46,8 @@ export default function Features() {
       </div>
       <Link href="/auth/signin">
         <Button>
-            <ArrowRight />
-            Daftar Sekarang
+          <ArrowRight />
+          Daftar Sekarang
         </Button>
       </Link>
     </section>

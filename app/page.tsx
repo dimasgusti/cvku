@@ -4,10 +4,10 @@ import TextReveal from "@/components/TextReveal";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Pricing from "./pricing/page";
 import { generateMetaTags } from "./metadata";
 import Head from "next/head";
 import Features from "@/components/Features";
+import Pricing from "@/components/Pricing";
 
 export default function HomePage() {
   const meta = generateMetaTags({

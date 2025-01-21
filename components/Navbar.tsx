@@ -76,12 +76,6 @@ const Navbar = () => {
           <p className="hidden md:inline-block">Home</p>
         </Button>
       </Link>
-      <Link href="/pricing">
-        <Button variant="ghost" className={isActive("/pricing")}>
-          <DollarSign />
-          <p className="hidden md:inline-block">Pricing</p>
-        </Button>
-      </Link>
     </ul>
   );
 

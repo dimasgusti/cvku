@@ -4,7 +4,6 @@ import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "../../../lib/mongodb"; 
-import { signOut } from "next-auth/react";
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
