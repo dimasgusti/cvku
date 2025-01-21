@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import {
   CreditCard,
-  DollarSign,
   Home,
   Layers,
   LogIn,
