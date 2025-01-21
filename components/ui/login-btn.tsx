@@ -9,7 +9,7 @@ export default function LoginButton() {
   if (status === "loading") {
     return (
       <>
-        <Button size="sm">
+        <Button size="sm" variant="ghost">
           <Loader className="animate-spin" />
           Loading...
         </Button>

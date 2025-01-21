@@ -46,7 +46,7 @@ export default function SignIn() {
     };
 
     return (
-        <div className="w-full h-screen flex flex-col justify-center items-center bg-gray-50">
+        <div className="w-full h-screen flex flex-col justify-center items-center bg-gradient-to-r from-[#ffffff] via-[#bdc2e8] to-[#e6dee9]">
             <Card className="w-[360px] p-6 shadow-lg rounded-lg">
                 <CardHeader className="flex flex-col items-center mb-6">
                     <CardTitle className="text-2xl font-semibold">Sign In</CardTitle>

@@ -111,7 +111,7 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-row justify-center items-center">
-        <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-8">
+        <div className="w-full md:w-[560px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
           <div className="flex flex-row justify-start w-full items-center gap-4 py-4">
             <Image
               src={userData.image}
@@ -270,8 +270,8 @@ export default function Page() {
                   </div>
                   <div>
                     {workplace.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 gap-1 mt-2">
-                        <p className="text-sm">
+                      <div key={record.id} className="grid grid-cols-4 mt-2">
+                        <p className="text-sm pr-1">
                           {new Date(`${record.fromMonth} 1`).toLocaleString(
                             "en-US",
                             {

@@ -143,7 +143,7 @@ export default function Profile() {
     redirect("/auth/signin");
   }
 
-  if (!userData || !recordData) {
+  if (!userData || !recordData || !isProPlanActive) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />

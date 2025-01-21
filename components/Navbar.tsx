@@ -8,10 +8,13 @@ import {
   DollarSign,
   Home,
   Layers,
+  LogIn,
   Settings,
   User,
 } from "lucide-react";
 import LoginButton from "./ui/login-btn";
+import CVKULogo from "../public/Logo & Text.svg";
+import Image from "next/image";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -84,6 +87,11 @@ const Navbar = () => {
 
   return (
     <header className="w-full flex flex-row justify-between p-4 border-b sticky bg-white z-10 top-0">
+      <div>
+        <Link href="/">
+          <Image src={CVKULogo} height={50} alt={CVKULogo} />
+        </Link>
+      </div>
       <div className="flex items-center gap-2">
         {isAuthenticatedMenu ? authenticated : unauthenticated}
       </div>
@@ -93,7 +101,8 @@ const Navbar = () => {
         ) : (
           <Link href="/profile">
             <Button>
-              <User />
+              <LogIn />
+              Try Now
             </Button>
           </Link>
         )}
