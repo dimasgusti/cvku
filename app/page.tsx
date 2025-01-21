@@ -8,6 +8,7 @@ import { generateMetaTags } from "./metadata";
 import Head from "next/head";
 import Features from "@/components/Features";
 import Pricing from "@/components/Pricing";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -55,6 +56,7 @@ export default function HomePage() {
       </section>
       <Features />
       <Pricing />
+      <Footer />
     </>
   );
 }

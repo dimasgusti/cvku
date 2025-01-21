@@ -1,6 +1,5 @@
 
-import { FaSignInAlt } from "react-icons/fa";
-import { Check } from "lucide-react";
+import { Check, DollarSign } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
@@ -36,7 +35,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
           {price} <span className="font-thin text-sm">{pricePeriod}</span>
         </h2>
         <Button onClick={onActionClick} size="sm" className="w-full">
-          <FaSignInAlt />
+          <DollarSign />
           {actionLabel}
         </Button>
       </CardContent>
