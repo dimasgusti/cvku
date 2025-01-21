@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { Loader, Lock } from "lucide-react";
+import { Loader } from "lucide-react";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import Image, { StaticImageData } from "next/image";
