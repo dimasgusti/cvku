@@ -1,55 +1,38 @@
-import { ArrowRight, Monitor, Share2, Sliders } from "lucide-react";
-import Link from "next/link";
-import { Button } from "./ui/button";
+import { Monitor } from "lucide-react";
 
 export default function Features() {
   return (
-    <section className="min-h-[30rem] w-full flex flex-col justify-start items-center gap-4 md:gap-8 xl:gap-16">
-      <div className="grid grid-cols-1 lg:grid-cols-2 w-full place-items-start md:max-w-4xl px-4">
-        <div className="flex flex-col">
-          <p>Fitur</p>
-          <h1 className="text-3xl md:text-4xl font-semibold font-serif">
-            Temukan Fitur Terbaik
-          </h1>
-        </div>
-        <div className="flex flex-row w-full">
-          <p className="xl:text-end xl:pl-16">
-            Fitur utama kami dirancang untuk memberikan pengalaman yang efisien
-            dan memudahkan Anda dalam mencapai tujuan dengan berbagai fungsi
-            yang terintegrasi.
-          </p>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full place-items-center md:max-w-4xl px-4 gap-8">
-        <div className="flex flex-col justify-center items-center">
-          <Share2 size={32} />
-          <h2 className="mt-4 font-bold">Membagikan dengan Mudah</h2>
-          <p className="text-center">
-            Gunakan URL ekslusif yang dapat diakses oleh semua orang.
-          </p>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <Sliders size={32} />
-          <h2 className="mt-4 font-bold">Personalisasi</h2>
-          <p className="text-center">
-            Pilih tema dan tata letak yang sesuai dengan gaya Anda.
-          </p>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <Monitor size={32} />
-          <h2 className="mt-4 font-bold">UI yang Ramah</h2>
-          <p className="text-center">
-            Antarmuka yang menyesuaikan tampilan dengan perangkat yang
-            digunakan.
-          </p>
+    <section className="flex flex-col justify-center items-center">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-8">
+        <div className="flex flex-col justify-start items-start gap-4">
+          <div>
+            <p>Fitur</p>
+            <h2 className="text-xl md:text-2xl">Menyesuaikan Kebutuhan Anda</h2>
+            <p>
+              Didesain untuk memudahkan Anda menciptakan CV yang mencerminkan
+              siapa Anda sebenarnya.
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div>
+              <Monitor />
+              <h2 className="text-xl md:text-2xl mt-4">
+                Bangun Resume Anda dengan Mudah dan Elegan
+              </h2>
+              <p>
+                Buat resume profesional yang menonjolkan keterampilan unik Anda.
+              </p>
+            </div>
+            <div>
+              <Monitor />
+              <h2 className="text-xl md:text-2xl mt-4">
+                Terhubung dan Berinteraksi dengan Audiens Anda
+              </h2>
+              <p>Bagikan pengalaman dan wawasan Anda dengan mudah.</p>
+            </div>
+          </div>
         </div>
       </div>
-      <Link href="/auth/signin">
-        <Button>
-          <ArrowRight />
-          Daftar Sekarang
-        </Button>
-      </Link>
     </section>
   );
 }

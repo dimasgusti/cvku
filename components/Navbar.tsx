@@ -3,18 +3,14 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import {
-  CreditCard,
-  Layers,
-  LogIn,
-  Settings,
-  User,
-} from "lucide-react";
+import { CreditCard, Layers, Settings, User } from "lucide-react";
 import LoginButton from "./ui/login-btn";
 import CVKULogo from "../public/Logo & Text.svg";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   const isActive = (path: string) =>
@@ -77,16 +73,14 @@ const Navbar = () => {
         {isAuthenticatedMenu ? authenticated : null}
       </div>
       <ul className="flex items-center gap-2">
-        {isAuthenticatedMenu ? (
-          <LoginButton />
-        ) : (
-          <Link href="/profile">
+        {session && (
+          <Link href='/profile'>
             <Button>
-              <LogIn />
-              Try Now
+              <User />
             </Button>
           </Link>
         )}
+        <LoginButton />
       </ul>
     </header>
   );
