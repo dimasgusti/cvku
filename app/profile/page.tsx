@@ -190,13 +190,13 @@ export default function Profile() {
           <>
             <div className="flex flex-row justify-between items-center gap-4 py-4">
               <Link href={`/${userData.username}`} target="_blank">
-                <Button variant="secondary">
+                <Button variant="secondary" size='sm'>
                   <Eye /> Preview
                 </Button>
               </Link>
               {isProPlanActive ? (
                 <Link href="/profile/pdf">
-                  <Button variant="secondary">
+                  <Button variant="secondary" size='sm'>
                     <Download />
                     Convert PDF
                   </Button>

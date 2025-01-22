@@ -5,7 +5,6 @@ import "./globals.css";
 import { Manrope } from "next/font/google";
 import { defaultMeta, generateMetaTags } from "./metadata";
 import { Toaster } from "sonner";
-import Navbar from "@/components/Navbar";
 
 const manrope = Manrope({
   weight: "400",
@@ -45,7 +44,6 @@ export default function RootLayout({
             <div className="bg-yellow-400 text-black py-2 text-center">
               🚧 This website is currently under development. Stay tuned! 🚧
             </div>
-            <Navbar />
             {children}
             <Toaster />
           </main>

@@ -5,13 +5,12 @@ import { motion } from "framer-motion";
 
 const TextReveal = () => {
   const shareItems = [
-    "Pendidikan",
-    "Keahlian",
-    "Prestasi",
-    "Bahasa",
-    "Karya",
-    "Pekerjaan",
-    "Dan banyak lagi!",
+    "",
+    "Branding",
+    "sekarang",
+    "tanpa",
+    "biaya",
+    "apapun."
   ];
   return (
     <div className="overflow-hidden w-72 lg:w-full my-2">
@@ -30,7 +29,7 @@ const TextReveal = () => {
           style={{ display: "inline-block", whiteSpace: "nowrap" }}
           className="mr-[1rem] text-black/70"
         >
-          <p className="text-base text-black/70">
+          <p className="text-lg text-black/70">
             {text}
           </p>
         </motion.div>

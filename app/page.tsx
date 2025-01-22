@@ -1,12 +1,19 @@
 "use client";
 
-import TextReveal from "@/components/TextReveal";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import {
+  DollarSign,
+  FileText,
+  HelpCircle,
+  Home,
+  LifeBuoy,
+} from "lucide-react";
 import { generateMetaTags } from "./metadata";
 import Head from "next/head";
-import Features from "@/components/Features";
+import Image from "next/image";
+import LoginButton from "@/components/ui/login-btn";
+import CVKULogo from "../public/Logo & Text.svg";
 
 export default function HomePage() {
   const meta = generateMetaTags({
@@ -35,26 +42,77 @@ export default function HomePage() {
         <meta name="twitter:card" content="summary_large_image" />
         <title>{meta.title}</title>
       </Head>
+      <nav className="w-full h-[5rem] border-b px-4 sticky top-0 z-50 bg-white shadow-lg">
+        <ul className="flex flex-row justify-between items-center h-full">
+          <div>
+            <Link href="/">
+              <Image
+                src={CVKULogo}
+                alt="Logo CVKU"
+                width={100}
+                height={100}
+                priority
+              />
+            </Link>
+          </div>
+          <div className="flex flex-row gap-4 justify-center items-center">
+            <Link href="/">
+              <Button variant="outline" size="sm">
+                <Home />
+                <span className="hidden md:block">Beranda</span>
+              </Button>
+            </Link>
+            <Link href="/">
+              <Button variant="outline" size="sm">
+                <DollarSign />
+                <span className="hidden md:block">Harga</span>
+              </Button>
+            </Link>
+            <Link href="/">
+              <Button variant="outline" size="sm">
+                <HelpCircle />
+                <span className="hidden md:block">FAQ</span>
+              </Button>
+            </Link>
+          </div>
+          <div>
+            <LoginButton />
+          </div>
+        </ul>
+      </nav>
       <section className="min-h-[30rem] w-full flex flex-row justify-center items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 w-full md:max-w-4xl px-4">
           <div>
             <h1 className="text-3xl md:text-4xl font-semibold font-serif">
-              Buat, Bagikan, Kembangkan
+              Buat CV Profesional Tanpa Ribet!
             </h1>
-            <h2 className="text-xl md:text-2xl">Platform Terbaik Membuat CV</h2>
-            <TextReveal />
-            <Link href="/auth/signin">
-              <Button>
-                <ArrowRight />
-                Daftar Sekarang
-              </Button>
-            </Link>
+            <h2 className="text-xl md:text-2xl">Mudah, Cepat, dan Gratis-Daftar Sekarang</h2>
+            {/* <TextReveal /> */}
+            <p className="text-base md:text-lg">
+              Waktunya upgrade CV-mu dengan desain modern!
+            </p>
+            <div className="flex flex-row items-center gap-4 mt-2">
+              <Link href="/auth/signin">
+                <Button variant="default" size="lg">
+                  <FileText />
+                  Buat Sekarang
+                </Button>
+              </Link>
+              <Link href="/auth/signin">
+                <Button variant="outline" size="lg">
+                  <LifeBuoy />
+                  Pelajari
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-      <Features />
-      {/* <Pricing />
-      <Footer /> */}
+      <section className="h-fit w-full flex flex-row justify-center items-center bg-primary text-primary-foreground py-4">
+        <div className="flex flex-wrap justify-center items-center gap-4 px-4 w-full md:max-w-4xl">
+          <h2 className="text-xl md:text-2xl font-semibold truncate">Platform Terbaik Membuat CV</h2>
+        </div>
+      </section>
     </>
   );
 }
