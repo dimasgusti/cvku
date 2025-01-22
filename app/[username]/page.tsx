@@ -12,6 +12,7 @@ import "react-photo-view/dist/react-photo-view.css";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 countries.registerLocale(enLocale);
 
@@ -99,7 +100,7 @@ export default function Page() {
   const volunteers =
     recordData?.filter((record: Record) => record.type === "volunteer") || [];
 
-  if (!userData || !recordData) {
+  if (!userData) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -144,512 +145,554 @@ export default function Page() {
 
           {!userData.private ? (
             <>
-              {projects.length > 0 ? (
+              {recordData.length > 0 ? (
                 <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Project</p>
-                  </div>
-                  <div>
-                    {projects.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <div className="text-sm">
-                          {record.year && (
-                            <p>
-                              {record.year === "ongoing" ? (
-                                "Ongoing"
-                              ) : (
-                                <span>
-                                  {new Date(
-                                    `${record.fromMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {record.year}
-                                </span>
+                  {projects.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Project</p>
+                      </div>
+                      <div>
+                        {projects.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <div className="text-sm">
+                              {record.year && (
+                                <p>
+                                  {record.year === "ongoing" ? (
+                                    "Ongoing"
+                                  ) : (
+                                    <span>
+                                      {new Date(
+                                        `${record.fromMonth} 1`
+                                      ).toLocaleString("en-US", {
+                                        month: "short",
+                                      })}{" "}
+                                      {record.year}
+                                    </span>
+                                  )}
+                                </p>
                               )}
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.company && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.company}
-                                  </a>
-                                </>
-                              ) : record.company ? (
-                                <> at {record.company}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}
-                          </p>
-                          {record.image && (
-                            <PhotoProvider>
-                              <div className="overflow-x-auto flex flex-row space-x-4">
-                                {Array.isArray(record.image) ? (
-                                  record.image.map((imageUrl, index) => (
-                                    <div key={index} className="flex-shrink-0">
-                                      <PhotoView
-                                        src={
-                                          typeof imageUrl === "string"
-                                            ? imageUrl
-                                            : (imageUrl as StaticImageData).src
-                                        }
+                            </div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.company && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
                                       >
-                                        <Image
-                                          src={imageUrl}
-                                          layout="intrinsic"
-                                          alt={`Image ${userData.username} ${index}`}
-                                          width={100}
-                                          height={50}
-                                          className="cursor-pointer"
-                                          unoptimized
-                                        />
-                                      </PhotoView>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <div className="flex-shrink-0">
-                                    <PhotoView
-                                      src={
-                                        typeof record.image === "string"
-                                          ? record.image
-                                          : (record.image as StaticImageData)
-                                              .src
-                                      }
-                                    >
-                                      <Image
-                                        src={record.image}
-                                        layout="intrinsic"
-                                        alt={`Image ${userData.username}`}
-                                        width={100}
-                                        height={50}
-                                        className="cursor-pointer"
-                                        unoptimized
-                                      />
-                                    </PhotoView>
-                                  </div>
-                                )}
-                              </div>
-                            </PhotoProvider>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {workplace.length > 0 ? (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Work Experience</p>
-                  </div>
-                  <div>
-                    {workplace.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <p className="text-sm pr-1">
-                          {new Date(`${record.fromMonth} 1`).toLocaleString(
-                            "en-US",
-                            {
-                              month: "short",
-                            }
-                          )}{" "}
-                          {record.from}
-                          {record.to && (
-                            <span>
-                              -{" "}
-                              {record.to === "ongoing" ? (
-                                "Ongoing"
-                              ) : (
-                                <span>
-                                  {" "}
-                                  {new Date(
-                                    `${record.toMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {record.to}
-                                </span>
-                              )}
-                            </span>
-                          )}
-                        </p>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.company && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.company}
-                                  </a>
-                                </>
-                              ) : record.company ? (
-                                <> at {record.company}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {awards.length > 0 ? (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Award</p>
-                  </div>
-                  <div>
-                    {awards.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <div className="text-sm">{record.year}</div>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.presentedBy && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.presentedBy}
-                                  </a>
-                                </>
-                              ) : record.presentedBy ? (
-                                <> at {record.presentedBy}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {certifications.length > 0 ? (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Certification</p>
-                  </div>
-                  <div>
-                    {certifications.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <div>
-                          <p className="text-sm">
-                            {record.issued}
-                            {record.expires && (
-                              <span>
-                                {" - "}
-                                {record.expires === "doesNotExpire"
-                                  ? "No Expiry"
-                                  : `Expires ${record.expires}`}
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.organization && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.organization}
-                                  </a>
-                                </>
-                              ) : record.organization ? (
-                                <> at {record.organization}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {educations.length > 0 ? (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Education</p>
-                  </div>
-                  <div>
-                    {educations.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <div>
-                          <p className="text-sm">
-                            {record.from}
-                            {record.to && (
-                              <span>
-                                {" - "}
-                                {parseInt(record.to) > new Date().getFullYear()
-                                  ? `Expected ${record.to}`
-                                  : record.to}
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.institution && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.institution}
-                                  </a>
-                                </>
-                              ) : record.institution ? (
-                                <> at {record.institution}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}{" "}
-                          </p>
-                          <p className="text-sm text-black/70">
-                            Field of Study: {record.fieldOfStudy} <br />
-                            {record.gpa && `GPA: ${record.gpa}`}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : null}
-
-              {volunteers.length > 0 ? (
-                <>
-                  <Separator className="my-4" />
-                  <div className="flex flex-row justify-between items-center my-4">
-                    <p className="text-lg text-black/70">Volunteer</p>
-                  </div>
-                  <div>
-                    {volunteers.map((record) => (
-                      <div key={record.id} className="grid grid-cols-4 mt-2">
-                        <div className="text-sm">
-                          {record.from && (
-                            <p>
-                              {record.to ? (
-                                <span>
-                                  {new Date(
-                                    `${record.fromMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {record.from} -{" "}
-                                  {new Date(
-                                    `${record.toMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {record.to}
-                                </span>
-                              ) : (
-                                <span>
-                                  {new Date(
-                                    `${record.fromMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {record.from} - Ongoing
-                                </span>
-                              )}
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-start-2 col-end-5">
-                          <div className="flex flex-row justify-between">
-                            <p>
-                              {record.title}
-                              {record.organization && record.url ? (
-                                <>
-                                  {" "}
-                                  at{" "}
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    {record.organization}
-                                  </a>
-                                </>
-                              ) : record.organization ? (
-                                <> at {record.organization}</>
-                              ) : record.url ? (
-                                <>
-                                  <a
-                                    href={record.url}
-                                    target="_blank"
-                                    className="underline"
-                                  >
-                                    Visit Link
-                                  </a>
-                                </>
-                              ) : null}
-                            </p>
-                          </div>
-                          <p className="text-sm text-black/70">
-                            {record.description}
-                          </p>
-                          {record.image && (
-                            <PhotoProvider>
-                              <div className="overflow-x-auto flex flex-row space-x-4">
-                                {Array.isArray(record.image) ? (
-                                  record.image.map((imageUrl, index) => (
-                                    <div key={index} className="flex-shrink-0">
-                                      <PhotoView
-                                        src={
-                                          typeof imageUrl === "string"
-                                            ? imageUrl
-                                            : (imageUrl as StaticImageData).src
-                                        }
+                                        {record.company}
+                                      </a>
+                                    </>
+                                  ) : record.company ? (
+                                    <> at {record.company}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
                                       >
-                                        <Image
-                                          src={imageUrl}
-                                          layout="intrinsic"
-                                          alt={`Image ${userData.username} ${index}`}
-                                          width={100}
-                                          height={50}
-                                          className="cursor-pointer"
-                                          unoptimized
-                                        />
-                                      </PhotoView>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <div className="flex-shrink-0">
-                                    <PhotoView
-                                      src={
-                                        typeof record.image === "string"
-                                          ? record.image
-                                          : (record.image as StaticImageData)
-                                              .src
-                                      }
-                                    >
-                                      <Image
-                                        src={record.image}
-                                        layout="intrinsic"
-                                        alt={`Image ${userData.username}`}
-                                        width={100}
-                                        height={50}
-                                        className="cursor-pointer"
-                                        unoptimized
-                                      />
-                                    </PhotoView>
-                                  </div>
-                                )}
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
                               </div>
-                            </PhotoProvider>
-                          )}
-                        </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}
+                              </p>
+                              {record.image && (
+                                <PhotoProvider>
+                                  <div className="overflow-x-auto flex flex-row space-x-4">
+                                    {Array.isArray(record.image) ? (
+                                      record.image.map((imageUrl, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex-shrink-0"
+                                        >
+                                          <PhotoView
+                                            src={
+                                              typeof imageUrl === "string"
+                                                ? imageUrl
+                                                : (imageUrl as StaticImageData)
+                                                    .src
+                                            }
+                                          >
+                                            <Image
+                                              src={imageUrl}
+                                              layout="intrinsic"
+                                              alt={`Image ${userData.username} ${index}`}
+                                              width={100}
+                                              height={50}
+                                              className="cursor-pointer"
+                                              unoptimized
+                                            />
+                                          </PhotoView>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <div className="flex-shrink-0">
+                                        <PhotoView
+                                          src={
+                                            typeof record.image === "string"
+                                              ? record.image
+                                              : (
+                                                  record.image as StaticImageData
+                                                ).src
+                                          }
+                                        >
+                                          <Image
+                                            src={record.image}
+                                            layout="intrinsic"
+                                            alt={`Image ${userData.username}`}
+                                            width={100}
+                                            height={50}
+                                            className="cursor-pointer"
+                                            unoptimized
+                                          />
+                                        </PhotoView>
+                                      </div>
+                                    )}
+                                  </div>
+                                </PhotoProvider>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </>
+                  ) : null}
+
+                  {workplace.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Work Experience</p>
+                      </div>
+                      <div>
+                        {workplace.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <p className="text-sm pr-1">
+                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                }
+                              )}{" "}
+                              {record.from}
+                              {record.to && (
+                                <span>
+                                  -{" "}
+                                  {record.to === "ongoing" ? (
+                                    "Ongoing"
+                                  ) : (
+                                    <span>
+                                      {" "}
+                                      {new Date(
+                                        `${record.toMonth} 1`
+                                      ).toLocaleString("en-US", {
+                                        month: "short",
+                                      })}{" "}
+                                      {record.to}
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </p>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.company && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {record.company}
+                                      </a>
+                                    </>
+                                  ) : record.company ? (
+                                    <> at {record.company}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+
+                  {awards.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Award</p>
+                      </div>
+                      <div>
+                        {awards.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <div className="text-sm">{record.year}</div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.presentedBy && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {record.presentedBy}
+                                      </a>
+                                    </>
+                                  ) : record.presentedBy ? (
+                                    <> at {record.presentedBy}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+
+                  {certifications.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Certification</p>
+                      </div>
+                      <div>
+                        {certifications.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <div>
+                              <p className="text-sm">
+                                {record.issued}
+                                {record.expires && (
+                                  <span>
+                                    {" - "}
+                                    {record.expires === "doesNotExpire"
+                                      ? "No Expiry"
+                                      : `Expires ${record.expires}`}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.organization && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {record.organization}
+                                      </a>
+                                    </>
+                                  ) : record.organization ? (
+                                    <> at {record.organization}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+
+                  {educations.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Education</p>
+                      </div>
+                      <div>
+                        {educations.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <div>
+                              <p className="text-sm">
+                                {record.from}
+                                {record.to && (
+                                  <span>
+                                    {" - "}
+                                    {parseInt(record.to) >
+                                    new Date().getFullYear()
+                                      ? `Expected ${record.to}`
+                                      : record.to}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.institution && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {record.institution}
+                                      </a>
+                                    </>
+                                  ) : record.institution ? (
+                                    <> at {record.institution}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}{" "}
+                              </p>
+                              <p className="text-sm text-black/70">
+                                Field of Study: {record.fieldOfStudy} <br />
+                                {record.gpa && `GPA: ${record.gpa}`}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+
+                  {volunteers.length > 0 ? (
+                    <>
+                      <Separator className="my-4" />
+                      <div className="flex flex-row justify-between items-center my-4">
+                        <p className="text-lg text-black/70">Volunteer</p>
+                      </div>
+                      <div>
+                        {volunteers.map((record) => (
+                          <div
+                            key={record.id}
+                            className="grid grid-cols-4 mt-2"
+                          >
+                            <div className="text-sm">
+                              {record.from && (
+                                <p>
+                                  {record.to ? (
+                                    <span>
+                                      {new Date(
+                                        `${record.fromMonth} 1`
+                                      ).toLocaleString("en-US", {
+                                        month: "short",
+                                      })}{" "}
+                                      {record.from} -{" "}
+                                      {new Date(
+                                        `${record.toMonth} 1`
+                                      ).toLocaleString("en-US", {
+                                        month: "short",
+                                      })}{" "}
+                                      {record.to}
+                                    </span>
+                                  ) : (
+                                    <span>
+                                      {new Date(
+                                        `${record.fromMonth} 1`
+                                      ).toLocaleString("en-US", {
+                                        month: "short",
+                                      })}{" "}
+                                      {record.from} - Ongoing
+                                    </span>
+                                  )}
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {record.title}
+                                  {record.organization && record.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {record.organization}
+                                      </a>
+                                    </>
+                                  ) : record.organization ? (
+                                    <> at {record.organization}</>
+                                  ) : record.url ? (
+                                    <>
+                                      <a
+                                        href={record.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {record.description}
+                              </p>
+                              {record.image && (
+                                <PhotoProvider>
+                                  <div className="overflow-x-auto flex flex-row space-x-4">
+                                    {Array.isArray(record.image) ? (
+                                      record.image.map((imageUrl, index) => (
+                                        <div
+                                          key={index}
+                                          className="flex-shrink-0"
+                                        >
+                                          <PhotoView
+                                            src={
+                                              typeof imageUrl === "string"
+                                                ? imageUrl
+                                                : (imageUrl as StaticImageData)
+                                                    .src
+                                            }
+                                          >
+                                            <Image
+                                              src={imageUrl}
+                                              layout="intrinsic"
+                                              alt={`Image ${userData.username} ${index}`}
+                                              width={100}
+                                              height={50}
+                                              className="cursor-pointer"
+                                              unoptimized
+                                            />
+                                          </PhotoView>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <div className="flex-shrink-0">
+                                        <PhotoView
+                                          src={
+                                            typeof record.image === "string"
+                                              ? record.image
+                                              : (
+                                                  record.image as StaticImageData
+                                                ).src
+                                          }
+                                        >
+                                          <Image
+                                            src={record.image}
+                                            layout="intrinsic"
+                                            alt={`Image ${userData.username}`}
+                                            width={100}
+                                            height={50}
+                                            className="cursor-pointer"
+                                            unoptimized
+                                          />
+                                        </PhotoView>
+                                      </div>
+                                    )}
+                                  </div>
+                                </PhotoProvider>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  <Separator className="my-4" />
+                  <div className="flex flex-col justify-start items-start my-4 gap-4">
+                    <Skeleton className="w-1/4 py-2" />
+                    <Skeleton className="w-1/2 py-2" />
+                    <Skeleton className="w-1/3 py-2" />
                   </div>
                 </>
-              ) : null}
+              )}
             </>
           ) : null}
           {userData.website || userData.linkedIn || userData.github ? (

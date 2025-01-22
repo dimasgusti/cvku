@@ -14,9 +14,7 @@ async function getUserByUsername(username) {
     await client.connect();
 
     const db = client.db(dbName);
-    const usersCollection = db.collection("users"); 
-
-    
+    const usersCollection = db.collection("users");
     const user = await usersCollection.findOne({ username });
 
     return user;

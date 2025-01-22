@@ -172,11 +172,13 @@ export default function Profile() {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-8">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
-              <Button variant='secondary' className="w-full">Upgrade to CVKU Pro</Button>
+              <Button variant="secondary" className="w-full">
+                Upgrade to CVKU Pro
+              </Button>
             </Link>
           )}
         </div>
@@ -1027,7 +1029,7 @@ export default function Profile() {
             {userData.website || userData.linkedIn || userData.github ? (
               <div>
                 <div className="flex flex-row justify-between items-center my-4">
-                  <p>Contact</p>
+                  <p className="text-lg text-black/70">Contact</p>
                   <Link href="/profile/settings">
                     <PlusCircle size={14} />
                   </Link>
