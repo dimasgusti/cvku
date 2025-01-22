@@ -203,56 +203,57 @@ export default function Billing() {
         <div className="w-full flex flex-row justify-center items-center">
           <Card className="w-fit mx-4">
             <CardContent className="py-4">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="border px-4 py-2">No</th>
-                    <th className="border px-4 py-2">Start Date</th>
-                    <th className="border px-4 py-2">End Date</th>
-                    <th className="border px-4 py-2">Amount</th>
-                    <th className="border px-4 py-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.length > 0 ? (
-                    transactions.map((transaction, index) => (
-                      <tr key={transaction.id}>
-                        <td className="border px-4 py-2">{index + 1}</td>
-                        <td className="border px-4 py-2">
-                          {new Intl.DateTimeFormat("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }).format(new Date(transaction.createdAt))}
-                        </td>
-                        <td className="border px-4 py-2">
-                          {new Intl.DateTimeFormat("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }).format(new Date(transaction.endDate))}
-                        </td>
-                        <td className="border px-4 py-2">
-                        {transaction.amount}
-
-                        </td>
-                        <td className="border px-4 py-2">
-                          {transaction.status}
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead>
+                    <tr>
+                      <th className="border px-4 py-2">No</th>
+                      <th className="border px-4 py-2">Start Date</th>
+                      <th className="border px-4 py-2">End Date</th>
+                      <th className="border px-4 py-2">Amount</th>
+                      <th className="border px-4 py-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.length > 0 ? (
+                      transactions.map((transaction, index) => (
+                        <tr key={transaction.id}>
+                          <td className="border px-4 py-2">{index + 1}</td>
+                          <td className="border px-4 py-2">
+                            {new Intl.DateTimeFormat("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }).format(new Date(transaction.createdAt))}
+                          </td>
+                          <td className="border px-4 py-2">
+                            {new Intl.DateTimeFormat("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }).format(new Date(transaction.endDate))}
+                          </td>
+                          <td className="border px-4 py-2">
+                            {transaction.amount}
+                          </td>
+                          <td className="border px-4 py-2">
+                            {transaction.status}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={5}
+                          className="border px-4 py-2 text-center text-gray-500"
+                        >
+                          No transactions found.
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={6}
-                        className="border px-4 py-2 text-center text-gray-500"
-                      >
-                        No transactions found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </CardContent>
           </Card>
         </div>

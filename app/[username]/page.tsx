@@ -99,7 +99,7 @@ export default function Page() {
   const volunteers =
     recordData?.filter((record: Record) => record.type === "volunteer") || [];
 
-  if (!userData || !recordData.length) {
+  if (!userData || !recordData) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />

@@ -139,17 +139,17 @@ export default function Profile() {
     }
   };
 
-  if (status === "unauthenticated") {
-    redirect("/");
-  }
-
-  if (!userData || !recordData || !isProPlanActive) {
+  if (status === "loading") {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
         Please wait
       </div>
     );
+  }
+
+  if (status === "unauthenticated") {
+    redirect("/");
   }
 
   if (errorMessage) {
@@ -176,23 +176,27 @@ export default function Profile() {
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
-              <Button className="w-full">Upgrade to CVKU Pro</Button>
+              <Button variant='secondary' className="w-full">Upgrade to CVKU Pro</Button>
             </Link>
           )}
         </div>
-        <div className="flex flex-row justify-between items-center gap-4 py-4">
-          <Link href={`/${userData.username}`} target="_blank">
-            <Button variant="secondary">
-              <Eye /> Preview
-            </Button>
-          </Link>
-          <Link href="/profile/pdf">
-            <Button variant="secondary">
-              <Download />
-              Convert PDF
-            </Button>
-          </Link>
-        </div>
+        {userData?.username && (
+          <>
+            <div className="flex flex-row justify-between items-center gap-4 py-4">
+              <Link href={`/${userData.username}`} target="_blank">
+                <Button variant="secondary">
+                  <Eye /> Preview
+                </Button>
+              </Link>
+              <Link href="/profile/pdf">
+                <Button variant="secondary">
+                  <Download />
+                  Convert PDF
+                </Button>
+              </Link>
+            </div>
+          </>
+        )}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Image
             src={session?.user?.image || "/defaultAvatar.png"}
@@ -207,7 +211,7 @@ export default function Profile() {
               {!userData?.username ? (
                 <>
                   <div>
-                    <p className="text-sm">{userData?.email}</p>
+                    <p className="text-sm">{session?.user?.email}</p>
                     <p className="text-xs">
                       Thank you for signing up with CVKU!
                     </p>
