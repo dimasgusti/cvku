@@ -122,7 +122,11 @@ export default function AddCertification() {
                     <FormItem>
                       <FormLabel>Name*</FormLabel>
                       <FormControl>
-                        <Input placeholder="iOS Swift UI" {...field} />
+                        <Input
+                          disabled={btnLoading}
+                          placeholder="iOS Swift UI"
+                          {...field}
+                        />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -136,7 +140,7 @@ export default function AddCertification() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input disabled={btnLoading} {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -153,6 +157,7 @@ export default function AddCertification() {
                       <FormLabel>Issued*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -189,6 +194,7 @@ export default function AddCertification() {
                       <FormLabel>Expires*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -228,7 +234,11 @@ export default function AddCertification() {
                   <FormItem>
                     <FormLabel>Organization*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Coursera" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Coursera"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -243,6 +253,7 @@ export default function AddCertification() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        disabled={btnLoading}
                         placeholder="Describe your project in all its glory!"
                         maxLength={150}
                         {...field}

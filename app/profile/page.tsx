@@ -139,6 +139,10 @@ export default function Profile() {
     }
   };
 
+  if (!userData || !recordData) {
+    return <p>Loading...</p>;
+  }
+
   if (status === "loading") {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
@@ -190,12 +194,21 @@ export default function Profile() {
                   <Eye /> Preview
                 </Button>
               </Link>
-              <Link href="/profile/pdf">
-                <Button variant="secondary">
-                  <Download />
-                  Convert PDF
-                </Button>
-              </Link>
+              {isProPlanActive ? (
+                <Link href="/profile/pdf">
+                  <Button variant="secondary">
+                    <Download />
+                    Convert PDF
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/profile/pdf">
+                  <Button disabled variant="secondary" className="hover:cursor-not-allowed">
+                    <Download />
+                    Convert PDF
+                  </Button>
+                </Link>
+              )}
             </div>
           </>
         )}

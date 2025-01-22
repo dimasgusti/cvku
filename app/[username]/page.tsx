@@ -54,6 +54,16 @@ interface Record {
   image: (string | StaticImageData)[];
 }
 
+type RecordDictionary = {
+  project: Record[];
+  workplace: Record[];
+  award: Record[];
+  certification: Record[];
+  education: Record[];
+  volunteer: Record[];
+  [key: string]: Record[];
+};
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page() {
@@ -76,35 +86,54 @@ export default function Page() {
     fetcher
   );
 
-  const [recordData, setRecordData] = useState<Record[]>([]);
+  const [recordData, setRecordData] = useState<RecordDictionary>({
+    project: [],
+    workplace: [],
+    award: [],
+    certification: [],
+    education: [],
+    volunteer: [],
+  });
+
+  const hasRecords = Object.values(recordData).some(records => records.length > 0);
 
   useEffect(() => {
     if (fetchedRecordData) {
-      setRecordData(fetchedRecordData);
+      // Gunakan reduce untuk mengelompokkan record berdasarkan tipe
+      const categorizedRecords = fetchedRecordData.reduce((acc, record) => {
+        if (!acc[record.type]) {
+          acc[record.type] = [];
+        }
+        acc[record.type].push(record);
+        return acc;
+      }, {} as RecordDictionary);
+
+      setRecordData(categorizedRecords);
     }
   }, [fetchedRecordData]);
 
-  if (error) return <div>Error loading user data.</div>;
+  if (error) return <div>Error loading user data: {error.message}</div>;
 
-  const projects =
-    recordData?.filter((record: Record) => record.type === "project") || [];
-  const workplace =
-    recordData?.filter((record: Record) => record.type === "workplace") || [];
-  const awards =
-    recordData?.filter((record: Record) => record.type === "award") || [];
-  const certifications =
-    recordData?.filter((record: Record) => record.type === "certification") ||
-    [];
-  const educations =
-    recordData?.filter((record: Record) => record.type === "education") || [];
-  const volunteers =
-    recordData?.filter((record: Record) => record.type === "volunteer") || [];
+  const projects = recordData.project || [];
+  const workplace = recordData.workplace || [];
+  const awards = recordData.award || [];
+  const certifications = recordData.certification || [];
+  const educations = recordData.education || [];
+  const volunteers = recordData.volunteer || [];
 
-  if (!userData) {
+  if (!userData || !recordData) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
         Please wait
+      </div>
+    );
+  }
+
+  if(!userData._id) {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        Not Found
       </div>
     );
   }
@@ -145,7 +174,7 @@ export default function Page() {
 
           {!userData.private ? (
             <>
-              {recordData.length > 0 ? (
+              {hasRecords ? (
                 <>
                   {projects.length > 0 ? (
                     <>
@@ -694,7 +723,14 @@ export default function Page() {
                 </>
               )}
             </>
-          ) : null}
+          ) : (
+            <>
+              <Separator className="my-4" />
+              <div className="flex flex-col justify-center items-center h-32 w-full">
+                <p>Belum ada postingan.</p>
+              </div>
+            </>
+          )}
           {userData.website || userData.linkedIn || userData.github ? (
             <>
               <Separator className="my-4" />

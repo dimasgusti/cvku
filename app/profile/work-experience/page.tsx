@@ -125,7 +125,11 @@ export default function AddWorkExperience() {
                     <FormItem>
                       <FormLabel>Name*</FormLabel>
                       <FormControl>
-                        <Input placeholder="iOS Swift UI" {...field} />
+                        <Input
+                          disabled={btnLoading}
+                          placeholder="iOS Swift UI"
+                          {...field}
+                        />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -139,7 +143,7 @@ export default function AddWorkExperience() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input disabled={btnLoading} {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -156,6 +160,7 @@ export default function AddWorkExperience() {
                       <FormLabel>From*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -192,6 +197,7 @@ export default function AddWorkExperience() {
                       <FormLabel>From Month*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -235,6 +241,7 @@ export default function AddWorkExperience() {
                       <FormLabel>Expires*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -272,6 +279,7 @@ export default function AddWorkExperience() {
                       <FormLabel>To Month</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -315,7 +323,11 @@ export default function AddWorkExperience() {
                   <FormItem>
                     <FormLabel>Organization*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Coursera" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Coursera"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -329,7 +341,11 @@ export default function AddWorkExperience() {
                   <FormItem>
                     <FormLabel>Location*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Indonesia, Bogor" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Indonesia, Bogor"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -344,6 +360,7 @@ export default function AddWorkExperience() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        disabled={btnLoading}
                         placeholder="Describe your project in all its glory!"
                         maxLength={150}
                         {...field}

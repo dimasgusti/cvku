@@ -121,7 +121,11 @@ export default function AddAward() {
                 <FormItem>
                   <FormLabel>Title*</FormLabel>
                   <FormControl>
-                    <Input placeholder="Fastest Keyboard Typer" {...field} />
+                    <Input
+                      disabled={btnLoading}
+                      placeholder="Fastest Keyboard Typer"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,6 +140,7 @@ export default function AddAward() {
                     <FormLabel>Year*</FormLabel>
                     <FormControl>
                       <Select
+                        disabled={btnLoading}
                         onValueChange={(value) => field.onChange(value)}
                         value={field.value}
                       >
@@ -170,7 +175,7 @@ export default function AddAward() {
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input disabled={btnLoading} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -184,7 +189,11 @@ export default function AddAward() {
                 <FormItem>
                   <FormLabel>Presented by*</FormLabel>
                   <FormControl>
-                    <Input placeholder="MyMom" {...field} />
+                    <Input
+                      disabled={btnLoading}
+                      placeholder="MyMom"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -198,6 +207,7 @@ export default function AddAward() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
+                      disabled={btnLoading}
                       placeholder="Describe your project in all its glory!"
                       maxLength={150}
                       {...field}

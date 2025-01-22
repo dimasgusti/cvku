@@ -237,6 +237,7 @@ export default function AddProject() {
                       <FormLabel>Month*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >

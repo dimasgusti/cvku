@@ -124,7 +124,11 @@ export default function AddEducation() {
                     <FormItem>
                       <FormLabel>Degree*</FormLabel>
                       <FormControl>
-                        <Input placeholder="iOS Swift UI" {...field} />
+                        <Input
+                          disabled={btnLoading}
+                          placeholder="iOS Swift UI"
+                          {...field}
+                        />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -138,7 +142,7 @@ export default function AddEducation() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input disabled={btnLoading} {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -155,6 +159,7 @@ export default function AddEducation() {
                       <FormLabel>Issued*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -191,6 +196,7 @@ export default function AddEducation() {
                       <FormLabel>Graduated*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -227,7 +233,11 @@ export default function AddEducation() {
                   <FormItem>
                     <FormLabel>Intitution*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Harvard University" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Harvard University"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -241,7 +251,11 @@ export default function AddEducation() {
                   <FormItem>
                     <FormLabel>Field of Study*</FormLabel>
                     <FormControl>
-                      <Input placeholder="Computer Science" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Computer Science"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -255,12 +269,13 @@ export default function AddEducation() {
                   <FormItem>
                     <FormLabel>GPA</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="3.85" 
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="3.85"
                         type="number"
                         max={4}
-                        step='0.1'
-                        {...field} 
+                        step="0.1"
+                        {...field}
                       />
                     </FormControl>
                     <FormDescription />
@@ -276,6 +291,7 @@ export default function AddEducation() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
+                        disabled={btnLoading}
                         placeholder="Describe your project in all its glory!"
                         maxLength={150}
                         {...field}
