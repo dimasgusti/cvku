@@ -19,7 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { signOut, useSession } from "next-auth/react";
 
 export default function HomePage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   return (
     <>
       <nav className="w-full h-[5rem] px-4 sticky top-0 z-50 bg-white shadow-lg">

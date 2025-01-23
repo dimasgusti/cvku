@@ -89,7 +89,6 @@ export default function Settings() {
     setBtnLoading(true);
     values.username = values.username.trim().toLowerCase();
 
-    
     if (values.username !== userData?.username) {
       try {
         const usernameResponse = await fetch(
@@ -97,7 +96,6 @@ export default function Settings() {
         );
         const { exists } = await usernameResponse.json();
 
-        
         if (exists) {
           toast.error("Username is already taken. Please choose another.");
           setBtnLoading(false);
@@ -116,7 +114,6 @@ export default function Settings() {
       typeof values.image !== "string" &&
       (values.image as File) instanceof File
     ) {
-      
       const imageFile = values.image as File;
       const isValid = handleFileValidation(imageFile);
       if (!isValid) {
@@ -124,10 +121,10 @@ export default function Settings() {
         setBtnLoading(false);
         return;
       }
-    
+
       const storageRef = ref(storage, `uploads/${imageFile.name}`);
       const uploadTask = uploadBytesResumable(storageRef, imageFile);
-    
+
       try {
         const imageUrl = await new Promise<string>((resolve, reject) => {
           uploadTask.on(
@@ -135,7 +132,7 @@ export default function Settings() {
             (snapshot) => {
               const progress =
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              setProgress(progress); 
+              setProgress(progress);
             },
             (error) => {
               console.error("Upload failed:", error);
@@ -148,8 +145,7 @@ export default function Settings() {
             }
           );
         });
-    
-        
+
         values.image = imageUrl;
       } catch (error) {
         toast.error("Image upload failed. Please try again.");
@@ -178,7 +174,7 @@ export default function Settings() {
         error instanceof Error ? error.message : "An unexpected error occurred."
       );
     } finally {
-      setBtnLoading(false); 
+      setBtnLoading(false);
     }
   }
 
@@ -462,10 +458,12 @@ export default function Settings() {
 
             <Button type="submit" disabled={btnLoading}>
               {btnLoading ? (
-                <span className="flex flex-row items-center justify-center gap-2">
-                  <Loader className="animate-spin" />
-                  Saving User
-                </span>
+                <>
+                  <span className="flex flex-row items-center justify-center gap-2">
+                    <Loader className="animate-spin" />
+                    Saving User {progress}%
+                  </span>
+                </>
               ) : (
                 <span className="flex flex-row justify-center items-center gap-2">
                   <Save />

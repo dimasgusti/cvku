@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import CVKULogo from "../public/Logo & Text.svg";
 import { signOut, useSession } from "next-auth/react";
-import SignOut from '../pages/auth/signout';
 import { Button } from "./ui/button";
 import { LogIn, LogOut, User } from "lucide-react";
 
