@@ -110,13 +110,13 @@ export default function HomePage() {
             </div>
           </div>
           <div className="flex flex-row justify-center items-start">
-            <Image
+            {/* <Image
               src="/ss3.png"
               alt="CV"
               width={250}
               height={250}
               className="rounded-sm w-full mt-4"
-            />
+            /> */}
           </div>
         </div>
       </section>

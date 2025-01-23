@@ -12,7 +12,7 @@ import "react-photo-view/dist/react-photo-view.css";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 countries.registerLocale(enLocale);
 
@@ -95,7 +95,9 @@ export default function Page() {
     volunteer: [],
   });
 
-  const hasRecords = Object.values(recordData).some(records => records.length > 0);
+  const hasRecords = Object.values(recordData).some(
+    (records) => records.length > 0
+  );
 
   useEffect(() => {
     if (fetchedRecordData) {
@@ -130,7 +132,7 @@ export default function Page() {
     );
   }
 
-  if(!userData._id) {
+  if (!userData._id) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         Not Found
@@ -143,14 +145,10 @@ export default function Page() {
       <div className="flex flex-row justify-center items-center">
         <div className="w-full md:w-[560px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
           <div className="flex flex-row justify-start w-full items-center gap-4 py-4">
-            <Image
-              src={userData.image}
-              width={100}
-              height={100}
-              alt={`${userData.username} Profile Picture`}
-              className="rounded-full"
-              priority
-            />
+            <Avatar style={{ width: 100, height: 100 }}>
+              <AvatarImage src={`${userData.image}`} alt={userData.username} />
+              <AvatarFallback>CV</AvatarFallback>
+            </Avatar>
             <div className="flex flex-col">
               <p className="text-lg text-black/90">
                 {userData?.username} <br />
@@ -715,10 +713,8 @@ export default function Page() {
               ) : (
                 <>
                   <Separator className="my-4" />
-                  <div className="flex flex-col justify-start items-start my-4 gap-4">
-                    <Skeleton className="w-1/4 py-2" />
-                    <Skeleton className="w-1/2 py-2" />
-                    <Skeleton className="w-1/3 py-2" />
+                  <div className="flex flex-col justify-center items-center h-32 w-full">
+                    <p>Belum ada postingan.</p>
                   </div>
                 </>
               )}
@@ -727,7 +723,7 @@ export default function Page() {
             <>
               <Separator className="my-4" />
               <div className="flex flex-col justify-center items-center h-32 w-full">
-                <p>Belum ada postingan.</p>
+                <p>Akun private.</p>
               </div>
             </>
           )}

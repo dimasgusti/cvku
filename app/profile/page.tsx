@@ -34,6 +34,7 @@ import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 countries.registerLocale(enLocale);
 
@@ -222,26 +223,13 @@ export default function Profile() {
           </>
         )}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
-          <div
-          style={{
-            width: "125px",
-            height: "125px",
-            borderRadius: "50%",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          >
-          <Image
-            src={userData.image || "/defaultAvatar.png"}
-            width={100}
-            height={100}
-            alt={session?.user?.name || "Guest"}
-            className="object-cover object-center"
-            priority
-          />
-          </div>
+          <Avatar style={{ width: 100, height: 100 }}>
+            <AvatarImage
+              src={`${userData.image}`}
+              alt={userData.username}
+            />
+            <AvatarFallback>CV</AvatarFallback>
+          </Avatar>
           <div className="flex flex-row justify-between w-full">
             <div className="pr-4">
               {!userData?.username ? (

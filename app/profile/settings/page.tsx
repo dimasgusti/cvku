@@ -1,6 +1,7 @@
 "use client";
 
 import CountrySelect from "@/components/country-select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,7 +22,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
@@ -148,7 +148,7 @@ export default function Settings() {
 
         values.image = imageUrl;
       } catch (error) {
-        console.log("Image upload failed:", error)
+        console.log("Image upload failed:", error);
         toast.error("Image upload failed. Please try again.");
         setBtnLoading(false);
         return;
@@ -232,26 +232,10 @@ export default function Settings() {
               </Button>
             </Link>
             <h2 className="text-xl md:text-2xl">Update Profile</h2>
-            <div
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                src={previewImage || userData?.image || "/logo.svg"}
-                width={100}
-                height={100}
-                alt={session?.user?.name || "Guest"}
-                className="object-cover object-center"
-                priority
-              />
-            </div>
+            <Avatar style={{ width: 100, height: 100 }}>
+              <AvatarImage src={previewImage || userData?.image || 'logo.svg'} alt={userData?.username || 'Guest'} />
+              <AvatarFallback>CV</AvatarFallback>
+            </Avatar>
             <FormField
               control={form.control}
               name="image"
