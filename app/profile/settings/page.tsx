@@ -14,11 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { storage } from "@/firebaseConfig";
 import { userSchema } from "@/lib/validation/UserSchema";
 import { fetchData } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
@@ -49,6 +52,8 @@ export default function Settings() {
   const [btnLoading, setBtnLoading] = useState(false);
   const formResetRef = useRef(false);
   const [charCount, setCharCount] = useState(0);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
@@ -66,10 +71,25 @@ export default function Settings() {
     },
   });
 
+  const handleFileValidation = (file: File) => {
+    const maxSize = 5 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (file.size > maxSize) {
+      toast.error("File size exceeds 5MB!");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
+      return false;
+    }
+    return true;
+  };
+
   async function onSubmit(values: z.infer<typeof userSchema>) {
     setBtnLoading(true);
-
     values.username = values.username.trim().toLowerCase();
+
+    
     if (values.username !== userData?.username) {
       try {
         const usernameResponse = await fetch(
@@ -77,6 +97,7 @@ export default function Settings() {
         );
         const { exists } = await usernameResponse.json();
 
+        
         if (exists) {
           toast.error("Username is already taken. Please choose another.");
           setBtnLoading(false);
@@ -90,6 +111,53 @@ export default function Settings() {
       }
     }
 
+    if (
+      values.image &&
+      typeof values.image !== "string" &&
+      (values.image as File) instanceof File
+    ) {
+      
+      const imageFile = values.image as File;
+      const isValid = handleFileValidation(imageFile);
+      if (!isValid) {
+        toast.error("Invalid file. Please check the file size or type.");
+        setBtnLoading(false);
+        return;
+      }
+    
+      const storageRef = ref(storage, `uploads/${imageFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    
+      try {
+        const imageUrl = await new Promise<string>((resolve, reject) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              setProgress(progress); 
+            },
+            (error) => {
+              console.error("Upload failed:", error);
+              reject(error);
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref)
+                .then(resolve)
+                .catch(reject);
+            }
+          );
+        });
+    
+        
+        values.image = imageUrl;
+      } catch (error) {
+        toast.error("Image upload failed. Please try again.");
+        setBtnLoading(false);
+        return;
+      }
+    }
+
     try {
       const response = await fetch("/api/users/updateUserByEmail", {
         method: "PUT",
@@ -98,17 +166,19 @@ export default function Settings() {
         },
         body: JSON.stringify(values),
       });
+
       if (!response.ok) {
         throw new Error("There are no changes made. Please try again!");
       }
+
       toast.success("Profile updated!");
       router.push("/profile");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "An unexpected error occured."
+        error instanceof Error ? error.message : "An unexpected error occurred."
       );
     } finally {
-      setBtnLoading(false);
+      setBtnLoading(false); 
     }
   }
 
@@ -165,6 +235,54 @@ export default function Settings() {
               </Button>
             </Link>
             <h2 className="text-xl md:text-2xl">Update Profile</h2>
+            <div
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                src={previewImage || userData?.image || "/logo.svg"}
+                width={100}
+                height={100}
+                alt={session?.user?.name || "Guest"}
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={btnLoading}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const imageUrl = URL.createObjectURL(file);
+                          setPreviewImage(imageUrl);
+                        }
+                        field.onChange(file);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Max file size: 5MB, Allowed types: Images (jpeg, png, gif)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"

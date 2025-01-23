@@ -222,14 +222,26 @@ export default function Profile() {
           </>
         )}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
+          <div
+          style={{
+            width: "125px",
+            height: "125px",
+            borderRadius: "50%",
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          >
           <Image
-            src={session?.user?.image || "/defaultAvatar.png"}
+            src={userData.image || "/defaultAvatar.png"}
             width={100}
             height={100}
             alt={session?.user?.name || "Guest"}
-            className="rounded-full"
+            className="object-cover object-center"
             priority
           />
+          </div>
           <div className="flex flex-row justify-between w-full">
             <div className="pr-4">
               {!userData?.username ? (

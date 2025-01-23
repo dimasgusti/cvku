@@ -1,9 +1,9 @@
-<svg width="174" height="224" viewBox="0 0 174 224" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M12 12H127V47H162V212H12V12Z" fill="black"/>
-<path d="M132 12L162 42H132V12Z" fill="black"/>
-<rect x="49" y="93.5" width="37.5" height="37.5" fill="white"/>
-<rect x="49" y="56" width="37.5" height="37.5" fill="white"/>
-<path d="M86.5 56V56C107.211 56 124 72.7893 124 93.5V93.5H86.5V56Z" fill="white"/>
-<path d="M49 131H86.5V168.5V168.5C65.7893 168.5 49 151.711 49 131V131Z" fill="white"/>
-<rect x="86.5" y="131" width="37.5" height="37.5" fill="white"/>
+<svg width="250" height="250" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M84 31H199L187.029 63.8892H222.029L165.596 218.939H15.596L84 31Z" fill="black"/>
+<path d="M204 31L223.739 59.1908H193.739L204 31Z" fill="black"/>
+<rect width="37.5" height="37.5" transform="matrix(1 0 -0.34202 0.939693 93.1254 107.585)" fill="white"/>
+<rect width="37.5" height="37.5" transform="matrix(1 0 -0.34202 0.939693 105.951 72.3465)" fill="white"/>
+<path d="M143.451 72.3465C164.162 72.3465 175.209 88.1233 168.125 107.585H130.625L143.451 72.3465Z" fill="white"/>
+<path d="M80.2996 142.823H117.8L104.974 178.062C84.2632 178.062 73.2161 162.285 80.2996 142.823Z" fill="white"/>
+<rect width="37.5" height="37.5" transform="matrix(1 0 -0.34202 0.939693 117.8 142.823)" fill="white"/>
 </svg>

@@ -36,7 +36,7 @@ export const userSchema = z.object({
     .max(100, "Bio must contain at most 100 character(s)")
     .optional(),
   email: z.string().email("Invalid email format").optional(),
-  image: z.string().optional(),
+  image: z.union([z.instanceof(File), z.string()]).optional(),
   website: linkUrlValidation,
   linkedIn: linkUrlValidation,
   github: linkUrlValidation,
