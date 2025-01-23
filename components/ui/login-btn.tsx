@@ -1,7 +1,8 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "./button";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
-import { Loader } from "lucide-react";
+import { Loader, User } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginButton() {
   const { data: session, status } = useSession();
@@ -20,10 +21,17 @@ export default function LoginButton() {
   if (session) {
     return (
       <>
-        <Button variant="outline" onClick={() => signOut()} size="sm">
-          <FaSignOutAlt />
-          Keluar
-        </Button>
+        <div className="flex flex-row items-center gap-2">
+          <Link href='/profile'>
+            <Button size='sm'>
+              <User />
+            </Button>
+          </Link>
+          <Button variant="outline" onClick={() => signOut()} size="sm">
+            <FaSignOutAlt />
+            Keluar
+          </Button>
+        </div>
       </>
     );
   }

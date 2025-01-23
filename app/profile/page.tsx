@@ -139,8 +139,17 @@ export default function Profile() {
     }
   };
 
+  if (status === "unauthenticated") {
+    redirect("/");
+  }
+
   if (!userData || !recordData) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
   }
 
   if (status === "loading") {
@@ -150,10 +159,6 @@ export default function Profile() {
         Please wait
       </div>
     );
-  }
-
-  if (status === "unauthenticated") {
-    redirect("/");
   }
 
   if (errorMessage) {
@@ -190,20 +195,24 @@ export default function Profile() {
           <>
             <div className="flex flex-row justify-between items-center gap-4 py-4">
               <Link href={`/${userData.username}`} target="_blank">
-                <Button variant="secondary" size='sm'>
+                <Button variant="secondary" size="sm">
                   <Eye /> Preview
                 </Button>
               </Link>
               {isProPlanActive ? (
                 <Link href="/profile/pdf">
-                  <Button variant="secondary" size='sm'>
+                  <Button variant="secondary" size="sm">
                     <Download />
                     Convert PDF
                   </Button>
                 </Link>
               ) : (
                 <Link href="/profile/pdf">
-                  <Button disabled variant="secondary" className="hover:cursor-not-allowed">
+                  <Button
+                    disabled
+                    variant="secondary"
+                    className="hover:cursor-not-allowed"
+                  >
                     <Download />
                     Convert PDF
                   </Button>
