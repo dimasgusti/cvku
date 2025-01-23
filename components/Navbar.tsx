@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 import { LogIn, LogOut, User } from "lucide-react";
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   return (
     <nav className="w-full h-[5rem] border-b px-4 sticky top-0 z-50 bg-white shadow-lg">
       <ul className="flex flex-row justify-between items-center h-full">

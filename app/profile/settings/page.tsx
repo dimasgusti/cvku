@@ -148,6 +148,7 @@ export default function Settings() {
 
         values.image = imageUrl;
       } catch (error) {
+        console.log("Image upload failed:", error)
         toast.error("Image upload failed. Please try again.");
         setBtnLoading(false);
         return;
