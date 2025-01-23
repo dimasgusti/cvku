@@ -32,6 +32,7 @@ import Link from "next/link";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebaseConfig";
 import { volunteerSchema } from "@/lib/validation/VolunteerSchema";
+import { redirect } from "next/navigation";
 
 type VolunteerFormValues = z.infer<typeof volunteerSchema>;
 
@@ -147,17 +148,7 @@ export default function AddVolunteer() {
   };
 
   if (!session) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>
-          Please{" "}
-          <Link href="/auth/signin" className="underline">
-            log in
-          </Link>{" "}
-          to view your profile.
-        </p>
-      </div>
-    );
+    redirect("/");
   }
 
   return (

@@ -55,7 +55,7 @@ export default function HomePage() {
                       <User />
                     </Button>
                   </Link>
-                  <Button variant="outline" onClick={() => signOut()} size="sm">
+                  <Button variant="outline" onClick={() => signOut({callbackUrl: '/'})} size="sm">
                     <LogOut />
                   </Button>
                 </div>

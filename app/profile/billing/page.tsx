@@ -121,6 +121,10 @@ export default function Billing() {
     return endDate >= today;
   });
 
+  if (status === "unauthenticated") {
+    redirect("/");
+  }
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
@@ -128,10 +132,6 @@ export default function Billing() {
         Please wait
       </div>
     );
-  }
-
-  if (status === "unauthenticated") {
-    redirect("/");
   }
 
   return (

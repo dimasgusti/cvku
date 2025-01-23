@@ -27,7 +27,7 @@ export default function LoginButton() {
               <User />
             </Button>
           </Link>
-          <Button variant="outline" onClick={() => signOut()} size="sm">
+          <Button variant="outline" onClick={() => signOut({callbackUrl: '/'})} size="sm">
             <FaSignOutAlt />
             Keluar
           </Button>

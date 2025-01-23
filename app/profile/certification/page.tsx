@@ -25,7 +25,7 @@ import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { certificationSchema } from "@/lib/validation/CertificationSchema";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
@@ -89,17 +89,7 @@ export default function AddCertification() {
   }
 
   if (!session) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p>
-          Please{" "}
-          <Link href="/auth/signin" className="underline">
-            log in
-          </Link>{" "}
-          to view your profile.
-        </p>
-      </div>
-    );
+    redirect("/");
   }
 
   return (
