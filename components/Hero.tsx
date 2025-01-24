@@ -13,8 +13,9 @@ export default function Hero() {
           </h1>
           <h2 className="text-xl md:text-2xl">Mudah, Cepat, dan Gratis</h2>
           {/* <TextReveal /> */}
-          <p className="text-base md:text-lg">
-            Waktunya upgrade CV-mu dengan desain modern
+          <p className="text-base md:text-lg max-w-xl">
+            Tingkatkan kualitas CV-mu dengan desain modern yang memukau. Saatnya
+            tampil beda dan unggul di mata perekrut dan klien!
           </p>
           <div className="flex flex-row items-center gap-4 mt-2">
             <Link href="/auth/signin">

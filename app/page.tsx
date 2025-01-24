@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
-import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Pricing from "@/components/Pricing";
 import { Faq1 } from "@/components/FAQ";
+import Features2 from "@/components/Features2";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   return (
@@ -34,9 +35,10 @@ export default function HomePage() {
           draggable={false}
         />
       </ContainerScroll>
-      <Features />
+      <Features2 />
       <Pricing />
       <Faq1 />
+      <Footer />
     </>
   );
 }

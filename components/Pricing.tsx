@@ -15,35 +15,31 @@ export default function Pricing() {
       <div className="flex flex-wrap flex-col justify-center items-center gap-4 px-4 w-full md:max-w-4xl">
         <h2 className="text-xl md:text-2xl">Harga</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-4 md:gap-8 lg:gap-16 py-4">
-          <PricingCard  
+          <PricingCard
             title="Starter"
             description="Semua kebutuhan CV Anda"
             price={0}
             pricePeriod="/bulan"
-            features={
-              [
-                'Buat CV Online dengan mudah',
-                'Bagikan URL unik CV Anda',
-                'Pilih dari 2 template dasar',
-                'Cocok untuk fresh graduate dan freelancer baru'
-              ]
-            }
+            features={[
+              "Buat CV Online dengan mudah",
+              "Bagikan URL unik CV Anda",
+              "Pilih dari 2 template dasar",
+              "Cocok untuk fresh graduate dan freelancer baru",
+            ]}
             onActionClick={() => null}
             actionLabel="Coba Sekarang"
           />
-          <PricingCard  
+          <PricingCard
             title="Pro"
             description="Tingkatkan kelas CV Anda"
             price={24.999}
             pricePeriod="/bulan"
-            features={
-              [
-                'Semua fitur Starter',
-                'Eksport CV ke PDF',
-                'Akses ke 10+ template premium yang dirancang profesional.',
-                'Dapatkan prioritas dukungan pelanggan'
-              ]
-            }
+            features={[
+              "Semua fitur Starter",
+              "Eksport CV ke PDF",
+              "Akses ke 10+ template premium yang dirancang profesional.",
+              "Dapatkan prioritas dukungan pelanggan",
+            ]}
             onActionClick={() => null}
             actionLabel="Coba Sekarang"
           />
@@ -58,7 +54,7 @@ interface PricingCardProps {
   description: string;
   price: number;
   pricePeriod: string;
-  features: string[]; 
+  features: string[];
   onActionClick: () => void;
   actionLabel: string;
 }
@@ -81,7 +77,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
       <Separator />
       <CardContent className="space-y-4 py-4 flex flex-col items-center">
         <h2 className="text-3xl md:text-4xl font-semibold">
-          Rp {price}<span className="font-thin text-sm">{pricePeriod}</span>
+          Rp {price}
+          <span className="font-thin text-sm">{pricePeriod}</span>
         </h2>
         <Button onClick={onActionClick} size="sm" className="w-full">
           {actionLabel}
