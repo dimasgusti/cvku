@@ -1,14 +1,6 @@
-import {
-    Button,
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@relume_io/relume-ui";
-  
-  import type { ButtonProps } from "@relume_io/relume-ui";
-  
-  type QuestionsProps = {
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
+
+    type QuestionsProps = {
     title: string;
     answer: string;
   };
@@ -18,14 +10,13 @@ import {
     description: string;
     footerHeading: string;
     footerDescription: string;
-    button: ButtonProps;
     questions: QuestionsProps[];
   };
   
   export type Faq1Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
   
   export const Faq1 = (props: Faq1Props) => {
-    const { heading, description, questions, footerHeading, footerDescription, button } = {
+    const { heading, description, questions, footerHeading, footerDescription } = {
       ...Faq1Defaults,
       ...props,
     };
@@ -52,7 +43,7 @@ import {
             </h4>
             <p className="md:text-md">{footerDescription}</p>
             <div className="mt-6 md:mt-8">
-              <Button {...button}>{button.title}</Button>
+              {/* <Button {...button}>{button.title}</Button> */}
             </div>
           </div>
         </div>
@@ -92,10 +83,6 @@ import {
       },
     ],
     footerHeading: "Tidak menemukan jawaban?",
-    footerDescription: "Anda bisa hubungi kontak dibawah.",
-    button: {
-      title: "Contact",
-      variant: "secondary",
-    },
+    footerDescription: "Anda bisa hubungi kontak dibawah."
   };
   
