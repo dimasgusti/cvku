@@ -41,9 +41,9 @@ export default function RootLayout({
       <body className={manrope.className}>
         <SessionProvider>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-            {/* <div className="bg-yellow-400 text-black py-2 text-center">
+            <div className="bg-yellow-400 text-black py-2 text-center">
               🚧 This website is currently under development. Stay tuned! 🚧
-            </div> */}
+            </div>
             {children}
             <Toaster />
           </main>
