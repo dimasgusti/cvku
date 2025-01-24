@@ -869,7 +869,7 @@ export default function Profile() {
                 ))}
               </div>
             ) : (
-              <Link href="/profile/certification">
+              <Link href="/profile/education">
                 <Button variant="outline" size="sm">
                   Add Education
                 </Button>

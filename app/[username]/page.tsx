@@ -123,7 +123,7 @@ export default function Page() {
   const educations = recordData.education || [];
   const volunteers = recordData.volunteer || [];
 
-  if (!userData || !recordData) {
+  if (!userData || !fetchedRecordData) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
