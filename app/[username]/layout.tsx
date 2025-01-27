@@ -8,7 +8,14 @@ export default function UsernameLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <header></header>
+      <header className="flex flex-col justify-center items-center py-2">
+        <h2 className="text-base md:text-lg">
+          Created with{" "}
+          <Link href="/" className="underline">
+            CVKU
+          </Link>
+        </h2>
+      </header>
       <main className="flex-grow">{children}</main>
       <footer className="flex flex-col justify-center items-center py-2">
         <h2 className="text-base md:text-lg">
