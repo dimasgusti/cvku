@@ -34,30 +34,30 @@ model Session {
   user         User     @relation(fields: [userId], references: [id])
 }
 
-model Record {
-  id           String   @id @default(cuid()) @map("_id")
-  userId       String
-  type         String
-  title        String
-  year         String?
-  issued       String?
-  expires      String?
-  from         String?
-  fromMonth    String?
-  to           String?
-  toMonth      String?
-  company      String?
-  organization String?
-  institution  String?
-  fieldOfStudy String?
-  gpa          String?
-  location     String?
-  presentedBy  String?
-  url          String?
-  description  String?
-  image        String[] @default([])
-  User         User?    @relation(fields: [userId], references: [id])
-}
+// model Record {
+//   id           String   @id @default(cuid()) @map("_id")
+//   userId       String
+//   type         String
+//   title        String
+//   year         String?
+//   issued       String?
+//   expires      String?
+//   from         String?
+//   fromMonth    String?
+//   to           String?
+//   toMonth      String?
+//   company      String?
+//   organization String?
+//   institution  String?
+//   fieldOfStudy String?
+//   gpa          String?
+//   location     String?
+//   presentedBy  String?
+//   url          String?
+//   description  String?
+//   image        String[] @default([])
+//   User         User?    @relation(fields: [userId], references: [id])
+// }
 
 model Transaction {
   id                          String   @id @default(cuid()) @map("_id")
@@ -97,7 +97,16 @@ model User {
   viewCount     Int           @default(0)
   accounts      Account[]
   sessions      Session[]
-  records       Record[]
+  education     Json[]        @default([])
+  project       Json[]        @default([])
+  experience    Json[]        @default([])
+  award         Json[]        @default([])
+  volunteer     Json[]        @default([])
+  certification Json[]        @default([])
+  skill         Json[]        @default([])
+  language      Json[]        @default([])
+  publication   Json[]        @default([])
+  blog          Json[]        @default([])
   transactions  Transaction[]
 }
 
