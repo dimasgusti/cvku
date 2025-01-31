@@ -107,6 +107,7 @@ model User {
   language      Json[]        @default([])
   publication   Json[]        @default([])
   blog          Json[]        @default([])
+  setting       Json[]        @default([])
   transactions  Transaction[]
 }
 
