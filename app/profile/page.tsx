@@ -90,69 +90,9 @@ export default function Profile() {
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
   };
 
-  const { data: userData } = useSWR<Profile>(
-    session?.user?.email
-      ? `/api/users/getUserByEmail?email=${session.user.email}`
-      : null,
-    fetcher
-  );
-
-  const { data: fetchedRecordData } = useSWR<Record[]>(
-    session?.user?.id
-      ? `/api/records/getRecord?userId=${session.user.id}`
-      : null,
-    fetcher
-  );
-
-  const [recordData, setRecordData] = useState<Record[]>([]);
-
-  useEffect(() => {
-    if (fetchedRecordData) {
-      setRecordData(fetchedRecordData);
-    }
-  }, [fetchedRecordData]);
-
-  const handleRemove = async (recordId: string) => {
-    try {
-      setBtnLoading(true);
-      const response = await fetch(
-        `/api/records/deleteRecord?recordId=${recordId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete record.");
-      }
-
-      setRecordData((prevData) =>
-        prevData.filter((record) => record.id !== recordId)
-      );
-    } catch (error) {
-      console.error("Error removing record:", error);
-    } finally {
-      toast("Delete success");
-      setBtnLoading(false);
-    }
-  };
-
   if (status === "unauthenticated") {
     redirect("/");
   }
-
-  if (!userData || !recordData) {
-    return (
-      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
-        <Loader className="animate-spin" size={32} />
-        Please wait
-      </div>
-    );
-  }
-
   if (status === "loading") {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
@@ -166,23 +106,9 @@ export default function Profile() {
     return <div>{errorMessage}</div>;
   }
 
-  const projects =
-    recordData?.filter((record: Record) => record.type === "project") || [];
-  const workplace =
-    recordData?.filter((record: Record) => record.type === "workplace") || [];
-  const awards =
-    recordData?.filter((record: Record) => record.type === "award") || [];
-  const certifications =
-    recordData?.filter((record: Record) => record.type === "certification") ||
-    [];
-  const educations =
-    recordData?.filter((record: Record) => record.type === "education") || [];
-  const volunteers =
-    recordData?.filter((record: Record) => record.type === "volunteer") || [];
-
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
+      {/* <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
@@ -1123,7 +1049,7 @@ export default function Profile() {
             ) : null}
           </>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
