@@ -91,7 +91,7 @@ export default function Profile() {
     }
   };
 
-  const { data: user, error } = useSWR<Profile>(
+  const { data: user } = useSWR<Profile>(
     session?.user?.email
       ? `/api/users/getUser?email=${session.user.email}`
       : null,
