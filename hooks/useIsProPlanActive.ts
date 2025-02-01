@@ -18,9 +18,8 @@ export function useIsProPlanActive(email: string | undefined) {
         const data = await response.json();
 
         if (data.success) {
-          // Check if there's a message with "No transactions found"
           if (data.message && data.message === "No transactions found") {
-            setErrorMessage(data.message); // Set the message if no transactions are found
+            setErrorMessage(data.message); 
             setIsProPlanActive(false);
           } else if (data.transactions && data.transactions.length > 0) {
             const activeTransaction = data.transactions.find((transaction: any) => {

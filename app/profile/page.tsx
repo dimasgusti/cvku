@@ -92,6 +92,7 @@ export default function Profile() {
     }
   };
 
+  // @ts-ignore
   const sortByDate = (a: any, b: any) => {
     const yearA = a.year
       ? new Date(`${a.fromMonth} 1, ${a.year}`).getTime()
