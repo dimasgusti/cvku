@@ -252,11 +252,6 @@ export default function Profile() {
               {!user?.username ? null : (
                 <>
                   <div className="flex flex-row items-center gap-2">
-                    <Link href="/profile/analytics">
-                      <Button variant="outline">
-                        <ChartBar />
-                      </Button>
-                    </Link>
                     <Link href="/profile/settings">
                       <Button variant="outline">
                         <Settings />
