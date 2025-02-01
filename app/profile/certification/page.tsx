@@ -33,6 +33,11 @@ import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof certificationSchema>;
 
+interface ItemData {
+  email?: string;
+  [key: string]: string | number | boolean | undefined | (string | File)[];
+}
+
 export default function AddCertification() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
@@ -54,7 +59,7 @@ export default function AddCertification() {
   const onSubmit = async (values: z.infer<typeof certificationSchema>) => {
     setBtnLoading(true);
     try {
-      const itemData = { ...values } as { email?: string; [key: string]: any };
+      const itemData: ItemData = { ...values };
 
       const email = session?.user?.email;
 

@@ -1,8 +1,6 @@
 import { MongoClient } from "mongodb";
 import clientPromise from "../../../lib/mongodb";
 
-const client = new MongoClient(process.env.DATABASE_URL);
-
 export default async function handler(req, res) {
     if(req.method === 'GET') {
         try {

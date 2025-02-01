@@ -36,6 +36,11 @@ import { redirect } from "next/navigation";
 
 type VolunteerFormValues = z.infer<typeof volunteerSchema>;
 
+interface ItemData {
+  email?: string;
+  [key: string]: string | number | boolean | undefined | (string | File)[];
+}
+
 export default function AddVolunteer() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
@@ -75,7 +80,7 @@ export default function AddVolunteer() {
   const onSubmit = async (values: z.infer<typeof volunteerSchema>) => {
     setBtnLoading(true);
     try {
-      const itemData = { ...values } as { email?: string; [key: string]: any };
+      const itemData: ItemData = { ...values };
 
       const email = session?.user?.email;
 

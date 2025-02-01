@@ -33,6 +33,11 @@ import Link from "next/link";
 
 type ProjectFormValues = z.infer<typeof awardSchema>;
 
+interface ItemData {
+  email?: string;
+  [key: string]: string | number | boolean | undefined | (string | File)[];
+}
+
 export default function AddAward() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
@@ -53,7 +58,7 @@ export default function AddAward() {
   const onSubmit = async (values: z.infer<typeof awardSchema>) => {
     setBtnLoading(true);
     try {
-      const itemData = { ...values } as { email?: string; [key: string]: any };
+      const itemData: ItemData = { ...values };
 
       const email = session?.user?.email;
 

@@ -36,6 +36,11 @@ import { redirect } from "next/navigation";
 
 type ProjectFormValues = z.infer<typeof projectSchema>;
 
+interface ItemData {
+  email?: string;
+  [key: string]: string | number | boolean | undefined | (string | File)[];
+}
+
 export default function AddProject() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
@@ -73,7 +78,7 @@ export default function AddProject() {
   const onSubmit = async (values: z.infer<typeof projectSchema>) => {
     setBtnLoading(true);
     try {
-      const itemData = { ...values } as { email?: string; [key: string]: any };
+      const itemData: ItemData = { ...values };
 
       const email = session?.user?.email;
 

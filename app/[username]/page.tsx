@@ -7,7 +7,6 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import Image, { StaticImageData } from "next/image";
 import { PhotoProvider, PhotoView } from "react-photo-view";
-import { useEffect, useState } from "react";
 import "react-photo-view/dist/react-photo-view.css";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";

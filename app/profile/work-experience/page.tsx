@@ -33,6 +33,11 @@ import Link from "next/link";
 
 type WorkplaceFormValues = z.infer<typeof workplaceSchema>;
 
+interface ItemData {
+  email?: string;
+  [key: string]: string | number | boolean | undefined | (string | File)[];
+}
+
 export default function AddWorkExperience() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
@@ -57,7 +62,7 @@ export default function AddWorkExperience() {
   const onSubmit = async (values: z.infer<typeof workplaceSchema>) => {
     setBtnLoading(true);
     try {
-      const itemData = { ...values } as { email?: string; [key: string]: any };
+      const itemData: ItemData = { ...values };
 
       const email = session?.user?.email;
 
