@@ -30,7 +30,7 @@ export default function Page() {
   };
 
   const { data: user, error } = useSWR<Profile>(
-    username ? `/api/users/getUserByUsername?username=${username}` : null,
+    username ? `/api/users/getUsername?username=${username}` : null,
     fetcher
   );
 

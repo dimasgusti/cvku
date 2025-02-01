@@ -1,4 +1,3 @@
-import { MongoClient } from "mongodb";
 import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {

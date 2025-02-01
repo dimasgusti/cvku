@@ -3,16 +3,16 @@ import clientPromise from "../../../lib/mongodb";
 export default async function handler(req, res) {
     if (req.method === 'GET') {
         try {
-            const { email } = req.query;
+            const { username } = req.query;
 
-            if (!email) {
-                return res.status(400).json({ error: "Email is required." });
+            if (!username) {
+                return res.status(400).json({ error: "Username is required." });
             }
 
             const client = await clientPromise;
             const collection = client.db().collection("users");
 
-            const user = await collection.findOne({ email });
+            const user = await collection.findOne({ username });
 
             if (!user) {
                 return res.status(404).json({ error: "User not found." });
