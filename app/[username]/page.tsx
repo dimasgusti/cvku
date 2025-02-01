@@ -83,9 +83,11 @@ export default function Page() {
               {user.title ? (
                 <p className="text-sm text-black/70">💼 {user.title}</p>
               ) : null}
-              <p className="text-sm text-black/70">
-                📌 {getCountryName(user.country)}
-              </p>
+              {isClient && user?.country && (
+                <p className="text-sm text-black/70">
+                  🌏 {getCountryName(user?.country)}
+                </p>
+              )}
             </div>
           </div>
           {user?.bio ? (

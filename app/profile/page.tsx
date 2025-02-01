@@ -243,7 +243,7 @@ export default function Profile() {
                     <p className="text-sm text-black/70">💼 {user.title}</p>
                   ) : null}
                   <p className="text-sm text-black/70">
-                    📌 {getCountryName(user.country)}
+                    🌏 {getCountryName(user.country)}
                   </p>
                 </>
               )}
