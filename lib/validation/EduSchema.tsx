@@ -33,4 +33,5 @@ export const educationSchema = z.object({
   gpa: z.string().optional(),
   url: linkUrlValidation,
   description: z.string().max(150).optional(),
+  images: z.array(z.union([z.instanceof(File), z.string()])).optional(),
 });

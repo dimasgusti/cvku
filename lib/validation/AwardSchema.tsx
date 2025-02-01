@@ -30,4 +30,5 @@ export const awardSchema = z.object({
   presentedBy: z.string().nonempty("Presented by must be filled."),
   url: linkUrlValidation,
   description: z.string().max(150).optional(),
+  images: z.array(z.union([z.instanceof(File), z.string()])).optional(),
 });

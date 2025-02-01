@@ -164,14 +164,14 @@ export default function AddVolunteer() {
   };
 
   const handleToChange = (value: string) => {
-    if(value === "ongoing") {
+    if (value === "ongoing") {
       setOngoing(true);
-      form.setValue("fromMonth", "January")
+      form.setValue("fromMonth", "January");
     } else {
       setOngoing(false);
-      form.setValue("fromMonth", "")
+      form.setValue("fromMonth", "");
     }
-  }
+  };
 
   if (!session) {
     redirect("/");
@@ -189,7 +189,10 @@ export default function AddVolunteer() {
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Volunteer</h2>
-              <p>Your data is automatically sorted from the most recent to the oldest.</p>
+              <p>
+                Your data is automatically sorted from the most recent to the
+                oldest.
+              </p>
               <FormField
                 control={form.control}
                 name="title"
@@ -209,13 +212,13 @@ export default function AddVolunteer() {
                 )}
               />
 
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="from"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Year*</FormLabel>
+                      <FormLabel>From*</FormLabel>
                       <FormControl>
                         <Select
                           disabled={btnLoading}
@@ -247,15 +250,15 @@ export default function AddVolunteer() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="fromMonth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Month*</FormLabel>
+                      <FormLabel>From Month*</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
@@ -291,13 +294,12 @@ export default function AddVolunteer() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="to"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Year*</FormLabel>
+                      <FormLabel>Expires*</FormLabel>
                       <FormControl>
                         <Select
                           disabled={btnLoading}
@@ -308,7 +310,7 @@ export default function AddVolunteer() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="End Year" />
+                            <SelectValue placeholder="End Year (or ongoing)" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -333,17 +335,66 @@ export default function AddVolunteer() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="toMonth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Month</FormLabel>
+                      <FormLabel>To Month</FormLabel>
                       <FormControl>
                         <Select
                           disabled={btnLoading || ongoing}
-                          onValueChange={(value) => field.onChange(value)}
+                          onValueChange={(value) => {
+                            // Get the "from" values
+                            const fromYear = form.getValues("from");
+                            const fromMonth = form.getValues("fromMonth");
+
+                            // Get the "to" values
+                            const toYear = form.getValues("to");
+
+                            // Validation check to ensure "to" year is not less than "from" year
+                            if (
+                              parseInt(toYear) < parseInt(fromYear) ||
+                              (parseInt(toYear) === parseInt(fromYear) &&
+                                [
+                                  "January",
+                                  "February",
+                                  "March",
+                                  "April",
+                                  "May",
+                                  "June",
+                                  "July",
+                                  "August",
+                                  "September",
+                                  "October",
+                                  "November",
+                                  "December",
+                                ].indexOf(value) <
+                                  [
+                                    "January",
+                                    "February",
+                                    "March",
+                                    "April",
+                                    "May",
+                                    "June",
+                                    "July",
+                                    "August",
+                                    "September",
+                                    "October",
+                                    "November",
+                                    "December",
+                                  ].indexOf(fromMonth))
+                            ) {
+                              form.setError("toMonth", {
+                                type: "manual",
+                                message:
+                                  "End date cannot be earlier than start date",
+                              });
+                            } else {
+                              form.clearErrors("toMonth");
+                              field.onChange(value);
+                            }
+                          }}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
@@ -387,7 +438,11 @@ export default function AddVolunteer() {
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input disabled={btnLoading} placeholder="Organization URL" {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Organization URL"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -504,7 +559,7 @@ export default function AddVolunteer() {
                   <>
                     <span className="flex flex-row items-center justify-center gap-2">
                       <Loader className="animate-spin" />
-                      Saving Volunteer Uploading {progress}%
+                      Saving Volunteer {Math.round(progress)}%
                     </span>
                   </>
                 ) : (

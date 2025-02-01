@@ -41,6 +41,10 @@ countries.registerLocale(enLocale);
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+type ItemWithYear = { year?: string | number; fromMonth?: string };
+type Certification = { issued?: string | number; expires?: string | number };
+type Education = { from?: string | number; to?: string | number };
+
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
@@ -92,18 +96,27 @@ export default function Profile() {
     }
   };
 
-  // @ts-ignore @ts-expect-error
-  const sortByDate = (a: any, b: any) => {
-    const yearA = a.year
-      ? new Date(`${a.fromMonth} 1, ${a.year}`).getTime()
-      : 0;
-    const yearB = b.year
-      ? new Date(`${b.fromMonth} 1, ${b.year}`).getTime()
-      : 0;
-
+  const sortByDate = (a: any, b: any): number => {
+    const getYear = (item: any): number => {
+      if (item.year) {
+        return typeof item.year === "string" && item.year !== "ongoing"
+          ? new Date(`${item.fromMonth || "Jan"} 1, ${item.year}`).getTime()
+          : 0;
+      }
+      if (item.issued || item.from) {
+        // Handling Certification and Education types
+        return new Date(item.issued || item.from).getTime();
+      }
+      return 0;
+    };
+  
+    const yearA = getYear(a);
+    const yearB = getYear(b);
+  
+    // Handling "ongoing" year
     if (a.year === "ongoing" && b.year !== "ongoing") return -1;
     if (b.year === "ongoing" && a.year !== "ongoing") return 1;
-
+  
     return yearB - yearA;
   };
 

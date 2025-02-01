@@ -420,7 +420,7 @@ export default function AddProject() {
                   <>
                     <span className="flex flex-row items-center justify-center gap-2">
                       <Loader className="animate-spin" />
-                      Saving Project {progress}%
+                      Saving Project {Math.round(progress)}
                     </span>
                   </>
                 ) : (

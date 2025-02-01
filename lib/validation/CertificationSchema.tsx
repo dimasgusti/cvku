@@ -31,4 +31,5 @@ export const certificationSchema = z.object({
   organization: z.string().nonempty("Organization must be filled."),
   url: linkUrlValidation,
   description: z.string().max(150).optional(),
+  images: z.array(z.union([z.instanceof(File), z.string()])).optional(),
 });

@@ -30,6 +30,8 @@ import { workplaceSchema } from "@/lib/validation/WorkplaceSchema";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "@/firebaseConfig";
 
 type WorkplaceFormValues = z.infer<typeof workplaceSchema>;
 
@@ -44,6 +46,7 @@ export default function AddWorkExperience() {
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
   const [ongoing, setOngoing] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const form = useForm<WorkplaceFormValues>({
     resolver: zodResolver(workplaceSchema),
@@ -57,8 +60,23 @@ export default function AddWorkExperience() {
       location: "",
       url: "",
       description: "",
+      images: [],
     },
   });
+
+  const handleFileValidation = (file: File) => {
+    const maxSize = 5 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (file.size > maxSize) {
+      toast.error("File size exceeds 5MB!");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
+      return false;
+    }
+    return true;
+  };
 
   const onSubmit = async (values: z.infer<typeof workplaceSchema>) => {
     setBtnLoading(true);
@@ -67,8 +85,8 @@ export default function AddWorkExperience() {
 
       const email = session?.user?.email;
 
-      if(!email) {
-        toast.error("User is not authenticated.")
+      if (!email) {
+        toast.error("User is not authenticated.");
         setBtnLoading(false);
         return;
       }
@@ -76,6 +94,51 @@ export default function AddWorkExperience() {
       itemData.email = email;
 
       itemData.type = "experience";
+
+      if (values.images && values.images.length > 0) {
+        const fileUrls: string[] = [];
+
+        for (const file of values.images) {
+          if (file instanceof File) {
+            const isValid = handleFileValidation(file);
+            if (!isValid) {
+              toast.error(
+                "One or more files are invalid. Please check the file size or type."
+              );
+              setBtnLoading(false);
+              return;
+            }
+
+            const storageRef = ref(storage, `uploads/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  setProgress(progress);
+                },
+                (error) => {
+                  console.error("Upload failed:", error);
+                  reject(error);
+                },
+                () => {
+                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    fileUrls.push(url);
+                    resolve();
+                  });
+                }
+              );
+            });
+          } else {
+            console.error("Invalid file type encountered:", file);
+          }
+        }
+
+        itemData.images = fileUrls;
+      }
 
       const response = await fetch("/api/users/addItem", {
         method: "POST",
@@ -101,14 +164,14 @@ export default function AddWorkExperience() {
   };
 
   const handleToChange = (value: string) => {
-    if(value === "ongoing") {
+    if (value === "ongoing") {
       setOngoing(true);
-      form.setValue("fromMonth", "January")
+      form.setValue("fromMonth", "January");
     } else {
       setOngoing(false);
-      form.setValue("fromMonth", "")
+      form.setValue("fromMonth", "");
     }
-  }
+  };
 
   if (!session) {
     redirect("/");
@@ -126,7 +189,10 @@ export default function AddWorkExperience() {
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Experience</h2>
-              <p>Your data is automatically sorted from the most recent to the oldest.</p>
+              <p>
+                Your data is automatically sorted from the most recent to the
+                oldest.
+              </p>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -153,7 +219,11 @@ export default function AddWorkExperience() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input disabled={btnLoading} placeholder="Company URL" {...field} />
+                        <Input
+                          disabled={btnLoading}
+                          placeholder="Company URL"
+                          {...field}
+                        />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -252,7 +322,6 @@ export default function AddWorkExperience() {
                       <FormControl>
                         <Select
                           disabled={btnLoading}
-                          // onValueChange={(value) => field.onChange(value)}
                           onValueChange={(value) => {
                             field.onChange(value);
                             handleToChange(value);
@@ -294,7 +363,57 @@ export default function AddWorkExperience() {
                       <FormControl>
                         <Select
                           disabled={btnLoading || ongoing}
-                          onValueChange={(value) => field.onChange(value)}
+                          onValueChange={(value) => {
+                            // Get the "from" values
+                            const fromYear = form.getValues("from");
+                            const fromMonth = form.getValues("fromMonth");
+
+                            // Get the "to" values
+                            const toYear = form.getValues("to");
+
+                            // Validation check to ensure "to" year is not less than "from" year
+                            if (
+                              parseInt(toYear) < parseInt(fromYear) ||
+                              (parseInt(toYear) === parseInt(fromYear) &&
+                                [
+                                  "January",
+                                  "February",
+                                  "March",
+                                  "April",
+                                  "May",
+                                  "June",
+                                  "July",
+                                  "August",
+                                  "September",
+                                  "October",
+                                  "November",
+                                  "December",
+                                ].indexOf(value) <
+                                  [
+                                    "January",
+                                    "February",
+                                    "March",
+                                    "April",
+                                    "May",
+                                    "June",
+                                    "July",
+                                    "August",
+                                    "September",
+                                    "October",
+                                    "November",
+                                    "December",
+                                  ].indexOf(fromMonth))
+                            ) {
+                              form.setError("toMonth", {
+                                type: "manual",
+                                message:
+                                  "End date cannot be earlier than start date",
+                              });
+                            } else {
+                              form.clearErrors("toMonth");
+                              field.onChange(value);
+                            }
+                          }}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
@@ -395,11 +514,68 @@ export default function AddWorkExperience() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upload Images</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={btnLoading}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => {
+                          const files = e.target.files
+                            ? Array.from(e.target.files)
+                            : [];
+                          field.onChange(files);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Max file size: 5MB, Allowed types: Images (jpeg, png, gif)
+                    </FormDescription>
+                    {field.value && field.value.length > 0 && (
+                      <div className="overflow-x-auto flex flex-row space-x-4 border p-1 rounded-sm">
+                        {field.value.map((file, index) => {
+                          if (file instanceof File) {
+                            const url = URL.createObjectURL(file);
+                            return (
+                              <div
+                                key={index}
+                                className="flex-shrink-0 text-center"
+                              >
+                                {file.type.startsWith("image") ? (
+                                  <img
+                                    src={url}
+                                    alt={`Preview ${index}`}
+                                    className="preview-image w-32 h-32 object-cover"
+                                  />
+                                ) : null}
+                                <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
+                                  {file.name}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" disabled={btnLoading}>
                 {btnLoading ? (
                   <span className="flex flex-row items-center justify-center gap-2">
                     <Loader className="animate-spin" />
-                    Saving Work Experience
+                    Saving Experience {Math.round(progress)}%
                   </span>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">

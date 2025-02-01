@@ -19,74 +19,74 @@ body {
 
 @layer base {
   :root {
-    --background: 140 60% 98%; /* Light green background */
-    --foreground: 140 60% 20%; /* Dark green foreground */
-    --card: 140 60% 95%; /* Light green card background */
-    --card-foreground: 140 60% 10%; /* Dark green card text */
-    --popover: 140 60% 95%; /* Light green popover */
-    --popover-foreground: 140 60% 10%; /* Dark green popover text */
-    --primary: 140 60% 40%; /* Medium green primary */
+    --background: 210 60% 98%; /* Light blue background */
+    --foreground: 210 60% 20%; /* Dark blue foreground */
+    --card: 210 60% 95%; /* Light blue card background */
+    --card-foreground: 210 60% 10%; /* Dark blue card text */
+    --popover: 210 60% 95%; /* Light blue popover */
+    --popover-foreground: 210 60% 10%; /* Dark blue popover text */
+    --primary: 210 60% 40%; /* Medium blue primary */
     --primary-foreground: 0 0% 100%; /* White primary text */
-    --secondary: 140 60% 80%; /* Light green secondary */
-    --secondary-foreground: 140 60% 20%; /* Dark green secondary text */
-    --muted: 140 60% 90%; /* Muted light green */
-    --muted-foreground: 140 60% 40%; /* Muted dark green text */
-    --accent: 140 60% 60%; /* Accent green */
+    --secondary: 210 60% 80%; /* Light blue secondary */
+    --secondary-foreground: 210 60% 20%; /* Dark blue secondary text */
+    --muted: 210 60% 90%; /* Muted light blue */
+    --muted-foreground: 210 60% 40%; /* Muted dark blue text */
+    --accent: 210 60% 60%; /* Accent blue */
     --accent-foreground: 0 0% 100%; /* White accent text */
     --destructive: 0 84.2% 60.2%; /* Red for destructive actions */
     --destructive-foreground: 0 0% 100%; /* White destructive text */
-    --border: 140 60% 85%; /* Light green border */
-    --input: 140 60% 90%; /* Light green input background */
-    --ring: 140 60% 50%; /* Green ring for focus */
-    --chart-1: 140 60% 60%; /* Green chart color */
-    --chart-2: 140 60% 70%; /* Lighter green for chart */
-    --chart-3: 140 60% 80%; /* Even lighter green */
-    --chart-4: 140 60% 90%; /* Very light green */
-    --chart-5: 140 60% 95%; /* Almost white green */
+    --border: 210 60% 85%; /* Light blue border */
+    --input: 210 60% 90%; /* Light blue input background */
+    --ring: 210 60% 50%; /* Blue ring for focus */
+    --chart-1: 210 60% 60%; /* Blue chart color */
+    --chart-2: 210 60% 70%; /* Lighter blue for chart */
+    --chart-3: 210 60% 80%; /* Even lighter blue */
+    --chart-4: 210 60% 90%; /* Very light blue */
+    --chart-5: 210 60% 95%; /* Almost white blue */
     --radius: 0.5rem;
-    --sidebar-background: 140 60% 98%; /* Light green sidebar background */
-    --sidebar-foreground: 140 60% 20%; /* Dark green sidebar text */
-    --sidebar-primary: 140 60% 95%; /* Light green sidebar primary background */
-    --sidebar-primary-foreground: 140 60% 10%; /* Dark green sidebar primary text */
-    --sidebar-accent: 140 60% 80%; /* Light green sidebar accent */
-    --sidebar-accent-foreground: 140 60% 10%; /* Dark green sidebar accent text */
-    --sidebar-border: 140 60% 85%; /* Light green sidebar border */
-    --sidebar-ring: 140 60% 50%; /* Green sidebar ring */
+    --sidebar-background: 210 60% 98%; /* Light blue sidebar background */
+    --sidebar-foreground: 210 60% 20%; /* Dark blue sidebar text */
+    --sidebar-primary: 210 60% 95%; /* Light blue sidebar primary background */
+    --sidebar-primary-foreground: 210 60% 10%; /* Dark blue sidebar primary text */
+    --sidebar-accent: 210 60% 80%; /* Light blue sidebar accent */
+    --sidebar-accent-foreground: 210 60% 10%; /* Dark blue sidebar accent text */
+    --sidebar-border: 210 60% 85%; /* Light blue sidebar border */
+    --sidebar-ring: 210 60% 50%; /* Blue sidebar ring */
   }
 
   .dark {
-    --background: 140 60% 20%; /* Dark green background for dark mode */
-    --foreground: 140 60% 100%; /* White foreground in dark mode */
-    --card: 140 60% 30%; /* Darker green card background */
-    --card-foreground: 140 60% 90%; /* Lighter green card text */
-    --popover: 140 60% 30%; /* Dark green popover */
-    --popover-foreground: 140 60% 90%; /* Lighter green popover text */
-    --primary: 140 60% 60%; /* Medium green primary for dark mode */
+    --background: 210 60% 20%; /* Dark blue background for dark mode */
+    --foreground: 210 60% 100%; /* White foreground in dark mode */
+    --card: 210 60% 30%; /* Darker blue card background */
+    --card-foreground: 210 60% 90%; /* Lighter blue card text */
+    --popover: 210 60% 30%; /* Dark blue popover */
+    --popover-foreground: 210 60% 90%; /* Lighter blue popover text */
+    --primary: 210 60% 60%; /* Medium blue primary for dark mode */
     --primary-foreground: 0 0% 100%; /* White primary text */
-    --secondary: 140 60% 50%; /* Medium green secondary */
-    --secondary-foreground: 140 60% 90%; /* Lighter green secondary text */
-    --muted: 140 60% 40%; /* Darker green muted */
-    --muted-foreground: 140 60% 80%; /* Lighter green muted text */
-    --accent: 140 60% 60%; /* Accent green */
+    --secondary: 210 60% 50%; /* Medium blue secondary */
+    --secondary-foreground: 210 60% 90%; /* Lighter blue secondary text */
+    --muted: 210 60% 40%; /* Darker blue muted */
+    --muted-foreground: 210 60% 80%; /* Lighter blue muted text */
+    --accent: 210 60% 60%; /* Accent blue */
     --accent-foreground: 0 0% 100%; /* White accent text */
     --destructive: 0 84.2% 60.2%; /* Red for destructive actions */
     --destructive-foreground: 0 0% 100%; /* White destructive text */
-    --border: 140 60% 40%; /* Darker green border */
-    --input: 140 60% 50%; /* Dark green input background */
-    --ring: 140 60% 80%; /* Light green ring for focus */
-    --chart-1: 140 60% 60%; /* Green chart color */
-    --chart-2: 140 60% 70%; /* Lighter green for chart */
-    --chart-3: 140 60% 80%; /* Even lighter green */
-    --chart-4: 140 60% 90%; /* Very light green */
-    --chart-5: 140 60% 95%; /* Almost white green */
-    --sidebar-background: 140 60% 30%; /* Dark green sidebar background */
-    --sidebar-foreground: 140 60% 100%; /* White sidebar text */
-    --sidebar-primary: 140 60% 40%; /* Dark green sidebar primary background */
-    --sidebar-primary-foreground: 140 60% 90%; /* Light green sidebar primary text */
-    --sidebar-accent: 140 60% 50%; /* Medium green sidebar accent */
-    --sidebar-accent-foreground: 140 60% 90%; /* Lighter green sidebar accent text */
-    --sidebar-border: 140 60% 60%; /* Medium green sidebar border */
-    --sidebar-ring: 140 60% 80%; /* Light green sidebar ring */
+    --border: 210 60% 40%; /* Darker blue border */
+    --input: 210 60% 50%; /* Dark blue input background */
+    --ring: 210 60% 80%; /* Light blue ring for focus */
+    --chart-1: 210 60% 60%; /* Blue chart color */
+    --chart-2: 210 60% 70%; /* Lighter blue for chart */
+    --chart-3: 210 60% 80%; /* Even lighter blue */
+    --chart-4: 210 60% 90%; /* Very light blue */
+    --chart-5: 210 60% 95%; /* Almost white blue */
+    --sidebar-background: 210 60% 30%; /* Dark blue sidebar background */
+    --sidebar-foreground: 210 60% 100%; /* White sidebar text */
+    --sidebar-primary: 210 60% 40%; /* Dark blue sidebar primary background */
+    --sidebar-primary-foreground: 210 60% 90%; /* Light blue sidebar primary text */
+    --sidebar-accent: 210 60% 50%; /* Medium blue sidebar accent */
+    --sidebar-accent-foreground: 210 60% 90%; /* Lighter blue sidebar accent text */
+    --sidebar-border: 210 60% 60%; /* Medium blue sidebar border */
+    --sidebar-ring: 210 60% 80%; /* Light blue sidebar ring */
   }
 }
 

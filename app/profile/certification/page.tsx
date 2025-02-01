@@ -30,6 +30,8 @@ import { certificationSchema } from "@/lib/validation/CertificationSchema";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import Link from "next/link";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "@/firebaseConfig";
 
 type ProjectFormValues = z.infer<typeof certificationSchema>;
 
@@ -42,6 +44,7 @@ export default function AddCertification() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
+  const [progress, setProgress] = useState(0);
   const [btnLoading, setBtnLoading] = useState(false);
 
   const form = useForm<ProjectFormValues>({
@@ -53,8 +56,23 @@ export default function AddCertification() {
       organization: "",
       url: "",
       description: "",
+      images: [],
     },
   });
+
+  const handleFileValidation = (file: File) => {
+    const maxSize = 5 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (file.size > maxSize) {
+      toast.error("File size exceeds 5MB!");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
+      return false;
+    }
+    return true;
+  };
 
   const onSubmit = async (values: z.infer<typeof certificationSchema>) => {
     setBtnLoading(true);
@@ -73,6 +91,51 @@ export default function AddCertification() {
 
       itemData.type = "certification";
 
+      if (values.images && values.images.length > 0) {
+        const fileUrls: string[] = [];
+
+        for (const file of values.images) {
+          if (file instanceof File) {
+            const isValid = handleFileValidation(file);
+            if (!isValid) {
+              toast.error(
+                "One or more files are invalid. Please check the file size or type."
+              );
+              setBtnLoading(false);
+              return;
+            }
+
+            const storageRef = ref(storage, `uploads/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  setProgress(progress);
+                },
+                (error) => {
+                  console.error("Upload failed:", error);
+                  reject(error);
+                },
+                () => {
+                  getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    fileUrls.push(url);
+                    resolve();
+                  });
+                }
+              );
+            });
+          } else {
+            console.error("Invalid file type encountered:", file);
+          }
+        }
+
+        itemData.images = fileUrls;
+      }
+
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {
@@ -82,10 +145,10 @@ export default function AddCertification() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add award.");
+        throw new Error("Failed to add project.");
       }
 
-      toast.success("New award added successfully!");
+      toast.success("New project added successfully!");
       router.push("/profile");
     } catch (error) {
       toast.error(
@@ -112,7 +175,10 @@ export default function AddCertification() {
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Certification</h2>
-              <p>Your data is automatically sorted from the most recent to the oldest.</p>
+              <p>
+                Your data is automatically sorted from the most recent to the
+                oldest.
+              </p>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -139,7 +205,11 @@ export default function AddCertification() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input disabled={btnLoading} placeholder="Certification URL" {...field} />
+                        <Input
+                          disabled={btnLoading}
+                          placeholder="Certification URL"
+                          {...field}
+                        />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -273,11 +343,68 @@ export default function AddCertification() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upload Images</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={btnLoading}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => {
+                          const files = e.target.files
+                            ? Array.from(e.target.files)
+                            : [];
+                          field.onChange(files);
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Max file size: 5MB, Allowed types: Images (jpeg, png, gif)
+                    </FormDescription>
+                    {field.value && field.value.length > 0 && (
+                      <div className="overflow-x-auto flex flex-row space-x-4 border p-1 rounded-sm">
+                        {field.value.map((file, index) => {
+                          if (file instanceof File) {
+                            const url = URL.createObjectURL(file);
+                            return (
+                              <div
+                                key={index}
+                                className="flex-shrink-0 text-center"
+                              >
+                                {file.type.startsWith("image") ? (
+                                  <img
+                                    src={url}
+                                    alt={`Preview ${index}`}
+                                    className="preview-image w-32 h-32 object-cover"
+                                  />
+                                ) : null}
+                                <p className="text-xs text-center text-ellipsis max-w-32 overflow-hidden whitespace-nowrap">
+                                  {file.name}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" disabled={btnLoading}>
                 {btnLoading ? (
                   <span className="flex flex-row items-center justify-center gap-2">
                     <Loader className="animate-spin" />
-                    Saving Certification
+                    Saving Certification {Math.round(progress)}%
                   </span>
                 ) : (
                   <span className="flex flex-row justify-center items-center gap-2">
