@@ -18,6 +18,11 @@ export default async function handler(req, res) {
                 return res.status(404).json({ error: "User not found." });
             }
 
+            await collection.updateOne(
+                { username },
+                { $inc: { viewCount: 1 } }
+            )
+
             res.status(200).json(user);
         } catch (error) {
             console.error(error);
