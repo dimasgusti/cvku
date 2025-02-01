@@ -93,12 +93,16 @@ export default function Profile() {
   };
 
   const sortByDate = (a: any, b: any) => {
-    const yearA = a.year ? new Date(`${a.fromMonth} 1, ${a.year}`).getTime() : 0;
-    const yearB = b.year ? new Date(`${b.fromMonth} 1, ${b.year}`).getTime() : 0;
-  
-    if (a.year === 'ongoing' && b.year !== 'ongoing') return -1;
-    if (b.year === 'ongoing' && a.year !== 'ongoing') return 1;
-  
+    const yearA = a.year
+      ? new Date(`${a.fromMonth} 1, ${a.year}`).getTime()
+      : 0;
+    const yearB = b.year
+      ? new Date(`${b.fromMonth} 1, ${b.year}`).getTime()
+      : 0;
+
+    if (a.year === "ongoing" && b.year !== "ongoing") return -1;
+    if (b.year === "ongoing" && a.year !== "ongoing") return 1;
+
     return yearB - yearA;
   };
 
@@ -415,7 +419,8 @@ export default function Profile() {
                       {experience.from}
                       {experience.to && (
                         <span>
-                          {" "}-{" "}
+                          {" "}
+                          -{" "}
                           {experience.to === "ongoing" ? (
                             "Ongoing"
                           ) : (
@@ -620,7 +625,10 @@ export default function Profile() {
             {user.certification ? (
               <div>
                 {user.certification.sort(sortByDate).map((certification) => (
-                  <div key={certification._id} className="grid grid-cols-4 mt-2">
+                  <div
+                    key={certification._id}
+                    className="grid grid-cols-4 mt-2"
+                  >
                     <div>
                       <p className="text-sm">
                         {certification.issued}
@@ -683,7 +691,12 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove("certification", certification._id)}
+                                onClick={() =>
+                                  handleRemove(
+                                    "certification",
+                                    certification._id
+                                  )
+                                }
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -789,7 +802,9 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove("education", education._id)}
+                                onClick={() =>
+                                  handleRemove("education", education._id)
+                                }
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -840,26 +855,29 @@ export default function Profile() {
                     <div className="text-sm">
                       {volunteer.from && (
                         <p>
-                          {volunteer.to ? (
+                          {volunteer.to === "ongoing" ? (
                             <span>
-                              {new Date(`${volunteer.fromMonth} 1`).toLocaleString(
-                                "en-US",
-                                { month: "short" }
-                              )}{" "}
-                              {volunteer.from} -{" "}
-                              {new Date(`${volunteer.toMonth} 1`).toLocaleString(
-                                "en-US",
-                                { month: "short" }
-                              )}{" "}
-                              {volunteer.to}
+                              {new Date(
+                                `${volunteer.fromMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {volunteer.from} - Ongoing
                             </span>
                           ) : (
                             <span>
-                              {new Date(`${volunteer.fromMonth} 1`).toLocaleString(
-                                "en-US",
-                                { month: "short" }
-                              )}{" "}
-                              {volunteer.from} - Ongoing
+                              {new Date(
+                                `${volunteer.fromMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {volunteer.from} -{" "}
+                              {new Date(
+                                `${volunteer.toMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {volunteer.to}
                             </span>
                           )}
                         </p>
@@ -914,7 +932,9 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove("volunteer", volunteer._id)}
+                                onClick={() =>
+                                  handleRemove("volunteer", volunteer._id)
+                                }
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -964,7 +984,8 @@ export default function Profile() {
                                   src={
                                     typeof volunteer.images === "string"
                                       ? volunteer.images
-                                      : (volunteer.images as StaticImageData).src
+                                      : (volunteer.images as StaticImageData)
+                                          .src
                                   }
                                 >
                                   <Image

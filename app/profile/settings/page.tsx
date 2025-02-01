@@ -144,7 +144,8 @@ export default function Settings() {
       });
 
       if (!response.ok) {
-        throw new Error("There are no changes made. Please try again!");
+        const errorData = await response.json(); 
+        throw new Error(errorData.error || "Something went wrong");
       }
 
       toast.success("Profile updated!");
