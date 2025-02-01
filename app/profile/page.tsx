@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -25,7 +24,7 @@ import { useSession } from "next-auth/react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
 import countries from "i18n-iso-countries";
@@ -36,95 +35,9 @@ import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Profile } from "@/lib/interfaces";
 
 countries.registerLocale(enLocale);
-
-interface Project {
-  _id: string;
-  title: string;
-  year: string;
-  fromMonth: string;
-  company: string;
-  description: string;
-  url: string;
-  images: string[];
-}
-
-interface Experience {
-  _id: string;
-  title: string;
-  from: string;
-  fromMonth: string;
-  to: string;
-  toMonth: string;
-  company: string;
-  location: string;
-  url: string;
-  description: string;
-  images: string[];
-}
-
-interface Award {
-  _id: string;
-  title: string;
-  year: string;
-  presentedBy: string;
-  url: string;
-  description: string;
-}
-
-interface Certification {
-  _id: string;
-  title: string;
-  issued: string;
-  expires: string;
-  organization: string;
-  url: string;
-  description: string;
-}
-
-interface Education {
-  _id: string;
-  title: string;
-  from: string;
-  to: string;
-  institution: string;
-  fieldOfStudy: string;
-  gpa: string;
-  url: string;
-  description: string;
-}
-
-interface Volunteer {
-  _id: string;
-  title: string;
-  from: string;
-  fromMonth: string;
-  to: string;
-  toMonth: string;
-  organization: string;
-  url: string;
-  description: string;
-  images: string[];
-}
-
-interface Profile {
-  username: string;
-  title: string;
-  country: string;
-  bio: string;
-  email: string;
-  image: string;
-  website: string;
-  linkedIn: string;
-  github: string;
-  project: Project[];
-  experience: Experience[];
-  award: Award[];
-  certification: Certification[];
-  education: Education[];
-  volunteer: Volunteer[];
-}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

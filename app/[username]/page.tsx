@@ -13,56 +13,9 @@ import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Profile } from "@/lib/interfaces";
 
 countries.registerLocale(enLocale);
-
-interface Profile {
-  _id: string;
-  private: boolean;
-  username: string;
-  title: string;
-  country: string;
-  bio: string;
-  email: string;
-  image: string;
-  website: string;
-  linkedIn: string;
-  github: string;
-}
-
-interface Record {
-  id: string;
-  type: string;
-  title: string;
-  name: string;
-  year: string;
-  issued: string;
-  expires: string;
-  from: string;
-  fromMonth: string;
-  to: string;
-  toMonth: string;
-  url: string;
-  company: string;
-  organization: string;
-  institution: string;
-  fieldOfStudy: string;
-  gpa: string;
-  location: string;
-  presentedBy: string;
-  description: string;
-  image: (string | StaticImageData)[];
-}
-
-type RecordDictionary = {
-  project: Record[];
-  workplace: Record[];
-  award: Record[];
-  certification: Record[];
-  education: Record[];
-  volunteer: Record[];
-  [key: string]: Record[];
-};
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -76,54 +29,22 @@ export default function Page() {
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
   };
 
-  const { data: userData, error } = useSWR<Profile>(
+  const { data: user, error } = useSWR<Profile>(
     username ? `/api/users/getUserByUsername?username=${username}` : null,
     fetcher
   );
 
-  const { data: fetchedRecordData } = useSWR<Record[]>(
-    userData?._id ? `/api/records/getRecord?userId=${userData._id}` : null,
-    fetcher
-  );
-
-  const [recordData, setRecordData] = useState<RecordDictionary>({
-    project: [],
-    workplace: [],
-    award: [],
-    certification: [],
-    education: [],
-    volunteer: [],
-  });
-
-  const hasRecords = Object.values(recordData).some(
-    (records) => records.length > 0
-  );
-
-  useEffect(() => {
-    if (fetchedRecordData) {
-      // Gunakan reduce untuk mengelompokkan record berdasarkan tipe
-      const categorizedRecords = fetchedRecordData.reduce((acc, record) => {
-        if (!acc[record.type]) {
-          acc[record.type] = [];
-        }
-        acc[record.type].push(record);
-        return acc;
-      }, {} as RecordDictionary);
-
-      setRecordData(categorizedRecords);
-    }
-  }, [fetchedRecordData]);
+  const hasRecords =
+    (user?.project.length ?? 0) > 0 ||
+    (user?.experience?.length ?? 0) > 0 ||
+    (user?.award?.length ?? 0) > 0 ||
+    (user?.certification?.length ?? 0) > 0 ||
+    (user?.education?.length ?? 0) > 0 ||
+    (user?.volunteer?.length ?? 0) > 0;
 
   if (error) return <div>Error loading user data: {error.message}</div>;
 
-  const projects = recordData.project || [];
-  const workplace = recordData.workplace || [];
-  const awards = recordData.award || [];
-  const certifications = recordData.certification || [];
-  const educations = recordData.education || [];
-  const volunteers = recordData.volunteer || [];
-
-  if (!userData || !fetchedRecordData) {
+  if (!user) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -132,7 +53,7 @@ export default function Page() {
     );
   }
 
-  if (!userData._id) {
+  if (!user._id) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         Not Found
@@ -146,59 +67,56 @@ export default function Page() {
         <div className="w-full md:w-[560px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
           <div className="flex flex-row justify-start w-full items-center gap-4 py-4">
             <Avatar style={{ width: 100, height: 100 }}>
-              <AvatarImage src={`${userData.image}`} alt={userData.username} />
+              <AvatarImage src={`${user.image}`} alt={user.username} />
               <AvatarFallback>CV</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <p className="text-lg text-black/90">
-                {userData?.username} <br />
+                {user?.username} <br />
               </p>
-              {userData.title ? (
-                <p className="text-sm text-black/70">💼 {userData.title}</p>
+              {user.title ? (
+                <p className="text-sm text-black/70">💼 {user.title}</p>
               ) : null}
               <p className="text-sm text-black/70">
-                📌 {getCountryName(userData.country)}
+                📌 {getCountryName(user.country)}
               </p>
             </div>
           </div>
-          {userData?.bio ? (
+          {user?.bio ? (
             <>
               <div className="pb-4">
                 <p className="text-lg text-black/70">About</p>
-                <p className="text-sm">{userData?.bio}</p>
+                <p className="text-sm">{user?.bio}</p>
               </div>
             </>
           ) : null}
 
-          {!userData.private ? (
+          {!user.private ? (
             <>
               {hasRecords ? (
                 <>
-                  {projects.length > 0 ? (
+                  {user.project.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Project</p>
                       </div>
                       <div>
-                        {projects.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
+                        {user.project.map((project, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
                             <div className="text-sm">
-                              {record.year && (
+                              {project.year && (
                                 <p>
-                                  {record.year === "ongoing" ? (
+                                  {project.year === "ongoing" ? (
                                     "Ongoing"
                                   ) : (
                                     <span>
                                       {new Date(
-                                        `${record.fromMonth} 1`
+                                        `${project.fromMonth} 1`
                                       ).toLocaleString("en-US", {
                                         month: "short",
                                       })}{" "}
-                                      {record.year}
+                                      {project.year}
                                     </span>
                                   )}
                                 </p>
@@ -207,25 +125,25 @@ export default function Page() {
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.company && record.url ? (
+                                  {project.title}
+                                  {project.company && project.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={project.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.company}
+                                        {project.company}
                                       </a>
                                     </>
-                                  ) : record.company ? (
-                                    <> at {record.company}</>
-                                  ) : record.url ? (
+                                  ) : project.company ? (
+                                    <> at {project.company}</>
+                                  ) : project.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={project.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -236,13 +154,13 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}
+                                {project.description}
                               </p>
-                              {record.image && (
+                              {project.images && (
                                 <PhotoProvider>
                                   <div className="overflow-x-auto flex flex-row space-x-4">
-                                    {Array.isArray(record.image) ? (
-                                      record.image.map((imageUrl, index) => (
+                                    {Array.isArray(project.images) ? (
+                                      project.images.map((imageUrl, index) => (
                                         <div
                                           key={index}
                                           className="flex-shrink-0"
@@ -258,7 +176,7 @@ export default function Page() {
                                             <Image
                                               src={imageUrl}
                                               layout="intrinsic"
-                                              alt={`Image ${userData.username} ${index}`}
+                                              alt={`Image ${user.username} ${index}`}
                                               width={100}
                                               height={50}
                                               className="cursor-pointer"
@@ -271,17 +189,17 @@ export default function Page() {
                                       <div className="flex-shrink-0">
                                         <PhotoView
                                           src={
-                                            typeof record.image === "string"
-                                              ? record.image
+                                            typeof project.images === "string"
+                                              ? project.images
                                               : (
-                                                  record.image as StaticImageData
+                                                  project.images as StaticImageData
                                                 ).src
                                           }
                                         >
                                           <Image
-                                            src={record.image}
+                                            src={project.images}
                                             layout="intrinsic"
-                                            alt={`Image ${userData.username}`}
+                                            alt={`Image ${user.username}`}
                                             width={100}
                                             height={50}
                                             className="cursor-pointer"
@@ -300,40 +218,36 @@ export default function Page() {
                     </>
                   ) : null}
 
-                  {workplace.length > 0 ? (
+                  {user.experience.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Work Experience</p>
                       </div>
                       <div>
-                        {workplace.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
+                        {user.experience.map((experience, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
                             <p className="text-sm pr-1">
-                              {new Date(`${record.fromMonth} 1`).toLocaleString(
-                                "en-US",
-                                {
-                                  month: "short",
-                                }
-                              )}{" "}
-                              {record.from}
-                              {record.to && (
+                              {new Date(
+                                `${experience.fromMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {experience.from}
+                              {experience.to && (
                                 <span>
                                   -{" "}
-                                  {record.to === "ongoing" ? (
+                                  {experience.to === "ongoing" ? (
                                     "Ongoing"
                                   ) : (
                                     <span>
                                       {" "}
                                       {new Date(
-                                        `${record.toMonth} 1`
+                                        `${experience.toMonth} 1`
                                       ).toLocaleString("en-US", {
                                         month: "short",
                                       })}{" "}
-                                      {record.to}
+                                      {experience.to}
                                     </span>
                                   )}
                                 </span>
@@ -342,25 +256,25 @@ export default function Page() {
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.company && record.url ? (
+                                  {experience.title}
+                                  {experience.company && experience.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={experience.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.company}
+                                        {experience.company}
                                       </a>
                                     </>
-                                  ) : record.company ? (
-                                    <> at {record.company}</>
-                                  ) : record.url ? (
+                                  ) : experience.company ? (
+                                    <> at {experience.company}</>
+                                  ) : experience.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={experience.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -371,7 +285,7 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}
+                                {experience.description}
                               </p>
                             </div>
                           </div>
@@ -380,41 +294,38 @@ export default function Page() {
                     </>
                   ) : null}
 
-                  {awards.length > 0 ? (
+                  {user.award.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Award</p>
                       </div>
                       <div>
-                        {awards.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
-                            <div className="text-sm">{record.year}</div>
+                        {user.award.map((award, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
+                            <div className="text-sm">{award.year}</div>
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.presentedBy && record.url ? (
+                                  {award.title}
+                                  {award.presentedBy && award.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={award.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.presentedBy}
+                                        {award.presentedBy}
                                       </a>
                                     </>
-                                  ) : record.presentedBy ? (
-                                    <> at {record.presentedBy}</>
-                                  ) : record.url ? (
+                                  ) : award.presentedBy ? (
+                                    <> at {award.presentedBy}</>
+                                  ) : award.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={award.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -425,7 +336,7 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}
+                                {award.description}
                               </p>
                             </div>
                           </div>
@@ -434,27 +345,24 @@ export default function Page() {
                     </>
                   ) : null}
 
-                  {certifications.length > 0 ? (
+                  {user.certification.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Certification</p>
                       </div>
                       <div>
-                        {certifications.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
+                        {user.certification.map((certification, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
                             <div>
                               <p className="text-sm">
-                                {record.issued}
-                                {record.expires && (
+                                {certification.issued}
+                                {certification.expires && (
                                   <span>
                                     {" - "}
-                                    {record.expires === "doesNotExpire"
+                                    {certification.expires === "doesNotExpire"
                                       ? "No Expiry"
-                                      : `Expires ${record.expires}`}
+                                      : `Expires ${certification.expires}`}
                                   </span>
                                 )}
                               </p>
@@ -462,25 +370,26 @@ export default function Page() {
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.organization && record.url ? (
+                                  {certification.title}
+                                  {certification.organization &&
+                                  certification.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={certification.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.organization}
+                                        {certification.organization}
                                       </a>
                                     </>
-                                  ) : record.organization ? (
-                                    <> at {record.organization}</>
-                                  ) : record.url ? (
+                                  ) : certification.organization ? (
+                                    <> at {certification.organization}</>
+                                  ) : certification.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={certification.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -491,7 +400,7 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}
+                                {certification.description}
                               </p>
                             </div>
                           </div>
@@ -500,28 +409,25 @@ export default function Page() {
                     </>
                   ) : null}
 
-                  {educations.length > 0 ? (
+                  {user.education.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Education</p>
                       </div>
                       <div>
-                        {educations.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
+                        {user.education.map((education, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
                             <div>
                               <p className="text-sm">
-                                {record.from}
-                                {record.to && (
+                                {education.from}
+                                {education.to && (
                                   <span>
                                     {" - "}
-                                    {parseInt(record.to) >
+                                    {parseInt(education.to) >
                                     new Date().getFullYear()
-                                      ? `Expected ${record.to}`
-                                      : record.to}
+                                      ? `Expected ${education.to}`
+                                      : education.to}
                                   </span>
                                 )}
                               </p>
@@ -529,25 +435,25 @@ export default function Page() {
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.institution && record.url ? (
+                                  {education.title}
+                                  {education.institution && education.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={education.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.institution}
+                                        {education.institution}
                                       </a>
                                     </>
-                                  ) : record.institution ? (
-                                    <> at {record.institution}</>
-                                  ) : record.url ? (
+                                  ) : education.institution ? (
+                                    <> at {education.institution}</>
+                                  ) : education.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={education.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -558,11 +464,11 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}{" "}
+                                {education.description}{" "}
                               </p>
                               <p className="text-sm text-black/70">
-                                Field of Study: {record.fieldOfStudy} <br />
-                                {record.gpa && `GPA: ${record.gpa}`}
+                                Field of Study: {education.fieldOfStudy} <br />
+                                {education.gpa && `GPA: ${education.gpa}`}
                               </p>
                             </div>
                           </div>
@@ -571,44 +477,41 @@ export default function Page() {
                     </>
                   ) : null}
 
-                  {volunteers.length > 0 ? (
+                  {user.volunteer.length > 0 ? (
                     <>
                       <Separator className="my-4" />
                       <div className="flex flex-row justify-between items-center my-4">
                         <p className="text-lg text-black/70">Volunteer</p>
                       </div>
                       <div>
-                        {volunteers.map((record) => (
-                          <div
-                            key={record.id}
-                            className="grid grid-cols-4 mt-2"
-                          >
+                        {user.volunteer.map((volunteer, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
                             <div className="text-sm">
-                              {record.from && (
+                              {volunteer.from && (
                                 <p>
-                                  {record.to ? (
+                                  {volunteer.to ? (
                                     <span>
                                       {new Date(
-                                        `${record.fromMonth} 1`
+                                        `${volunteer.fromMonth} 1`
                                       ).toLocaleString("en-US", {
                                         month: "short",
                                       })}{" "}
-                                      {record.from} -{" "}
+                                      {volunteer.from} -{" "}
                                       {new Date(
-                                        `${record.toMonth} 1`
+                                        `${volunteer.toMonth} 1`
                                       ).toLocaleString("en-US", {
                                         month: "short",
                                       })}{" "}
-                                      {record.to}
+                                      {volunteer.to}
                                     </span>
                                   ) : (
                                     <span>
                                       {new Date(
-                                        `${record.fromMonth} 1`
+                                        `${volunteer.fromMonth} 1`
                                       ).toLocaleString("en-US", {
                                         month: "short",
                                       })}{" "}
-                                      {record.from} - Ongoing
+                                      {volunteer.from} - Ongoing
                                     </span>
                                   )}
                                 </p>
@@ -617,25 +520,25 @@ export default function Page() {
                             <div className="col-start-2 col-end-5">
                               <div className="flex flex-row justify-between">
                                 <p>
-                                  {record.title}
-                                  {record.organization && record.url ? (
+                                  {volunteer.title}
+                                  {volunteer.organization && volunteer.url ? (
                                     <>
                                       {" "}
                                       at{" "}
                                       <a
-                                        href={record.url}
+                                        href={volunteer.url}
                                         target="_blank"
                                         className="underline"
                                       >
-                                        {record.organization}
+                                        {volunteer.organization}
                                       </a>
                                     </>
-                                  ) : record.organization ? (
-                                    <> at {record.organization}</>
-                                  ) : record.url ? (
+                                  ) : volunteer.organization ? (
+                                    <> at {volunteer.organization}</>
+                                  ) : volunteer.url ? (
                                     <>
                                       <a
-                                        href={record.url}
+                                        href={volunteer.url}
                                         target="_blank"
                                         className="underline"
                                       >
@@ -646,52 +549,55 @@ export default function Page() {
                                 </p>
                               </div>
                               <p className="text-sm text-black/70">
-                                {record.description}
+                                {volunteer.description}
                               </p>
-                              {record.image && (
+                              {volunteer.images && (
                                 <PhotoProvider>
                                   <div className="overflow-x-auto flex flex-row space-x-4">
-                                    {Array.isArray(record.image) ? (
-                                      record.image.map((imageUrl, index) => (
-                                        <div
-                                          key={index}
-                                          className="flex-shrink-0"
-                                        >
-                                          <PhotoView
-                                            src={
-                                              typeof imageUrl === "string"
-                                                ? imageUrl
-                                                : (imageUrl as StaticImageData)
-                                                    .src
-                                            }
+                                    {Array.isArray(volunteer.images) ? (
+                                      volunteer.images.map(
+                                        (imageUrl, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex-shrink-0"
                                           >
-                                            <Image
-                                              src={imageUrl}
-                                              layout="intrinsic"
-                                              alt={`Image ${userData.username} ${index}`}
-                                              width={100}
-                                              height={50}
-                                              className="cursor-pointer"
-                                              unoptimized
-                                            />
-                                          </PhotoView>
-                                        </div>
-                                      ))
+                                            <PhotoView
+                                              src={
+                                                typeof imageUrl === "string"
+                                                  ? imageUrl
+                                                  : (
+                                                      imageUrl as StaticImageData
+                                                    ).src
+                                              }
+                                            >
+                                              <Image
+                                                src={imageUrl}
+                                                layout="intrinsic"
+                                                alt={`Image ${user.username} ${index}`}
+                                                width={100}
+                                                height={50}
+                                                className="cursor-pointer"
+                                                unoptimized
+                                              />
+                                            </PhotoView>
+                                          </div>
+                                        )
+                                      )
                                     ) : (
                                       <div className="flex-shrink-0">
                                         <PhotoView
                                           src={
-                                            typeof record.image === "string"
-                                              ? record.image
+                                            typeof volunteer.images === "string"
+                                              ? volunteer.images
                                               : (
-                                                  record.image as StaticImageData
+                                                  volunteer.images as StaticImageData
                                                 ).src
                                           }
                                         >
                                           <Image
-                                            src={record.image}
+                                            src={volunteer.images}
                                             layout="intrinsic"
-                                            alt={`Image ${userData.username}`}
+                                            alt={`Image ${user.username}`}
                                             width={100}
                                             height={50}
                                             className="cursor-pointer"
@@ -727,7 +633,7 @@ export default function Page() {
               </div>
             </>
           )}
-          {userData.website || userData.linkedIn || userData.github ? (
+          {user.website || user.linkedIn || user.github ? (
             <>
               <Separator className="my-4" />
               <div>
@@ -735,7 +641,7 @@ export default function Page() {
                   <p>Contact</p>
                 </div>
 
-                {userData.website ? (
+                {user.website ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaLink size={18} />
@@ -744,11 +650,11 @@ export default function Page() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.website}
+                            href={user.website}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.website}
+                            {user.website}
                           </a>
                         </p>
                       </div>
@@ -756,7 +662,7 @@ export default function Page() {
                   </div>
                 ) : null}
 
-                {userData.linkedIn ? (
+                {user.linkedIn ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaLinkedinIn size={18} />
@@ -765,11 +671,11 @@ export default function Page() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.linkedIn}
+                            href={user.linkedIn}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.linkedIn}
+                            {user.linkedIn}
                           </a>
                         </p>
                       </div>
@@ -777,7 +683,7 @@ export default function Page() {
                   </div>
                 ) : null}
 
-                {userData.github ? (
+                {user.github ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaGithub size={19} />
@@ -786,11 +692,11 @@ export default function Page() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.github}
+                            href={user.github}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.github}
+                            {user.github}
                           </a>
                         </p>
                       </div>
