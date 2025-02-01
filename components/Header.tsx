@@ -12,7 +12,7 @@ export default function Header() {
         <div>
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src="/Logo.svg"
               alt="Logo CVKU"
               width={50}
               height={50}

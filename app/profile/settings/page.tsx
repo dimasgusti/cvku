@@ -89,25 +89,7 @@ export default function Settings() {
     setBtnLoading(true);
     values.username = values.username.trim().toLowerCase();
 
-    if (values.username !== userData?.username) {
-      try {
-        const usernameResponse = await fetch(
-          `/api/users/checkUsernameExist?username=${values.username}`
-        );
-        const { exists } = await usernameResponse.json();
-
-        if (exists) {
-          toast.error("Username is already taken. Please choose another.");
-          setBtnLoading(false);
-          return;
-        }
-      } catch (error) {
-        console.error("Error checking username:", error);
-        toast.error("Error checking username.");
-        setBtnLoading(false);
-        return;
-      }
-    }
+    console.log("1", values)
 
     if (
       values.image &&
@@ -154,15 +136,16 @@ export default function Settings() {
         return;
       }
     }
-
     try {
-      const response = await fetch("/api/users/updateUserByEmail", {
+      const response = await fetch("/api/users/updateUser", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
+
+      console.log("2",values);
 
       if (!response.ok) {
         throw new Error("There are no changes made. Please try again!");
@@ -184,7 +167,7 @@ export default function Settings() {
       if (session?.user?.email) {
         try {
           const userData = await fetchData(
-            `/api/users/getUserByEmail?email=${session.user.email}`
+            `/api/users/getUser?email=${session.user.email}`
           );
           setUserData(userData);
 
@@ -233,7 +216,10 @@ export default function Settings() {
             </Link>
             <h2 className="text-xl md:text-2xl">Update Profile</h2>
             <Avatar style={{ width: 100, height: 100 }}>
-              <AvatarImage src={previewImage || userData?.image || 'logo.svg'} alt={userData?.username || 'Guest'} />
+              <AvatarImage
+                src={previewImage || userData?.image || "/Logo.svg"}
+                alt={userData?.username || "Guest"}
+              />
               <AvatarFallback>CV</AvatarFallback>
             </Avatar>
             <FormField

@@ -34,31 +34,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id])
 }
 
-// model Record {
-//   id           String   @id @default(cuid()) @map("_id")
-//   userId       String
-//   type         String
-//   title        String
-//   year         String?
-//   issued       String?
-//   expires      String?
-//   from         String?
-//   fromMonth    String?
-//   to           String?
-//   toMonth      String?
-//   company      String?
-//   organization String?
-//   institution  String?
-//   fieldOfStudy String?
-//   gpa          String?
-//   location     String?
-//   presentedBy  String?
-//   url          String?
-//   description  String?
-//   image        String[] @default([])
-//   User         User?    @relation(fields: [userId], references: [id])
-// }
-
 model Transaction {
   id                          String   @id @default(cuid()) @map("_id")
   mayarId                     String
@@ -93,6 +68,7 @@ model User {
   website       String?
   linkedin      String?
   github        String?
+  private       Boolean       @default(true)
   template      String?
   viewCount     Int           @default(0)
   accounts      Account[]

@@ -50,30 +50,6 @@ interface Profile {
   github: string;
 }
 
-interface Record {
-  id: string;
-  type: string;
-  title: string;
-  name: string;
-  year: string;
-  issued: string;
-  expires: string;
-  from: string;
-  fromMonth: string;
-  to: string;
-  toMonth: string;
-  url: string;
-  company: string;
-  organization: string;
-  institution: string;
-  fieldOfStudy: string;
-  gpa: string;
-  location: string;
-  presentedBy: string;
-  description: string;
-  image: (string | StaticImageData)[];
-}
-
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Profile() {
@@ -89,6 +65,11 @@ export default function Profile() {
     const upperCaseCode = countryCode.toUpperCase();
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
   };
+
+  const { data: user, error } = useSWR<Profile>(
+    session?.user?.email ? `/api/users/getUser?email=${session.user.email}` : null,
+    fetcher
+  )
 
   if (status === "unauthenticated") {
     redirect("/");
@@ -108,7 +89,7 @@ export default function Profile() {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      {/* <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
@@ -118,10 +99,10 @@ export default function Profile() {
             </Link>
           )}
         </div>
-        {userData?.username && (
+        {user?.username && (
           <>
             <div className="flex flex-row justify-between items-center gap-4 py-4">
-              <Link href={`/${userData.username}`} target="_blank">
+              <Link href={`/${user.username}`} target="_blank">
                 <Button variant="secondary" size="sm">
                   <Eye /> Preview
                 </Button>
@@ -151,14 +132,14 @@ export default function Profile() {
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Avatar style={{ width: 100, height: 100 }}>
             <AvatarImage
-              src={`${userData.image}`}
-              alt={userData.username}
+              src={`${user?.image}`}
+              alt={user?.username}
             />
             <AvatarFallback>CV</AvatarFallback>
           </Avatar>
           <div className="flex flex-row justify-between w-full">
             <div className="pr-4">
-              {!userData?.username ? (
+              {!user?.username ? (
                 <>
                   <div>
                     <p className="text-sm">{session?.user?.email}</p>
@@ -170,19 +151,19 @@ export default function Profile() {
               ) : (
                 <>
                   <p className="text-lg text-black/90">
-                    {userData?.username} <br />
+                    {user?.username} <br />
                   </p>
-                  {userData.title ? (
-                    <p className="text-sm text-black/70">💼 {userData.title}</p>
+                  {user.title ? (
+                    <p className="text-sm text-black/70">💼 {user.title}</p>
                   ) : null}
                   <p className="text-sm text-black/70">
-                    📌 {getCountryName(userData.country)}
+                    📌 {getCountryName(user.country)}
                   </p>
                 </>
               )}
             </div>
             <div>
-              {!userData?.username ? null : (
+              {!user?.username ? null : (
                 <>
                   <Link href="/profile/settings">
                     <Button variant="outline">
@@ -194,16 +175,16 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        {userData?.bio ? (
+        {user?.bio ? (
           <>
             <div className="pb-4">
               <p className="text-lg text-black/70">About</p>
-              <p className="text-sm">{userData?.bio}</p>
+              <p className="text-sm">{user?.bio}</p>
             </div>
           </>
         ) : null}
         <Separator />
-        {!userData?.username ? (
+        {!user?.username ? (
           <>
             <div className="flex flex-col justify-center items-center h-40">
               <h2 className="text-xl md:text-2xl pb-2">
@@ -225,7 +206,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {projects.length > 0 ? (
+            {/* {projects.length > 0 ? (
               <div>
                 {projects.map((record) => (
                   <div key={record.id} className="grid grid-cols-4 mt-2">
@@ -970,11 +951,11 @@ export default function Profile() {
                   Add Volunteer
                 </Button>
               </Link>
-            )}
+            )} */}
 
             <Separator className="my-4" />
 
-            {userData.website || userData.linkedIn || userData.github ? (
+            {user.website || user.linkedIn || user.github ? (
               <div>
                 <div className="flex flex-row justify-between items-center my-4">
                   <p className="text-lg text-black/70">Contact</p>
@@ -983,7 +964,7 @@ export default function Profile() {
                   </Link>
                 </div>
 
-                {userData.website ? (
+                {user.website ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaLink size={18} />
@@ -992,11 +973,11 @@ export default function Profile() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.website}
+                            href={user.website}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.website}
+                            {user.website}
                           </a>
                         </p>
                       </div>
@@ -1004,7 +985,7 @@ export default function Profile() {
                   </div>
                 ) : null}
 
-                {userData.linkedIn ? (
+                {user.linkedIn ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaLinkedinIn size={18} />
@@ -1013,11 +994,11 @@ export default function Profile() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.linkedIn}
+                            href={user.linkedIn}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.linkedIn}
+                            {user.linkedIn}
                           </a>
                         </p>
                       </div>
@@ -1025,7 +1006,7 @@ export default function Profile() {
                   </div>
                 ) : null}
 
-                {userData.github ? (
+                {user.github ? (
                   <div className="grid grid-cols-4 mt-2">
                     <div>
                       <FaGithub size={19} />
@@ -1034,11 +1015,11 @@ export default function Profile() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={userData.github}
+                            href={user.github}
                             target="_blank"
                             className="underline"
                           >
-                            {userData.github}
+                            {user.github}
                           </a>
                         </p>
                       </div>
@@ -1049,7 +1030,7 @@ export default function Profile() {
             ) : null}
           </>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }
