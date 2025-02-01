@@ -166,10 +166,10 @@ export default function AddWorkExperience() {
   const handleToChange = (value: string) => {
     if (value === "ongoing") {
       setOngoing(true);
-      form.setValue("fromMonth", "January");
+      form.setValue("toMonth", "January");
     } else {
       setOngoing(false);
-      form.setValue("fromMonth", "");
+      form.setValue("toMonth", "");
     }
   };
 
@@ -269,6 +269,7 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="fromMonth"
@@ -313,6 +314,7 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="to"
@@ -354,6 +356,7 @@ export default function AddWorkExperience() {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="toMonth"
@@ -364,14 +367,11 @@ export default function AddWorkExperience() {
                         <Select
                           disabled={btnLoading || ongoing}
                           onValueChange={(value) => {
-                            // Get the "from" values
                             const fromYear = form.getValues("from");
                             const fromMonth = form.getValues("fromMonth");
 
-                            // Get the "to" values
                             const toYear = form.getValues("to");
 
-                            // Validation check to ensure "to" year is not less than "from" year
                             if (
                               parseInt(toYear) < parseInt(fromYear) ||
                               (parseInt(toYear) === parseInt(fromYear) &&

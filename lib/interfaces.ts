@@ -67,6 +67,12 @@ export  interface Volunteer {
     images: string[];
 }
 
+export interface ViewHistory {
+    month: string;
+    count: number;
+    timestamp: string;
+}
+
 export  interface Profile {
     _id: string;
     private: boolean;
@@ -85,4 +91,6 @@ export  interface Profile {
     certification: Certification[];
     education: Education[];
     volunteer: Volunteer[];
+    viewCount: number;
+    viewHistory: ViewHistory[];
 }

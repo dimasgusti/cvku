@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
+  ChartBar,
   Download,
   Edit,
   Eye,
@@ -41,9 +42,20 @@ countries.registerLocale(enLocale);
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-type ItemWithYear = { year?: string | number; fromMonth?: string };
-type Certification = { issued?: string | number; expires?: string | number };
-type Education = { from?: string | number; to?: string | number };
+type ItemWithYear = {
+  year?: string | number;
+  fromMonth?: string;
+};
+
+type Certification = {
+  issued?: string | number;
+  expires?: string | number;
+};
+
+type Education = {
+  from?: string | number;
+  to?: string | number;
+};
 
 export default function Profile() {
   const { data: session, status } = useSession();
@@ -96,27 +108,49 @@ export default function Profile() {
     }
   };
 
-  const sortByDate = (a: any, b: any): number => {
-    const getYear = (item: any): number => {
-      if (item.year) {
+  const sortByDate = (
+    a: ItemWithYear | Certification | Education,
+    b: ItemWithYear | Certification | Education
+  ): number => {
+    const getYear = (
+      item: ItemWithYear | Certification | Education
+    ): number => {
+      if ("year" in item && item.year) {
         return typeof item.year === "string" && item.year !== "ongoing"
           ? new Date(`${item.fromMonth || "Jan"} 1, ${item.year}`).getTime()
           : 0;
       }
-      if (item.issued || item.from) {
-        // Handling Certification and Education types
-        return new Date(item.issued || item.from).getTime();
+
+      if ("issued" in item && item.issued) {
+        return new Date(item.issued).getTime();
       }
+
+      if ("from" in item && item.from) {
+        return new Date(item.from).getTime();
+      }
+
       return 0;
     };
-  
+
     const yearA = getYear(a);
     const yearB = getYear(b);
-  
-    // Handling "ongoing" year
-    if (a.year === "ongoing" && b.year !== "ongoing") return -1;
-    if (b.year === "ongoing" && a.year !== "ongoing") return 1;
-  
+
+    // Handling ongoing year
+    if (
+      "year" in a &&
+      a.year === "ongoing" &&
+      "year" in b &&
+      b.year !== "ongoing"
+    )
+      return -1;
+    if (
+      "year" in b &&
+      b.year === "ongoing" &&
+      "year" in a &&
+      a.year !== "ongoing"
+    )
+      return 1;
+
     return yearB - yearA;
   };
 
@@ -146,6 +180,9 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
+        <div>
+          <p>View Count: {user.viewCount}</p>
+        </div>
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
@@ -218,11 +255,18 @@ export default function Profile() {
             <div>
               {!user?.username ? null : (
                 <>
-                  <Link href="/profile/settings">
-                    <Button variant="outline">
-                      <Settings />
-                    </Button>
-                  </Link>
+                  <div className="flex flex-row items-center gap-2">
+                    <Link href="/profile/analytics">
+                      <Button variant="outline">
+                        <ChartBar />
+                      </Button>
+                    </Link>
+                    <Link href="/profile/settings">
+                      <Button variant="outline">
+                        <Settings />
+                      </Button>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
@@ -301,6 +345,7 @@ export default function Profile() {
                             <> at {project.company}</>
                           ) : project.url ? (
                             <>
+                              {" "}
                               <a
                                 href={project.url}
                                 target="_blank"
