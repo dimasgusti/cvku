@@ -20,6 +20,7 @@ import {
   PlusCircle,
   Settings,
   Trash2,
+  TrendingUp,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image, { StaticImageData } from "next/image";
@@ -180,9 +181,6 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
-        <div>
-          <p>View Count: {user.viewCount}</p>
-        </div>
         <div className="flex flex-row justify-center w-full items-center">
           {!isProPlanActive && (
             <Link href="/profile/billing" className="w-full">
@@ -240,9 +238,7 @@ export default function Profile() {
                 </>
               ) : (
                 <>
-                  <p className="text-lg text-black/90">
-                    {user?.username} <br />
-                  </p>
+                  <p className="text-lg text-black/90 flex flex-row gap-2 items-center">{user?.username} <span className="flex flex-row gap-1 items-center text-sm text-green-700"><TrendingUp size={16} />{user.viewCount}</span></p>
                   {user.title ? (
                     <p className="text-sm text-black/70">💼 {user.title}</p>
                   ) : null}

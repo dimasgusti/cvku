@@ -13,6 +13,7 @@ import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Profile } from "@/lib/interfaces";
+import { useEffect, useState } from "react";
 
 countries.registerLocale(enLocale);
 
@@ -20,6 +21,12 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page() {
   const { username } = useParams() as { username: string };
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getCountryName = (countryCode: string): string => {
     if (!countryCode) return "Unknown Country";
@@ -141,6 +148,7 @@ export default function Page() {
                                     <> at {project.company}</>
                                   ) : project.url ? (
                                     <>
+                                      {" "}
                                       <a
                                         href={project.url}
                                         target="_blank"
