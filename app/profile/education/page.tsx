@@ -114,17 +114,18 @@ export default function AddEducation() {
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Education</h2>
+              <p>Your data is automatically sorted from the most recent to the oldest.</p>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Degree*</FormLabel>
+                      <FormLabel>Degree/Program Title*</FormLabel>
                       <FormControl>
                         <Input
                           disabled={btnLoading}
-                          placeholder="iOS Swift UI"
+                          placeholder="Judul Gelar/Program"
                           {...field}
                         />
                       </FormControl>
@@ -140,7 +141,7 @@ export default function AddEducation() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input disabled={btnLoading} {...field} />
+                        <Input disabled={btnLoading} placeholder="Institution URL" {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -162,7 +163,7 @@ export default function AddEducation() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="Start Year" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -199,7 +200,7 @@ export default function AddEducation() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="End Year (or expected)" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -233,7 +234,7 @@ export default function AddEducation() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Harvard University"
+                        placeholder="Institution Name"
                         {...field}
                       />
                     </FormControl>
@@ -251,7 +252,7 @@ export default function AddEducation() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Computer Science"
+                        placeholder="(e.g., Computer Science)"
                         {...field}
                       />
                     </FormControl>
@@ -269,7 +270,7 @@ export default function AddEducation() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="3.85"
+                        placeholder="GPA"
                         type="number"
                         max={4}
                         step="0.1"
@@ -290,7 +291,7 @@ export default function AddEducation() {
                     <FormControl>
                       <Textarea
                         disabled={btnLoading}
-                        placeholder="Describe your project in all its glory!"
+                        placeholder="Program details and key learnings"
                         maxLength={150}
                         {...field}
                         value={field.value}

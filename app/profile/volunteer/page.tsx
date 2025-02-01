@@ -47,6 +47,7 @@ export default function AddVolunteer() {
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [ongoing, setOngoing] = useState(false);
 
   const form = useForm<VolunteerFormValues>({
     resolver: zodResolver(volunteerSchema),
@@ -162,6 +163,16 @@ export default function AddVolunteer() {
     }
   };
 
+  const handleToChange = (value: string) => {
+    if(value === "ongoing") {
+      setOngoing(true);
+      form.setValue("fromMonth", "January")
+    } else {
+      setOngoing(false);
+      form.setValue("fromMonth", "")
+    }
+  }
+
   if (!session) {
     redirect("/");
   }
@@ -178,6 +189,7 @@ export default function AddVolunteer() {
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Volunteer</h2>
+              <p>Your data is automatically sorted from the most recent to the oldest.</p>
               <FormField
                 control={form.control}
                 name="title"
@@ -187,7 +199,7 @@ export default function AddVolunteer() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Fastest Keyboard Typer"
+                        placeholder="Volunteer Role"
                         {...field}
                       />
                     </FormControl>
@@ -211,7 +223,7 @@ export default function AddVolunteer() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="Start Year" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -248,7 +260,7 @@ export default function AddVolunteer() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a month" />
+                            <SelectValue placeholder="Start Month" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -289,11 +301,14 @@ export default function AddVolunteer() {
                       <FormControl>
                         <Select
                           disabled={btnLoading}
-                          onValueChange={(value) => field.onChange(value)}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleToChange(value);
+                          }}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="End Year" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -327,11 +342,12 @@ export default function AddVolunteer() {
                       <FormLabel>Month</FormLabel>
                       <FormControl>
                         <Select
+                          disabled={btnLoading || ongoing}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a month" />
+                            <SelectValue placeholder="End Month" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -371,7 +387,7 @@ export default function AddVolunteer() {
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input disabled={btnLoading} {...field} />
+                      <Input disabled={btnLoading} placeholder="Organization URL" {...field} />
                     </FormControl>
                     <FormDescription />
                     <FormMessage />
@@ -388,7 +404,7 @@ export default function AddVolunteer() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="MyMom"
+                        placeholder="Organization Name"
                         {...field}
                       />
                     </FormControl>
@@ -406,7 +422,7 @@ export default function AddVolunteer() {
                     <FormControl>
                       <Textarea
                         disabled={btnLoading}
-                        placeholder="Describe your Responsibilites!"
+                        placeholder="Volunteer work description and impact"
                         maxLength={150}
                         {...field}
                         value={field.value}

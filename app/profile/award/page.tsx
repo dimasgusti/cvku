@@ -110,6 +110,10 @@ export default function AddAward() {
               </Button>
             </Link>
             <h2 className="text-xl md:text-2xl">Add Award</h2>
+            <p>
+              Your data is automatically sorted from the most recent to the
+              oldest.
+            </p>
             <FormField
               control={form.control}
               name="title"
@@ -119,7 +123,7 @@ export default function AddAward() {
                   <FormControl>
                     <Input
                       disabled={btnLoading}
-                      placeholder="Fastest Keyboard Typer"
+                      placeholder="Award Title"
                       {...field}
                     />
                   </FormControl>
@@ -141,7 +145,7 @@ export default function AddAward() {
                         value={field.value}
                       >
                         <SelectTrigger className="w-fit">
-                          <SelectValue placeholder="Select a year" />
+                          <SelectValue placeholder="Year of Award" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
@@ -171,7 +175,11 @@ export default function AddAward() {
                   <FormItem>
                     <FormLabel>URL</FormLabel>
                     <FormControl>
-                      <Input disabled={btnLoading} {...field} />
+                      <Input
+                        disabled={btnLoading}
+                        placeholder="Award URL"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -187,7 +195,7 @@ export default function AddAward() {
                   <FormControl>
                     <Input
                       disabled={btnLoading}
-                      placeholder="MyMom"
+                      placeholder="(e.g., Organization)"
                       {...field}
                     />
                   </FormControl>
@@ -204,7 +212,7 @@ export default function AddAward() {
                   <FormControl>
                     <Textarea
                       disabled={btnLoading}
-                      placeholder="Describe your project in all its glory!"
+                      placeholder="Brief description of the award"
                       maxLength={150}
                       {...field}
                       value={field.value}

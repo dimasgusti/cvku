@@ -26,7 +26,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
@@ -82,13 +82,24 @@ export default function Profile() {
         toast.success(
           `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully`
         );
+        setBtnLoading(false);
+        mutate(`/api/users/getUser?email=${session?.user?.email}`);
       }
     } catch (error) {
       console.error(`Failed to remove ${type}`, error);
       toast.error(`An error occurred while trying to remove ${type}`);
-    } finally {
       setBtnLoading(false);
     }
+  };
+
+  const sortByDate = (a: any, b: any) => {
+    const yearA = a.year ? new Date(`${a.fromMonth} 1, ${a.year}`).getTime() : 0;
+    const yearB = b.year ? new Date(`${b.fromMonth} 1, ${b.year}`).getTime() : 0;
+  
+    if (a.year === 'ongoing' && b.year !== 'ongoing') return -1;
+    if (b.year === 'ongoing' && a.year !== 'ongoing') return 1;
+  
+    return yearB - yearA;
   };
 
   const { data: user } = useSWR<Profile>(
@@ -101,7 +112,7 @@ export default function Profile() {
   if (status === "unauthenticated") {
     redirect("/");
   }
-  if (status === "loading") {
+  if (status === "loading" || !user) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -232,8 +243,8 @@ export default function Profile() {
 
             {user.project ? (
               <div>
-                {user.project.map((project, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.project.sort(sortByDate).map((project) => (
+                  <div key={project._id} className="grid grid-cols-4 mt-2">
                     <div className="text-sm">
                       {project.year && (
                         <p>
@@ -394,8 +405,8 @@ export default function Profile() {
 
             {user.experience ? (
               <div>
-                {user.experience.map((experience, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.experience.sort(sortByDate).map((experience) => (
+                  <div key={experience._id} className="grid grid-cols-4 mt-2">
                     <p className="text-sm">
                       {new Date(`${experience.fromMonth} 1`).toLocaleString(
                         "en-US",
@@ -404,7 +415,7 @@ export default function Profile() {
                       {experience.from}
                       {experience.to && (
                         <span>
-                          -{" "}
+                          {" "}-{" "}
                           {experience.to === "ongoing" ? (
                             "Ongoing"
                           ) : (
@@ -514,8 +525,8 @@ export default function Profile() {
 
             {user.award ? (
               <div>
-                {user.award.map((award, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.award.sort(sortByDate).map((award) => (
+                  <div key={award._id} className="grid grid-cols-4 mt-2">
                     <div className="text-sm">{award.year}</div>
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
@@ -608,8 +619,8 @@ export default function Profile() {
 
             {user.certification ? (
               <div>
-                {user.certification.map((certification, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.certification.sort(sortByDate).map((certification) => (
+                  <div key={certification._id} className="grid grid-cols-4 mt-2">
                     <div>
                       <p className="text-sm">
                         {certification.issued}
@@ -714,8 +725,8 @@ export default function Profile() {
 
             {user.education ? (
               <div>
-                {user.education.map((education, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.education.sort(sortByDate).map((education) => (
+                  <div key={education._id} className="grid grid-cols-4 mt-2">
                     <div>
                       <p className="text-sm">
                         {education.from}
@@ -824,8 +835,8 @@ export default function Profile() {
 
             {user.volunteer ? (
               <div>
-                {user.volunteer.map((volunteer, index) => (
-                  <div key={index} className="grid grid-cols-4 mt-2">
+                {user.volunteer.sort(sortByDate).map((volunteer) => (
+                  <div key={volunteer._id} className="grid grid-cols-4 mt-2">
                     <div className="text-sm">
                       {volunteer.from && (
                         <p>

@@ -43,6 +43,7 @@ export default function AddWorkExperience() {
   const [charCount, setCharCount] = useState(0);
   const { data: session } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [ongoing, setOngoing] = useState(false);
 
   const form = useForm<WorkplaceFormValues>({
     resolver: zodResolver(workplaceSchema),
@@ -99,6 +100,16 @@ export default function AddWorkExperience() {
     }
   };
 
+  const handleToChange = (value: string) => {
+    if(value === "ongoing") {
+      setOngoing(true);
+      form.setValue("fromMonth", "January")
+    } else {
+      setOngoing(false);
+      form.setValue("fromMonth", "")
+    }
+  }
+
   if (!session) {
     redirect("/");
   }
@@ -114,7 +125,8 @@ export default function AddWorkExperience() {
                   <ArrowLeft />
                 </Button>
               </Link>
-              <h2 className="text-xl md:text-2xl">Add Work Experience</h2>
+              <h2 className="text-xl md:text-2xl">Add Experience</h2>
+              <p>Your data is automatically sorted from the most recent to the oldest.</p>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -125,7 +137,7 @@ export default function AddWorkExperience() {
                       <FormControl>
                         <Input
                           disabled={btnLoading}
-                          placeholder="iOS Swift UI"
+                          placeholder="Job Title"
                           {...field}
                         />
                       </FormControl>
@@ -141,7 +153,7 @@ export default function AddWorkExperience() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input disabled={btnLoading} {...field} />
+                        <Input disabled={btnLoading} placeholder="Company URL" {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -163,7 +175,7 @@ export default function AddWorkExperience() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="Start Year" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -200,7 +212,7 @@ export default function AddWorkExperience() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a month" />
+                            <SelectValue placeholder="Start Month" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -240,11 +252,15 @@ export default function AddWorkExperience() {
                       <FormControl>
                         <Select
                           disabled={btnLoading}
-                          onValueChange={(value) => field.onChange(value)}
+                          // onValueChange={(value) => field.onChange(value)}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleToChange(value);
+                          }}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="End Year (or ongoing)" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -277,12 +293,12 @@ export default function AddWorkExperience() {
                       <FormLabel>To Month</FormLabel>
                       <FormControl>
                         <Select
-                          disabled={btnLoading}
+                          disabled={btnLoading || ongoing}
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a month" />
+                            <SelectValue placeholder="End Month" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -323,7 +339,7 @@ export default function AddWorkExperience() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Coursera"
+                        placeholder="Company Name"
                         {...field}
                       />
                     </FormControl>
@@ -341,7 +357,7 @@ export default function AddWorkExperience() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Indonesia, Bogor"
+                        placeholder="(City, Country)"
                         {...field}
                       />
                     </FormControl>
@@ -359,7 +375,7 @@ export default function AddWorkExperience() {
                     <FormControl>
                       <Textarea
                         disabled={btnLoading}
-                        placeholder="Describe your project in all its glory!"
+                        placeholder="Job description and key achievements"
                         maxLength={150}
                         {...field}
                         value={field.value}

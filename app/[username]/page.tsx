@@ -619,7 +619,7 @@ export default function Page() {
                 <>
                   <Separator className="my-4" />
                   <div className="flex flex-col justify-center items-center h-32 w-full">
-                    <p>Belum ada postingan.</p>
+                    <p>No posts yet.</p>
                   </div>
                 </>
               )}
@@ -628,7 +628,7 @@ export default function Page() {
             <>
               <Separator className="my-4" />
               <div className="flex flex-col justify-center items-center h-32 w-full">
-                <p>Akun private.</p>
+                <p>Account is private.</p>
               </div>
             </>
           )}

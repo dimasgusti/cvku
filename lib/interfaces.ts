@@ -7,9 +7,9 @@ export interface Project {
     description: string;
     url: string;
     images: string[];
-  }
-  
- export  interface Experience {
+}
+
+export  interface Experience {
     _id: string;
     title: string;
     from: string;
@@ -21,18 +21,18 @@ export interface Project {
     url: string;
     description: string;
     images: string[];
-  }
-  
- export  interface Award {
+}
+
+export  interface Award {
     _id: string;
     title: string;
     year: string;
     presentedBy: string;
     url: string;
     description: string;
-  }
-  
- export  interface Certification {
+}
+
+export  interface Certification {
     _id: string;
     title: string;
     issued: string;
@@ -40,9 +40,9 @@ export interface Project {
     organization: string;
     url: string;
     description: string;
-  }
-  
- export  interface Education {
+}
+
+export  interface Education {
     _id: string;
     title: string;
     from: string;
@@ -52,9 +52,9 @@ export interface Project {
     gpa: string;
     url: string;
     description: string;
-  }
-  
- export  interface Volunteer {
+}
+
+export  interface Volunteer {
     _id: string;
     title: string;
     from: string;
@@ -65,9 +65,9 @@ export interface Project {
     url: string;
     description: string;
     images: string[];
-  }
-  
- export  interface Profile {
+}
+
+export  interface Profile {
     _id: string;
     private: boolean;
     username: string;
@@ -85,4 +85,4 @@ export interface Project {
     certification: Certification[];
     education: Education[];
     volunteer: Volunteer[];
-  }
+}

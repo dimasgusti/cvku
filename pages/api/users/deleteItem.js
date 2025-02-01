@@ -9,18 +9,19 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "Email, type, and itemId are required." });
         }
 
+        console.log(itemId);
+
         try {
             const client = await clientPromise;
             const collection = client.db().collection("users");
 
-            // Ensure the type matches project, education, etc.
             const updateResult = await collection.updateOne(
                 { email, [`${type}._id`]: new ObjectId(itemId) },
                 {
                     $pull: {
-                        [type]: { _id: new ObjectId(itemId) }, // Pull the specific item from the array
+                        [type]: { _id: new ObjectId(itemId) }, 
                     },
-                    $set: { updatedAt: new Date() }, // Update the timestamp
+                    $set: { updatedAt: new Date() }, 
                 }
             );
 

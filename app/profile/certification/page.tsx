@@ -111,7 +111,8 @@ export default function AddCertification() {
                   <ArrowLeft />
                 </Button>
               </Link>
-              <h2 className="text-xl md:text-2xl">Add Project</h2>
+              <h2 className="text-xl md:text-2xl">Add Certification</h2>
+              <p>Your data is automatically sorted from the most recent to the oldest.</p>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -122,7 +123,7 @@ export default function AddCertification() {
                       <FormControl>
                         <Input
                           disabled={btnLoading}
-                          placeholder="iOS Swift UI"
+                          placeholder="Certification Title"
                           {...field}
                         />
                       </FormControl>
@@ -138,7 +139,7 @@ export default function AddCertification() {
                     <FormItem>
                       <FormLabel>URL</FormLabel>
                       <FormControl>
-                        <Input disabled={btnLoading} {...field} />
+                        <Input disabled={btnLoading} placeholder="Certification URL" {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
@@ -160,7 +161,7 @@ export default function AddCertification() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="Issued Date" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -197,7 +198,7 @@ export default function AddCertification() {
                           value={field.value}
                         >
                           <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Select a year" />
+                            <SelectValue placeholder="Expiration Date" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -234,7 +235,7 @@ export default function AddCertification() {
                     <FormControl>
                       <Input
                         disabled={btnLoading}
-                        placeholder="Coursera"
+                        placeholder="Issuing Organization"
                         {...field}
                       />
                     </FormControl>
@@ -252,7 +253,7 @@ export default function AddCertification() {
                     <FormControl>
                       <Textarea
                         disabled={btnLoading}
-                        placeholder="Describe your project in all its glory!"
+                        placeholder="Certification details and skills acquired"
                         maxLength={150}
                         {...field}
                         value={field.value}
