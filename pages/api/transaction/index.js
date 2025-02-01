@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    console.log('Request Body:', req.body); // Add this to check the body content
 
     const { mayarId, mobile, status, paymentMethod, membership, credit, createdAt } = req.body;
 

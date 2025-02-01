@@ -75,8 +75,6 @@ export default function AddEducation() {
 
       itemData.type = "education";
 
-      console.log("Experience Data:", itemData);
-
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {

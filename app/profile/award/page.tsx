@@ -72,8 +72,6 @@ export default function AddAward() {
 
       itemData.type = "award";
 
-      console.log("Experience Data:", itemData);
-
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {

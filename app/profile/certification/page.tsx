@@ -73,8 +73,6 @@ export default function AddCertification() {
 
       itemData.type = "certification";
 
-      console.log("Experience Data:", itemData);
-
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {

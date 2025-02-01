@@ -89,8 +89,6 @@ export default function Settings() {
     setBtnLoading(true);
     values.username = values.username.trim().toLowerCase();
 
-    console.log("1", values)
-
     if (
       values.image &&
       typeof values.image !== "string" &&
@@ -144,8 +142,6 @@ export default function Settings() {
         },
         body: JSON.stringify(values),
       });
-
-      console.log("2",values);
 
       if (!response.ok) {
         throw new Error("There are no changes made. Please try again!");

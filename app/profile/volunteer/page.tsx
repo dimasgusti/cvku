@@ -139,8 +139,6 @@ export default function AddVolunteer() {
         itemData.images = fileUrls;
       }
 
-      console.log("Project Data:", itemData);
-
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {

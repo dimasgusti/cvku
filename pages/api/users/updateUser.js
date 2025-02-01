@@ -39,8 +39,6 @@ export default async function handler(req, res) {
                 updatedAt: new Date(),
             };
 
-            console.log(`updateData:`, updateData);
-
             const updateKeys = Object.keys(updateData).filter(key => key !== "updatedAt");
             if (updateKeys.length === 0) {
                 return res.status(400).json({ error: "No changes made." });

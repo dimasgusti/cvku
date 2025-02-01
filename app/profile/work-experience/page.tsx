@@ -76,8 +76,6 @@ export default function AddWorkExperience() {
 
       itemData.type = "experience";
 
-      console.log("Experience Data:",itemData);
-
       const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {

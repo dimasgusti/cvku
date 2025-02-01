@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {
-    console.log("Request Method", req.method);
 
     if (req.method === "POST") {
         const {
@@ -26,8 +25,6 @@ export default async function handler(req, res) {
             url,
             images
         } = req.body;
-
-        console.log("Request Body:", req.body);
 
         if (!email || !type || !title) {
             return res.status(400).json({ error: "Email, type, and title are required." });
