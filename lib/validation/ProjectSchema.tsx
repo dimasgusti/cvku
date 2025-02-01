@@ -21,7 +21,7 @@ const linkUrlValidation = z
   );
 
 export const projectSchema = z.object({
-  type: z.string().default("project"),
+  email: z.string().optional(),
   title: z.string().regex(/^[a-zA-Z0-9\s-]+$/, {
     message: "Title can only contain letters, spaces, and hyphens.",
   }),

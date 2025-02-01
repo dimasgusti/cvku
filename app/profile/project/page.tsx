@@ -46,7 +46,7 @@ export default function AddProject() {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      type: "project",
+      email: "",
       title: "",
       fromMonth: "",
       year: "",
@@ -74,7 +74,17 @@ export default function AddProject() {
   const onSubmit = async (values: z.infer<typeof projectSchema>) => {
     setBtnLoading(true);
     try {
-      const projectData = { ...values };
+      const projectData = { ...values } as { email?: string; [key: string]: any };
+
+      const email = session?.user?.email;
+
+      if(!email) {
+        toast.error("User is not authenticated.")
+        setBtnLoading(false);
+        return;
+      }
+
+      projectData.email = email;
 
       if (values.images && values.images.length > 0) {
         const fileUrls: string[] = [];
@@ -121,8 +131,9 @@ export default function AddProject() {
         projectData.images = fileUrls;
       }
 
-      console.log(projectData);
-      const response = await fetch("/api/records", {
+      console.log("Project Data:",projectData);
+
+      const response = await fetch("/api/users/addProject", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +142,7 @@ export default function AddProject() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add the certification.");
+        throw new Error("Failed to add project.");
       }
 
       toast.success("New project added successfully!");
