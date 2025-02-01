@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -38,6 +39,75 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 countries.registerLocale(enLocale);
 
+interface Project {
+  _id: string;
+  title: string;
+  year: string;
+  fromMonth: string;
+  company: string;
+  description: string;
+  url: string;
+  images: string[];
+}
+
+interface Experience {
+  _id: string;
+  title: string;
+  from: string;
+  fromMonth: string;
+  to: string;
+  toMonth: string;
+  company: string;
+  location: string;
+  url: string;
+  description: string;
+  images: string[];
+}
+
+interface Award {
+  _id: string;
+  title: string;
+  year: string;
+  presentedBy: string;
+  url: string;
+  description: string;
+}
+
+interface Certification {
+  _id: string;
+  title: string;
+  issued: string;
+  expires: string;
+  organization: string;
+  url: string;
+  description: string;
+}
+
+interface Education {
+  _id: string;
+  title: string;
+  from: string;
+  to: string;
+  institution: string;
+  fieldOfStudy: string;
+  gpa: string;
+  url: string;
+  description: string;
+}
+
+interface Volunteer {
+  _id: string;
+  title: string;
+  from: string;
+  fromMonth: string;
+  to: string;
+  toMonth: string;
+  organization: string;
+  url: string;
+  description: string;
+  images: string[];
+}
+
 interface Profile {
   username: string;
   title: string;
@@ -48,6 +118,12 @@ interface Profile {
   website: string;
   linkedIn: string;
   github: string;
+  project: Project[];
+  experience: Experience[];
+  award: Award[];
+  certification: Certification[];
+  education: Education[];
+  volunteer: Volunteer[];
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -66,10 +142,48 @@ export default function Profile() {
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
   };
 
+  const handleRemove = async (type: string, itemId: string) => {
+    setBtnLoading(true);
+    try {
+      const response = await fetch(`/api/users/deleteItem`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          type,
+          itemId,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        toast.error(
+          `${type.charAt(0).toUpperCase() + type.slice(1)} failed to delete: ${
+            result.error
+          }`
+        );
+      } else {
+        toast.success(
+          `${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully`
+        );
+      }
+    } catch (error) {
+      console.error(`Failed to remove ${type}`, error);
+      toast.error(`An error occurred while trying to remove ${type}`);
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
   const { data: user, error } = useSWR<Profile>(
-    session?.user?.email ? `/api/users/getUser?email=${session.user.email}` : null,
+    session?.user?.email
+      ? `/api/users/getUser?email=${session.user.email}`
+      : null,
     fetcher
-  )
+  );
 
   if (status === "unauthenticated") {
     redirect("/");
@@ -131,10 +245,7 @@ export default function Profile() {
         )}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Avatar style={{ width: 100, height: 100 }}>
-            <AvatarImage
-              src={`${user?.image}`}
-              alt={user?.username}
-            />
+            <AvatarImage src={`${user?.image}`} alt={user?.username} />
             <AvatarFallback>CV</AvatarFallback>
           </Avatar>
           <div className="flex flex-row justify-between w-full">
@@ -206,22 +317,23 @@ export default function Profile() {
               </Link>
             </div>
 
-            {/* {projects.length > 0 ? (
+            {user.project ? (
               <div>
-                {projects.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                {user.project.map((project, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
                     <div className="text-sm">
-                      {record.year && (
+                      {project.year && (
                         <p>
-                          {record.year === "ongoing" ? (
+                          {project.year === "ongoing" ? (
                             "Ongoing"
                           ) : (
                             <span>
-                              {new Date(`${record.fromMonth} 1`).toLocaleString(
-                                "en-US",
-                                { month: "short" }
-                              )}{" "}
-                              {record.year}
+                              {new Date(
+                                `${project.fromMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {project.year}
                             </span>
                           )}
                         </p>
@@ -230,25 +342,25 @@ export default function Profile() {
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.company && record.url ? (
+                          {project.title}
+                          {project.company && project.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={project.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.company}
+                                {project.company}
                               </a>
                             </>
-                          ) : record.company ? (
-                            <> at {record.company}</>
-                          ) : record.url ? (
+                          ) : project.company ? (
+                            <> at {project.company}</>
+                          ) : project.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={project.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -276,7 +388,9 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() =>
+                                  handleRemove("project", project._id)
+                                }
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -293,13 +407,13 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}
+                        {project.description}
                       </p>
-                      {record.image && (
+                      {project.images && (
                         <PhotoProvider>
                           <div className="overflow-x-auto flex flex-row space-x-4">
-                            {Array.isArray(record.image) ? (
-                              record.image.map((imageUrl, index) => (
+                            {Array.isArray(project.images) ? (
+                              project.images.map((imageUrl, index) => (
                                 <div key={index} className="flex-shrink-0">
                                   <PhotoView
                                     src={
@@ -324,13 +438,13 @@ export default function Profile() {
                               <div className="flex-shrink-0">
                                 <PhotoView
                                   src={
-                                    typeof record.image === "string"
-                                      ? record.image
-                                      : (record.image as StaticImageData).src
+                                    typeof project.images === "string"
+                                      ? project.images
+                                      : (project.images as StaticImageData).src
                                   }
                                 >
                                   <Image
-                                    src={record.image}
+                                    src={project.images}
                                     layout="intrinsic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
@@ -365,29 +479,30 @@ export default function Profile() {
               </Link>
             </div>
 
-            {workplace.length > 0 ? (
+            {user.experience ? (
               <div>
-                {workplace.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                {user.experience.map((experience, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
                     <p className="text-sm">
-                      {new Date(`${record.fromMonth} 1`).toLocaleString(
+                      {new Date(`${experience.fromMonth} 1`).toLocaleString(
                         "en-US",
                         { month: "short" }
                       )}{" "}
-                      {record.from}
-                      {record.to && (
+                      {experience.from}
+                      {experience.to && (
                         <span>
                           -{" "}
-                          {record.to === "ongoing" ? (
+                          {experience.to === "ongoing" ? (
                             "Ongoing"
                           ) : (
                             <span>
                               {" "}
-                              {new Date(`${record.toMonth} 1`).toLocaleString(
-                                "en-US",
-                                { month: "short" }
-                              )}{" "}
-                              {record.to}
+                              {new Date(
+                                `${experience.toMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {experience.to}
                             </span>
                           )}
                         </span>
@@ -396,25 +511,25 @@ export default function Profile() {
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.company && record.url ? (
+                          {experience.title}
+                          {experience.company && experience.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={experience.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.company}
+                                {experience.company}
                               </a>
                             </>
-                          ) : record.company ? (
-                            <> at {record.company}</>
-                          ) : record.url ? (
+                          ) : experience.company ? (
+                            <> at {experience.company}</>
+                          ) : experience.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={experience.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -442,7 +557,9 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() =>
+                                  handleRemove("experience", experience._id)
+                                }
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -459,7 +576,7 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}
+                        {experience.description}
                       </p>
                     </div>
                   </div>
@@ -468,7 +585,7 @@ export default function Profile() {
             ) : (
               <Link href="/profile/work-experience">
                 <Button variant="outline" size="sm">
-                  Add Project
+                  Add Work Experience
                 </Button>
               </Link>
             )}
@@ -482,33 +599,33 @@ export default function Profile() {
               </Link>
             </div>
 
-            {awards.length > 0 ? (
+            {user.award ? (
               <div>
-                {awards.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
-                    <div className="text-sm">{record.year}</div>
+                {user.award.map((award, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
+                    <div className="text-sm">{award.year}</div>
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.presentedBy && record.url ? (
+                          {award.title}
+                          {award.presentedBy && award.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={award.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.presentedBy}
+                                {award.presentedBy}
                               </a>
                             </>
-                          ) : record.presentedBy ? (
-                            <> at {record.presentedBy}</>
-                          ) : record.url ? (
+                          ) : award.presentedBy ? (
+                            <> at {award.presentedBy}</>
+                          ) : award.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={award.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -536,7 +653,7 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() => handleRemove("award", award._id)}
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -553,7 +670,7 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}
+                        {award.description}
                       </p>
                     </div>
                   </div>
@@ -576,19 +693,19 @@ export default function Profile() {
               </Link>
             </div>
 
-            {certifications.length > 0 ? (
+            {user.certification ? (
               <div>
-                {certifications.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                {user.certification.map((certification, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
                     <div>
                       <p className="text-sm">
-                        {record.issued}
-                        {record.expires && (
+                        {certification.issued}
+                        {certification.expires && (
                           <span>
                             {" - "}
-                            {record.expires === "doesNotExpire"
+                            {certification.expires === "doesNotExpire"
                               ? "No Expiry"
-                              : `Expires ${record.expires}`}
+                              : `Expires ${certification.expires}`}
                           </span>
                         )}
                       </p>
@@ -596,25 +713,25 @@ export default function Profile() {
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.organization && record.url ? (
+                          {certification.title}
+                          {certification.organization && certification.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={certification.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.organization}
+                                {certification.organization}
                               </a>
                             </>
-                          ) : record.organization ? (
-                            <> at {record.organization}</>
-                          ) : record.url ? (
+                          ) : certification.organization ? (
+                            <> at {certification.organization}</>
+                          ) : certification.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={certification.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -642,7 +759,7 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() => handleRemove("certification", certification._id)}
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -659,7 +776,7 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}
+                        {certification.description}
                       </p>
                     </div>
                   </div>
@@ -682,19 +799,19 @@ export default function Profile() {
               </Link>
             </div>
 
-            {educations.length > 0 ? (
+            {user.education ? (
               <div>
-                {educations.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                {user.education.map((education, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
                     <div>
                       <p className="text-sm">
-                        {record.from}
-                        {record.to && (
+                        {education.from}
+                        {education.to && (
                           <span>
                             {" - "}
-                            {parseInt(record.to) > new Date().getFullYear()
-                              ? `Expected ${record.to}`
-                              : record.to}
+                            {parseInt(education.to) > new Date().getFullYear()
+                              ? `Expected ${education.to}`
+                              : education.to}
                           </span>
                         )}
                       </p>
@@ -702,25 +819,25 @@ export default function Profile() {
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.institution && record.url ? (
+                          {education.title}
+                          {education.institution && education.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={education.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.institution}
+                                {education.institution}
                               </a>
                             </>
-                          ) : record.institution ? (
-                            <> at {record.institution}</>
-                          ) : record.url ? (
+                          ) : education.institution ? (
+                            <> at {education.institution}</>
+                          ) : education.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={education.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -748,7 +865,7 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() => handleRemove("education", education._id)}
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -765,11 +882,11 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}{" "}
+                        {education.description}{" "}
                       </p>
                       <p className="text-sm text-black/70">
-                        Field of Study: {record.fieldOfStudy} <br />
-                        {record.gpa && `GPA: ${record.gpa}`}
+                        Field of Study: {education.fieldOfStudy} <br />
+                        {education.gpa && `GPA: ${education.gpa}`}
                       </p>
                     </div>
                   </div>
@@ -792,33 +909,33 @@ export default function Profile() {
               </Link>
             </div>
 
-            {volunteers.length > 0 ? (
+            {user.volunteer ? (
               <div>
-                {volunteers.map((record) => (
-                  <div key={record.id} className="grid grid-cols-4 mt-2">
+                {user.volunteer.map((volunteer, index) => (
+                  <div key={index} className="grid grid-cols-4 mt-2">
                     <div className="text-sm">
-                      {record.from && (
+                      {volunteer.from && (
                         <p>
-                          {record.to ? (
+                          {volunteer.to ? (
                             <span>
-                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                              {new Date(`${volunteer.fromMonth} 1`).toLocaleString(
                                 "en-US",
                                 { month: "short" }
                               )}{" "}
-                              {record.from} -{" "}
-                              {new Date(`${record.toMonth} 1`).toLocaleString(
+                              {volunteer.from} -{" "}
+                              {new Date(`${volunteer.toMonth} 1`).toLocaleString(
                                 "en-US",
                                 { month: "short" }
                               )}{" "}
-                              {record.to}
+                              {volunteer.to}
                             </span>
                           ) : (
                             <span>
-                              {new Date(`${record.fromMonth} 1`).toLocaleString(
+                              {new Date(`${volunteer.fromMonth} 1`).toLocaleString(
                                 "en-US",
                                 { month: "short" }
                               )}{" "}
-                              {record.from} - Ongoing
+                              {volunteer.from} - Ongoing
                             </span>
                           )}
                         </p>
@@ -827,25 +944,25 @@ export default function Profile() {
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {record.title}
-                          {record.organization && record.url ? (
+                          {volunteer.title}
+                          {volunteer.organization && volunteer.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={record.url}
+                                href={volunteer.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {record.organization}
+                                {volunteer.organization}
                               </a>
                             </>
-                          ) : record.organization ? (
-                            <> at {record.organization}</>
-                          ) : record.url ? (
+                          ) : volunteer.organization ? (
+                            <> at {volunteer.organization}</>
+                          ) : volunteer.url ? (
                             <>
                               <a
-                                href={record.url}
+                                href={volunteer.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -873,7 +990,7 @@ export default function Profile() {
                               <Button
                                 variant="outline"
                                 className="bg-red-500 text-white"
-                                onClick={() => handleRemove(record.id)}
+                                onClick={() => handleRemove("volunteer", volunteer._id)}
                                 disabled={btnLoading}
                               >
                                 {btnLoading ? (
@@ -890,13 +1007,13 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70">
-                        {record.description}
+                        {volunteer.description}
                       </p>
-                      {record.image && (
+                      {volunteer.images && (
                         <PhotoProvider>
                           <div className="overflow-x-auto flex flex-row space-x-4">
-                            {Array.isArray(record.image) ? (
-                              record.image.map((imageUrl, index) => (
+                            {Array.isArray(volunteer.images) ? (
+                              volunteer.images.map((imageUrl, index) => (
                                 <div key={index} className="flex-shrink-0">
                                   <PhotoView
                                     src={
@@ -921,13 +1038,13 @@ export default function Profile() {
                               <div className="flex-shrink-0">
                                 <PhotoView
                                   src={
-                                    typeof record.image === "string"
-                                      ? record.image
-                                      : (record.image as StaticImageData).src
+                                    typeof volunteer.images === "string"
+                                      ? volunteer.images
+                                      : (volunteer.images as StaticImageData).src
                                   }
                                 >
                                   <Image
-                                    src={record.image}
+                                    src={volunteer.images}
                                     layout="intrinsic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
@@ -951,7 +1068,7 @@ export default function Profile() {
                   Add Volunteer
                 </Button>
               </Link>
-            )} */}
+            )}
 
             <Separator className="my-4" />
 

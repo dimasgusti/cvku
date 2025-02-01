@@ -46,7 +46,6 @@ export default function AddProject() {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      email: "",
       title: "",
       fromMonth: "",
       year: "",
@@ -74,7 +73,7 @@ export default function AddProject() {
   const onSubmit = async (values: z.infer<typeof projectSchema>) => {
     setBtnLoading(true);
     try {
-      const projectData = { ...values } as { email?: string; [key: string]: any };
+      const itemData = { ...values } as { email?: string; [key: string]: any };
 
       const email = session?.user?.email;
 
@@ -84,7 +83,9 @@ export default function AddProject() {
         return;
       }
 
-      projectData.email = email;
+      itemData.email = email;
+
+      itemData.type = "project";
 
       if (values.images && values.images.length > 0) {
         const fileUrls: string[] = [];
@@ -128,17 +129,17 @@ export default function AddProject() {
           }
         }
 
-        projectData.images = fileUrls;
+        itemData.images = fileUrls;
       }
 
-      console.log("Project Data:",projectData);
+      console.log("Project Data:",itemData);
 
-      const response = await fetch("/api/users/addProject", {
+      const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(projectData),
+        body: JSON.stringify(itemData),
       });
 
       if (!response.ok) {

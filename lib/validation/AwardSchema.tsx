@@ -21,7 +21,6 @@ const linkUrlValidation = z
   );
 
 export const awardSchema = z.object({
-  type: z.string().default("award"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {

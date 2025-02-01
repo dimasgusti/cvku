@@ -42,7 +42,6 @@ export default function AddAward() {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(awardSchema),
     defaultValues: {
-      type: "award",
       title: "",
       year: "",
       presentedBy: "",
@@ -51,33 +50,35 @@ export default function AddAward() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof awardSchema>) {
+  const onSubmit = async (values: z.infer<typeof awardSchema>) => {
     setBtnLoading(true);
     try {
-      const response = await fetch("/api/records", {
+      const itemData = { ...values } as { email?: string; [key: string]: any };
+
+      const email = session?.user?.email;
+
+      if (!email) {
+        toast.error("User is not authenticated.");
+        setBtnLoading(false);
+        return;
+      }
+
+      itemData.email = email;
+
+      itemData.type = "award";
+
+      console.log("Experience Data:", itemData);
+
+      const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(itemData),
       });
 
       if (!response.ok) {
-        let errorMessage = "Failed to add the award.";
-
-        if (response.status !== 204) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const errorData = JSON.parse(responseText);
-              errorMessage = errorData.error || errorMessage;
-            } catch (err) {
-              console.error("Error parsing the error response:", err);
-            }
-          }
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Failed to add award.");
       }
 
       toast.success("New award added successfully!");
@@ -86,11 +87,13 @@ export default function AddAward() {
       toast.error(
         error instanceof Error ? error.message : "An unexpected error occurred."
       );
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
   if (!session) {
-    redirect('/');
+    redirect("/");
   }
 
   return (
@@ -103,7 +106,7 @@ export default function AddAward() {
                 <ArrowLeft />
               </Button>
             </Link>
-            <h2 className="text-xl md:text-2xl">Add Project</h2>
+            <h2 className="text-xl md:text-2xl">Add Award</h2>
             <FormField
               control={form.control}
               name="title"

@@ -42,7 +42,6 @@ export default function AddWorkExperience() {
   const form = useForm<WorkplaceFormValues>({
     resolver: zodResolver(workplaceSchema),
     defaultValues: {
-      type: "workplace",
       title: "",
       from: "",
       fromMonth: "",
@@ -55,41 +54,47 @@ export default function AddWorkExperience() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof workplaceSchema>) {
+  const onSubmit = async (values: z.infer<typeof workplaceSchema>) => {
     setBtnLoading(true);
     try {
-      const response = await fetch("/api/records", {
+      const itemData = { ...values } as { email?: string; [key: string]: any };
+
+      const email = session?.user?.email;
+
+      if(!email) {
+        toast.error("User is not authenticated.")
+        setBtnLoading(false);
+        return;
+      }
+
+      itemData.email = email;
+
+      itemData.type = "experience";
+
+      console.log("Experience Data:",itemData);
+
+      const response = await fetch("/api/users/addItem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(itemData),
       });
+
       if (!response.ok) {
-        let errorMessage = "Failed to add the work experience.";
-
-        if (response.status !== 204) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const errorData = JSON.parse(responseText);
-              errorMessage = errorData.error || errorMessage;
-            } catch (err) {
-              console.error("Error parsing the error response:", err);
-            }
-          }
-        }
-
-        throw new Error(errorMessage);
+        throw new Error("Failed to add project.");
       }
+
       toast.success("New project added successfully!");
       router.push("/profile");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "An unexpected error occured."
+        error instanceof Error ? error.message : "An unexpected error occurred."
       );
+    } finally {
+      setBtnLoading(false);
     }
-  }
+  };
 
   if (!session) {
     redirect("/");

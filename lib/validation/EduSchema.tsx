@@ -21,7 +21,6 @@ const linkUrlValidation = z
   );
 
 export const educationSchema = z.object({
-  type: z.string().default("education"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {

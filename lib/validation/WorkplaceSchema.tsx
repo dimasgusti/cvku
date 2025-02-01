@@ -21,7 +21,6 @@ const linkUrlValidation = z
   );
 
 export const workplaceSchema = z.object({
-  type: z.string().default("workplace"),
   title: z
     .string()
     .regex(/^[a-zA-Z\s-]+$/, {
