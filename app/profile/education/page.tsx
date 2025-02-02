@@ -43,7 +43,7 @@ interface ItemData {
 export default function AddEducation() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -160,6 +160,15 @@ export default function AddEducation() {
       setBtnLoading(false);
     }
   };
+
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
+  }
 
   if (!session) {
     redirect("/");

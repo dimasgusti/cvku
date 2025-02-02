@@ -25,7 +25,15 @@ async function getTransactionsByEmail(email) {
       })
       .toArray();
 
-    return transactions;
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const isSubscriptionValidToday = transactions.some(transaction => {
+      const endDate = new Date(transaction.endDate); 
+      return todayStart <= endDate; 
+    });
+
+    return { transactions, isSubscriptionValidToday };
   } catch (error) {
     console.error("Error querying transactions:", error.message);
     throw error;
@@ -43,10 +51,13 @@ export default async function handler(req, res) {
     }
 
     try {
-      const transactions = await getTransactionsByEmail(email);
+      const { transactions, isSubscriptionValidToday } = await getTransactionsByEmail(email);
 
-      return res.status(200).json({ success: true, transactions: transactions.length > 0 ? transactions : [] });
-
+      return res.status(200).json({
+        success: true,
+        transactions: transactions.length > 0 ? transactions : [],
+        isSubscriptionValidToday
+      });
     } catch (error) {
       console.error("Error querying transactions:", error.message);
       res.status(500).json({ error: "Internal server error" });

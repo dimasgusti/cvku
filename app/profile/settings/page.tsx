@@ -194,6 +194,15 @@ export default function Settings() {
     fetchUserData();
   }, [session?.user?.email, form]);
 
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
+  }
+
   if (status === "unauthenticated") {
     redirect("/");
   }

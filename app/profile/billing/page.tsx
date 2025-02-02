@@ -68,7 +68,7 @@ export default function Billing() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 19999,
+          amount: 24999,
           customerName: session.user?.name,
           email: session.user.email,
           mobile: "0000000000",
@@ -141,7 +141,7 @@ export default function Billing() {
           <h2 className="text-xl md:text-2xl">Subscription</h2>
           <div className="flex flex-row justify-center items-center">
             <Card className="w-full">
-              <CardHeader>
+              <CardHeader className="text-center">
                 <CardTitle>
                   {isProPlanActive
                     ? `You're on CVKU Pro Plan until ${new Intl.DateTimeFormat(
@@ -193,12 +193,12 @@ export default function Billing() {
                 )}
                 <CardDescription className="text-center text-xs">
                   {!isProPlanActive &&
-                    "Only Rp 19.999/month for premium features"}
+                    "Only Rp 24.999/month for premium features"}
                 </CardDescription>
               </CardContent>
             </Card>
           </div>
-          <h2 className="text-xl md:text-2xl">History</h2>
+          <h2 className="text-xl md:text-2xl">Transaction History</h2>
         </div>
         <div className="w-full flex flex-row justify-center items-center">
           <Card className="w-fit mx-4">
@@ -224,7 +224,9 @@ export default function Billing() {
                               year: "numeric",
                               month: "long",
                               day: "numeric",
-                            }).format(new Date(transaction.createdAt))}
+                            }).format(
+                              new Date(parseInt(transaction.createdAt))
+                            )}
                           </td>
                           <td className="border px-4 py-2">
                             {new Intl.DateTimeFormat("en-US", {

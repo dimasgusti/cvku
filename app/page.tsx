@@ -12,7 +12,6 @@ import Footer from "@/components/Footer";
 export default function HomePage() {
   return (
     <>
-      <Header />
       <Hero />
       <ContainerScroll
         titleComponent={

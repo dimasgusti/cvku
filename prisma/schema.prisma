@@ -87,6 +87,13 @@ model User {
   transactions  Transaction[]
 }
 
+model Feedback {
+  id        String   @id @default(cuid()) @map("_id")
+  name      String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
 model VerificationRequest {
   id         String   @id @default(cuid()) @map("_id")
   identifier String

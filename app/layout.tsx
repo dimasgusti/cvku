@@ -5,6 +5,10 @@ import "./globals.css";
 import { Manrope } from "next/font/google";
 import { defaultMeta, generateMetaTags } from "./metadata";
 import { Toaster } from "sonner";
+import Navbar from "@/components/Navbar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { AppSidebar } from "@/components/app-sidebar";
 
 const manrope = Manrope({
   weight: "400",
@@ -41,10 +45,21 @@ export default function RootLayout({
       <body className={manrope.className}>
         <SessionProvider>
           <main className="text-sm antialiased flex flex-col min-h-screen w-full bg-white">
-            <div className="bg-yellow-400 text-black py-2 text-center">
-              🚧 This website is currently under development. Stay tuned! 🚧
+            <div className="[--header-height:calc(theme(spacing.14))]">
+              <SidebarProvider className="flex flex-col">
+                <SiteHeader />
+                <div className="flex flex-1">
+                  <AppSidebar />
+                  <SidebarInset>
+                    <div className="flex flex-1 flex-col">
+                      <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+                        {children}
+                      </div>
+                    </div>
+                  </SidebarInset>
+                </div>
+              </SidebarProvider>
             </div>
-            {children}
             <Toaster />
           </main>
         </SessionProvider>

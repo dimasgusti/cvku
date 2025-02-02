@@ -43,7 +43,7 @@ interface ItemData {
 export default function AddWorkExperience() {
   const router = useRouter();
   const [charCount, setCharCount] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
   const [ongoing, setOngoing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -172,6 +172,15 @@ export default function AddWorkExperience() {
       form.setValue("toMonth", "");
     }
   };
+
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+        <Loader className="animate-spin" size={32} />
+        Please wait
+      </div>
+    );
+  }
 
   if (!session) {
     redirect("/");

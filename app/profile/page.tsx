@@ -24,7 +24,7 @@ import {
 import { useSession } from "next-auth/react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
@@ -32,11 +32,10 @@ import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { FaGithub } from "react-icons/fa";
 import { FaLink, FaLinkedinIn } from "react-icons/fa6";
-import { useIsProPlanActive } from "@/hooks/useIsProPlanActive";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { Profile } from "@/lib/interfaces";
+import type { Profile, ResponseData } from "@/lib/interfaces";
 
 countries.registerLocale(enLocale);
 
@@ -60,15 +59,19 @@ type Education = {
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
-  const { isProPlanActive, errorMessage } = useIsProPlanActive(
-    session?.user?.email || ""
-  );
+  const router = useRouter();
 
   const getCountryName = (countryCode: string): string => {
     if (!countryCode) return "Unknown Country";
 
     const upperCaseCode = countryCode.toUpperCase();
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
+  };
+
+  const handleOpen = () => {
+    if (user?.username) {
+      window.open(`/${user.username}`, "_blank");
+    }
   };
 
   const handleRemove = async (type: string, itemId: string) => {
@@ -135,7 +138,6 @@ export default function Profile() {
     const yearA = getYear(a);
     const yearB = getYear(b);
 
-    // Handling ongoing year
     if (
       "year" in a &&
       a.year === "ongoing" &&
@@ -162,7 +164,7 @@ export default function Profile() {
   );
 
   if (status === "unauthenticated") {
-    redirect("/");
+    redirect("/auth/signin");
   }
   if (status === "loading" || !user) {
     return (
@@ -173,22 +175,9 @@ export default function Profile() {
     );
   }
 
-  if (errorMessage) {
-    return <div>{errorMessage}</div>;
-  }
-
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
-        <div className="flex flex-row justify-center w-full items-center">
-          {!isProPlanActive && (
-            <Link href="/profile/billing" className="w-full">
-              <Button variant="secondary" className="w-full">
-                Upgrade to CVKU Pro
-              </Button>
-            </Link>
-          )}
-        </div>
         {user?.username && (
           <>
             <div className="flex flex-row justify-between items-center gap-4 py-4">
@@ -197,25 +186,6 @@ export default function Profile() {
                   <Eye /> Preview
                 </Button>
               </Link>
-              {isProPlanActive ? (
-                <Link href="/profile/pdf">
-                  <Button variant="secondary" size="sm">
-                    <Download />
-                    Convert PDF
-                  </Button>
-                </Link>
-              ) : (
-                <Link href="/profile/pdf">
-                  <Button
-                    disabled
-                    variant="secondary"
-                    className="hover:cursor-not-allowed"
-                  >
-                    <Download />
-                    Convert PDF
-                  </Button>
-                </Link>
-              )}
             </div>
           </>
         )}
@@ -256,12 +226,16 @@ export default function Profile() {
             <div>
               {!user?.username ? null : (
                 <>
-                  <div className="flex flex-row items-center gap-2">
-                    <Link href="/profile/settings">
-                      <Button variant="outline">
-                        <Settings />
-                      </Button>
-                    </Link>
+                  <div className="flex flex-row flex-wrap items-center gap-2">
+                    <Button variant="outline" onClick={handleOpen}>
+                      <Eye />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => router.push("/profile/settings")}
+                    >
+                      <Settings />
+                    </Button>
                   </div>
                 </>
               )}
@@ -407,7 +381,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -428,7 +402,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={project.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}
@@ -577,7 +551,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -599,7 +573,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={experience.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}
@@ -721,7 +695,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -742,7 +716,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={award.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}
@@ -884,7 +858,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -907,7 +881,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={certification.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}
@@ -1047,7 +1021,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -1069,7 +1043,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={education.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}
@@ -1223,7 +1197,7 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
-                                      layout="intrinsic"
+                                      layout="intrisinic"
                                       alt={`Image ${session?.user?.name} ${index}`}
                                       width={100}
                                       height={50}
@@ -1245,7 +1219,7 @@ export default function Profile() {
                                 >
                                   <Image
                                     src={volunteer.images}
-                                    layout="intrinsic"
+                                    layout="intrisinic"
                                     alt={`Image ${session?.user?.name}`}
                                     width={100}
                                     height={50}

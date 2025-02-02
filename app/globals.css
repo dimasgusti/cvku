@@ -19,74 +19,75 @@ body {
 
 @layer base {
   :root {
-    --background: 210 60% 98%; /* Light blue background */
-    --foreground: 210 60% 20%; /* Dark blue foreground */
-    --card: 210 60% 95%; /* Light blue card background */
-    --card-foreground: 210 60% 10%; /* Dark blue card text */
-    --popover: 210 60% 95%; /* Light blue popover */
-    --popover-foreground: 210 60% 10%; /* Dark blue popover text */
-    --primary: 210 60% 40%; /* Medium blue primary */
-    --primary-foreground: 0 0% 100%; /* White primary text */
-    --secondary: 210 60% 80%; /* Light blue secondary */
-    --secondary-foreground: 210 60% 20%; /* Dark blue secondary text */
-    --muted: 210 60% 90%; /* Muted light blue */
-    --muted-foreground: 210 60% 40%; /* Muted dark blue text */
-    --accent: 210 60% 60%; /* Accent blue */
-    --accent-foreground: 0 0% 100%; /* White accent text */
-    --destructive: 0 84.2% 60.2%; /* Red for destructive actions */
-    --destructive-foreground: 0 0% 100%; /* White destructive text */
-    --border: 210 60% 85%; /* Light blue border */
-    --input: 210 60% 90%; /* Light blue input background */
-    --ring: 210 60% 50%; /* Blue ring for focus */
-    --chart-1: 210 60% 60%; /* Blue chart color */
-    --chart-2: 210 60% 70%; /* Lighter blue for chart */
-    --chart-3: 210 60% 80%; /* Even lighter blue */
-    --chart-4: 210 60% 90%; /* Very light blue */
-    --chart-5: 210 60% 95%; /* Almost white blue */
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+ 
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --ring: 215 20.2% 65.1%;
+ 
     --radius: 0.5rem;
-    --sidebar-background: 210 60% 98%; /* Light blue sidebar background */
-    --sidebar-foreground: 210 60% 20%; /* Dark blue sidebar text */
-    --sidebar-primary: 210 60% 95%; /* Light blue sidebar primary background */
-    --sidebar-primary-foreground: 210 60% 10%; /* Dark blue sidebar primary text */
-    --sidebar-accent: 210 60% 80%; /* Light blue sidebar accent */
-    --sidebar-accent-foreground: 210 60% 10%; /* Dark blue sidebar accent text */
-    --sidebar-border: 210 60% 85%; /* Light blue sidebar border */
-    --sidebar-ring: 210 60% 50%; /* Blue sidebar ring */
-  }
 
+    --sidebar-background: 0 0% 100%; 
+    --sidebar-foreground: 0 0% 0%;
+  }
+ 
   .dark {
-    --background: 210 60% 20%; /* Dark blue background for dark mode */
-    --foreground: 210 60% 100%; /* White foreground in dark mode */
-    --card: 210 60% 30%; /* Darker blue card background */
-    --card-foreground: 210 60% 90%; /* Lighter blue card text */
-    --popover: 210 60% 30%; /* Dark blue popover */
-    --popover-foreground: 210 60% 90%; /* Lighter blue popover text */
-    --primary: 210 60% 60%; /* Medium blue primary for dark mode */
-    --primary-foreground: 0 0% 100%; /* White primary text */
-    --secondary: 210 60% 50%; /* Medium blue secondary */
-    --secondary-foreground: 210 60% 90%; /* Lighter blue secondary text */
-    --muted: 210 60% 40%; /* Darker blue muted */
-    --muted-foreground: 210 60% 80%; /* Lighter blue muted text */
-    --accent: 210 60% 60%; /* Accent blue */
-    --accent-foreground: 0 0% 100%; /* White accent text */
-    --destructive: 0 84.2% 60.2%; /* Red for destructive actions */
-    --destructive-foreground: 0 0% 100%; /* White destructive text */
-    --border: 210 60% 40%; /* Darker blue border */
-    --input: 210 60% 50%; /* Dark blue input background */
-    --ring: 210 60% 80%; /* Light blue ring for focus */
-    --chart-1: 210 60% 60%; /* Blue chart color */
-    --chart-2: 210 60% 70%; /* Lighter blue for chart */
-    --chart-3: 210 60% 80%; /* Even lighter blue */
-    --chart-4: 210 60% 90%; /* Very light blue */
-    --chart-5: 210 60% 95%; /* Almost white blue */
-    --sidebar-background: 210 60% 30%; /* Dark blue sidebar background */
-    --sidebar-foreground: 210 60% 100%; /* White sidebar text */
-    --sidebar-primary: 210 60% 40%; /* Dark blue sidebar primary background */
-    --sidebar-primary-foreground: 210 60% 90%; /* Light blue sidebar primary text */
-    --sidebar-accent: 210 60% 50%; /* Medium blue sidebar accent */
-    --sidebar-accent-foreground: 210 60% 90%; /* Lighter blue sidebar accent text */
-    --sidebar-border: 210 60% 60%; /* Medium blue sidebar border */
-    --sidebar-ring: 210 60% 80%; /* Light blue sidebar ring */
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+ 
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+ 
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+ 
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+ 
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+ 
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --ring: 216 34% 17%;
+ 
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
   }
 }
 

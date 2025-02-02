@@ -97,3 +97,31 @@ export  interface Profile {
     viewCount: number;
     viewHistory: ViewHistory[];
 }
+
+export interface Transaction {
+    _id: string;
+    event: string;
+    id: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    merchantId: string;
+    merchantName: string;
+    merchantEmail: string;
+    customerName: string;
+    customerEmail: string;
+    customerMobile: string;
+    amount: string;
+    isAdminFeeBorneByCustomer: string;
+    isChannelFeeBorneByCustomer: string;
+    productId: string;
+    productName: string;
+    productType: string;
+    endDate: string;
+  }
+
+export interface ResponseData {
+    success: boolean;
+    transactions: Transaction[];
+    isSubscriptionValidToday: boolean;
+}
