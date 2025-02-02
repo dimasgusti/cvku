@@ -381,7 +381,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -402,7 +402,7 @@ export default function Profile() {
                                   <Image
                                     src={project.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
@@ -551,7 +551,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -573,7 +573,7 @@ export default function Profile() {
                                   <Image
                                     src={experience.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
@@ -695,7 +695,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -716,7 +716,7 @@ export default function Profile() {
                                   <Image
                                     src={award.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
@@ -858,7 +858,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -881,7 +881,7 @@ export default function Profile() {
                                   <Image
                                     src={certification.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
@@ -1021,7 +1021,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -1043,7 +1043,7 @@ export default function Profile() {
                                   <Image
                                     src={education.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
@@ -1197,7 +1197,7 @@ export default function Profile() {
                                     <Image
                                       src={imageUrl}
                                       layout="intrisinic"
-                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
@@ -1219,7 +1219,7 @@ export default function Profile() {
                                   <Image
                                     src={volunteer.images}
                                     layout="intrisinic"
-                                    alt={`Image ${session?.user?.name}`}
+                                    alt={`Image ${user.username}`}
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"

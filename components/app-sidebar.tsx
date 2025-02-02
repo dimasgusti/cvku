@@ -1,13 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Home,
-  Layers,
-  LifeBuoy,
-  Send,
-  User,
-} from "lucide-react";
+import { Home, Layers, LifeBuoy, Send, User } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -34,7 +28,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   );
 
   const { data: subscriptionData } = useSWR<ResponseData>(
-    session?.user?.email ? `/api/transaction/getTransactionByEmail?email=${session.user.email}` : null,
+    session?.user?.email
+      ? `/api/transaction/getTransactionByEmail?email=${session.user.email}`
+      : null,
     fetcher
   );
 
@@ -59,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         title: "Templates",
         url: "/templates",
-        icon: Layers
+        icon: Layers,
       },
     ],
     navSecondary: [

@@ -41,6 +41,7 @@ export const authOptions = {
   },
   pages: {
     signIn: '/auth/signin',
+    welcome: '/profile/settings',
     error: '/auth/error',
     newUser: '/profile',
   },

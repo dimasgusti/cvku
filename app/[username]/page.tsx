@@ -8,6 +8,8 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import "react-photo-view/dist/react-photo-view.css";
 import type { Profile } from "@/lib/interfaces";
 import DefaultTemplate from "@/components/template/default";
+import { motion } from "motion/react"
+import MinimalistTemplate from "@/components/template/minimalist";
 
 countries.registerLocale(enLocale);
 
@@ -42,11 +44,19 @@ export default function Page() {
 
   const templateMap: { [key: string]: JSX.Element } = {
     basic: <DefaultTemplate user={user} />,
+    minimalist: <MinimalistTemplate user={user} />
   };
 
   const selectedTemplate =
     templateMap[user.template as keyof typeof templateMap] ||
     templateMap["basic"];
 
-  return <>{selectedTemplate}</>;
+  return(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 100 }}
+    >
+      {selectedTemplate}
+    </motion.div>
+  );
 }
