@@ -41,6 +41,6 @@ export const userSchema = z.object({
   linkedIn: linkUrlValidation,
   github: linkUrlValidation,
   private: z.boolean().default(true),
-  template: z.string().default("default"),
+  template: z.string().default('basic'),
   viewCount: z.number().default(0),
 });

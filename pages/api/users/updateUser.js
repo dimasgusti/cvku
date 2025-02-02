@@ -2,7 +2,7 @@ import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {
     if (req.method === 'PUT') {
-        const { email, username, title, country, bio, image, website, linkedIn, github, private: privateField } = req.body;
+        const { template, email, username, title, country, bio, image, website, linkedIn, github, private: privateField } = req.body;
 
         try {
             if(!email) {
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
             }
 
             const updateData = {
+                ...(template && template !== user.template && { template}),
                 ...(username && username !== user.username && { username }),
                 ...(title && title !== user.title && { title }),
                 ...(country && country !== user.country && { country }),

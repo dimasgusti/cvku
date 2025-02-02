@@ -79,6 +79,7 @@ export interface ViewHistory {
 export  interface Profile {
     _id: string;
     private: boolean;
+    template: number;
     username: string;
     title: string;
     country: string;

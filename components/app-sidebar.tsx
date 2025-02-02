@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   Home,
+  Layers,
   LifeBuoy,
   Send,
   User,
@@ -54,6 +55,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Profile",
         url: "/profile",
         icon: User,
+      },
+      {
+        title: "Templates",
+        url: "/templates",
+        icon: Layers
       },
     ],
     navSecondary: [

@@ -59,6 +59,7 @@ export default function Settings() {
     resolver: zodResolver(userSchema),
     defaultValues: {
       username: "",
+      template: "",
       title: "",
       country: "",
       bio: "",
