@@ -26,19 +26,39 @@ export default async function handler(req, res) {
                 }
             }
 
-            const updateData = {
-                ...(template && template !== user.template && { template}),
-                ...(username && username !== user.username && { username }),
-                ...(title && title !== user.title && { title }),
-                ...(country && country !== user.country && { country }),
-                ...(bio && bio !== user.bio && { bio }),
-                ...(image && image !== user.image && { image }),
-                ...(website && website !== user.website && { website }),
-                ...(linkedIn && linkedIn !== user.linkedIn && { linkedIn }),
-                ...(github && github !== user.github && { github }),
-                ...(privateField !== user.private && { private: privateField }),
-                updatedAt: new Date(),
-            };
+            const updateData = {};
+            if (req.body.hasOwnProperty("template") && template !== user.template) {
+                updateData.template = template;
+            }
+            if (req.body.hasOwnProperty("username") && username !== user.username) {
+                updateData.username = username;
+            }
+            if (req.body.hasOwnProperty("title") && title !== user.title) {
+                updateData.title = title;
+            }
+            if (req.body.hasOwnProperty("country") && country !== user.country) {
+                updateData.country = country;
+            }
+            if (req.body.hasOwnProperty("bio") && bio !== user.bio) {
+                updateData.bio = bio;
+            }
+            if (req.body.hasOwnProperty("image") && image !== user.image) {
+                updateData.image = image;
+            }
+            if (req.body.hasOwnProperty("website") && website !== user.website) {
+                updateData.website = website;
+            }
+            if (req.body.hasOwnProperty("linkedIn") && linkedIn !== user.linkedIn) {
+                updateData.linkedIn = linkedIn;
+            }
+            if (req.body.hasOwnProperty("github") && github !== user.github) {
+                updateData.github = github;
+            }
+            if (req.body.hasOwnProperty("private") && privateField !== user.private) {
+                updateData.private = privateField;
+            }
+
+            updateData.updatedAt = new Date();
 
             const updateKeys = Object.keys(updateData).filter(key => key !== "updatedAt");
             if (updateKeys.length === 0) {

@@ -77,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="top-[--header-height] !h-[calc(100svh-var(--header-height))]"
       {...props}
     >
-      <SidebarContent>
+      <SidebarContent className="flex flex-col items-center">
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

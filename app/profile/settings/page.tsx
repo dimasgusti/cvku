@@ -42,6 +42,7 @@ interface Profile {
   linkedIn: string;
   github: string;
   private: boolean;
+  template: string;
 }
 
 export default function Settings() {
@@ -181,6 +182,7 @@ export default function Settings() {
               linkedIn: userData.linkedIn || "",
               github: userData.github || "",
               private: userData.private ?? true,
+              template: userData.template || "",
             });
             formResetRef.current = true;
           }
@@ -383,7 +385,7 @@ export default function Settings() {
               name="linkedIn"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>LinkedIn</FormLabel>
+                  <FormLabel>LinkedIn Username</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -401,7 +403,7 @@ export default function Settings() {
               name="github"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>GitHub</FormLabel>
+                  <FormLabel>GitHub Username</FormLabel>
                   <FormControl>
                     <Input
                       {...field}

@@ -868,7 +868,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                     <div className="flex flex-row justify-between">
                       <p>
                         <a
-                          href={user.linkedIn}
+                          href={`https://linkedin.com/in/${user.linkedIn}`}
                           target="_blank"
                           className="underline"
                         >
@@ -889,7 +889,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                     <div className="flex flex-row justify-between">
                       <p>
                         <a
-                          href={user.github}
+                          href={`https://github.com/${user.github}`}
                           target="_blank"
                           className="underline"
                         >

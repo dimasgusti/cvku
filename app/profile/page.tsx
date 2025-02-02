@@ -177,7 +177,7 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
-        {user?.username && (
+        {/* {user?.username && (
           <>
             <div className="flex flex-row justify-between items-center gap-4 py-4">
               <Link href={`/${user.username}`} target="_blank">
@@ -187,7 +187,7 @@ export default function Profile() {
               </Link>
             </div>
           </>
-        )}
+        )} */}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Avatar style={{ width: 100, height: 100 }}>
             <AvatarImage src={`${user?.image}`} alt={user?.username} />
@@ -225,7 +225,7 @@ export default function Profile() {
             <div>
               {!user?.username ? null : (
                 <>
-                  <div className="flex flex-row flex-wrap items-center gap-2">
+                  <div className="flex flex-row flex-wrap h-full items-center gap-2">
                     <Button variant="outline" onClick={handleOpen}>
                       <Eye />
                     </Button>
@@ -1284,7 +1284,7 @@ export default function Profile() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={user.linkedIn}
+                            href={`https://linkedin.com/in/${user.linkedIn}`}
                             target="_blank"
                             className="underline"
                           >
@@ -1305,7 +1305,7 @@ export default function Profile() {
                       <div className="flex flex-row justify-between">
                         <p>
                           <a
-                            href={user.github}
+                            href={`https://github.com/${user.github}`}
                             target="_blank"
                             className="underline"
                           >

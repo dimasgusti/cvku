@@ -5,9 +5,12 @@ import "./globals.css";
 import { Manrope } from "next/font/google";
 import { defaultMeta, generateMetaTags } from "./metadata";
 import { Toaster } from "sonner";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { SiteHeader } from "@/components/site-header";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
 
 const manrope = Manrope({
   weight: "400",
