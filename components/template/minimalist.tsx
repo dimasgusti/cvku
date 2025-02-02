@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Profile } from "@/lib/interfaces";
 import { Button } from "../ui/button";
 import { Github, Globe, Linkedin } from "lucide-react";
+import { Separator } from "../ui/separator";
 
 interface DefaultTemplateProps {
   user: Profile;
@@ -97,6 +98,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                   <>
                     {user.project.length > 0 && (
                       <>
+                        <Separator />
                         <h2 className="text-xl md:text-2xl">Project</h2>
                         <div className="grid grid-cols-1 gap-4 w-full">
                           {user.project.map((project, index) => (
@@ -214,6 +216,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
 
                     {user.experience.length > 0 && (
                       <>
+                        <Separator />
                         <h2 className="text-xl md:text-2xl">Work Experience</h2>
                         <div className="grid grid-cols-1 gap-4 w-full">
                           {user.experience.map((experience, index) => (
@@ -345,7 +348,8 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
 
                     {user.award.length > 0 && (
                       <>
-                        <h2 className="text-xl md:text-2xl">Project</h2>
+                        <Separator />
+                        <h2 className="text-xl md:text-2xl">Award</h2>
                         <div className="grid grid-cols-1 gap-4 w-full">
                           {user.award.map((award, index) => (
                             <div key={index} className="flex flex-col gap-1">
