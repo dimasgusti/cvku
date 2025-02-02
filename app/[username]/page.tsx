@@ -16,13 +16,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function Page() {
   const { username } = useParams() as { username: string };
 
-  const getCountryName = (countryCode: string): string => {
-    if (!countryCode) return "Unknown Country";
-
-    const upperCaseCode = countryCode.toUpperCase();
-    return countries.getName(upperCaseCode, "en") || "Unknown Country";
-  };
-
   const { data: user, error } = useSWR<Profile>(
     username ? `/api/users/getUsername?username=${username}` : null,
     fetcher
