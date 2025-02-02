@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
-  Download,
   Edit,
   Eye,
   Loader,
@@ -35,7 +34,7 @@ import { FaLink, FaLinkedinIn } from "react-icons/fa6";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { Profile, ResponseData } from "@/lib/interfaces";
+import type { Profile } from "@/lib/interfaces";
 
 countries.registerLocale(enLocale);
 

@@ -1,19 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
 import {
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
   Home,
   LifeBuoy,
-  Map,
-  PieChart,
   Send,
-  Settings2,
-  SquareTerminal,
   User,
 } from "lucide-react";
 

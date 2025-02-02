@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import Hero from "@/components/Hero";
-import Header from "@/components/Header";
 import Pricing from "@/components/Pricing";
 import { Faq1 } from "@/components/FAQ";
 import Features2 from "@/components/Features2";
