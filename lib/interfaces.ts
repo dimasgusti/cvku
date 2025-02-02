@@ -30,6 +30,7 @@ export  interface Award {
     presentedBy: string;
     url: string;
     description: string;
+    images: string[]
 }
 
 export  interface Certification {
@@ -40,6 +41,7 @@ export  interface Certification {
     organization: string;
     url: string;
     description: string;
+    images: string[];
 }
 
 export  interface Education {
@@ -52,6 +54,7 @@ export  interface Education {
     gpa: string;
     url: string;
     description: string;
+    images: string[];
 }
 
 export  interface Volunteer {

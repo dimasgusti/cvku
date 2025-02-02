@@ -237,7 +237,13 @@ export default function Profile() {
                 </>
               ) : (
                 <>
-                  <p className="text-lg text-black/90 flex flex-row gap-2 items-center">{user?.username} <span className="flex flex-row gap-1 items-center text-sm text-green-700"><TrendingUp size={16} />{user.viewCount}</span></p>
+                  <p className="text-lg text-black/90 flex flex-row gap-2 items-center">
+                    {user?.username}{" "}
+                    <span className="flex flex-row gap-1 items-center text-sm text-green-700">
+                      <TrendingUp size={16} />
+                      {user.viewCount}
+                    </span>
+                  </p>
                   {user.title ? (
                     <p className="text-sm text-black/70">💼 {user.title}</p>
                   ) : null}
@@ -383,7 +389,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         {project.description}
                       </p>
                       {project.images && (
@@ -553,9 +559,59 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         {experience.description}
                       </p>
+                      {experience.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(experience.images) ? (
+                              experience.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof experience.images === "string"
+                                      ? experience.images
+                                      : (experience.images as StaticImageData)
+                                          .src
+                                  }
+                                >
+                                  <Image
+                                    src={experience.images}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -647,9 +703,58 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         {award.description}
                       </p>
+                      {award.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(award.images) ? (
+                              award.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof award.images === "string"
+                                      ? award.images
+                                      : (award.images as StaticImageData).src
+                                  }
+                                >
+                                  <Image
+                                    src={award.images}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -761,9 +866,60 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         {certification.description}
                       </p>
+                      {certification.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(certification.images) ? (
+                              certification.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof certification.images === "string"
+                                      ? certification.images
+                                      : (
+                                          certification.images as StaticImageData
+                                        ).src
+                                  }
+                                >
+                                  <Image
+                                    src={certification.images}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -869,13 +1025,63 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
-                        {education.description}{" "}
-                      </p>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         Field of Study: {education.fieldOfStudy} <br />
                         {education.gpa && `GPA: ${education.gpa}`}
                       </p>
+                      <p className="text-sm text-black/70 py-1">
+                        {education.description}
+                      </p>
+                      {education.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(education.images) ? (
+                              education.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrinsic"
+                                      alt={`Image ${session?.user?.name} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof education.images === "string"
+                                      ? education.images
+                                      : (education.images as StaticImageData)
+                                          .src
+                                  }
+                                >
+                                  <Image
+                                    src={education.images}
+                                    layout="intrinsic"
+                                    alt={`Image ${session?.user?.name}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -999,7 +1205,7 @@ export default function Profile() {
                           </DialogContent>
                         </Dialog>
                       </div>
-                      <p className="text-sm text-black/70">
+                      <p className="text-sm text-black/70 py-1">
                         {volunteer.description}
                       </p>
                       {volunteer.images && (
