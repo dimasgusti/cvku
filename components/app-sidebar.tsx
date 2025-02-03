@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Home, Layers, LifeBuoy, Send, User } from "lucide-react";
+import { BookOpen, Home, Layers, LifeBuoy, Send, User } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
-import {
+import { 
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -61,13 +61,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navSecondary: [
       {
         title: "Support",
-        url: "#",
+        url: "/support",
         icon: LifeBuoy,
       },
       {
         title: "Feedback",
         url: "/feedback",
         icon: Send,
+      },
+      {
+        title: "Terms and Condition",
+        url: "/terms-and-conditions",
+        icon: BookOpen,
       },
     ],
   };
