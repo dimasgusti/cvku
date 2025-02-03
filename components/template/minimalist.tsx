@@ -33,7 +33,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
 
   return (
     <div className="flex flex-row justify-center items-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-[640px]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:w-[720px]">
         <div className="w-full flex flex-col justify-start items-start px-4">
           <div className="flex flex-row justify-start w-full items-center gap-4 py-4">
             <Avatar style={{ width: 100, height: 100 }}>
