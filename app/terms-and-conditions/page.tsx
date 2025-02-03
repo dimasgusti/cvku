@@ -25,7 +25,7 @@ export default function TermsConditionPage() {
         "Enhanced portfolio customization options",
       ],
       subdescription: [
-        "Payments are due at the time of subscription. All subscription fees are stated in [your currency] and are exclusive of applicable taxes.",
+        "Payments are due at the time of subscription. All subscription fees are stated in Rupiah and are exclusive of applicable taxes.",
       ],
     },
     {
