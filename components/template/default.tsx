@@ -15,6 +15,21 @@ interface DefaultTemplateProps {
   user: Profile;
 }
 
+type ItemWithYear = {
+  year?: string | number;
+  fromMonth?: string;
+};
+
+type Certification = {
+  issued?: string | number;
+  expires?: string | number;
+};
+
+type Education = {
+  from?: string | number;
+  to?: string | number;
+};
+
 export default function DefaultTemplate({ user }: DefaultTemplateProps) {
   const [isClient, setIsClient] = useState(false);
 
@@ -27,6 +42,51 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
 
     const upperCaseCode = countryCode.toUpperCase();
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
+  };
+
+  const sortByDate = (
+    a: ItemWithYear | Certification | Education,
+    b: ItemWithYear | Certification | Education
+  ): number => {
+    const getYear = (
+      item: ItemWithYear | Certification | Education
+    ): number => {
+      if ("year" in item && item.year) {
+        return typeof item.year === "string" && item.year !== "ongoing"
+          ? new Date(`${item.fromMonth || "Jan"} 1, ${item.year}`).getTime()
+          : 0;
+      }
+
+      if ("issued" in item && item.issued) {
+        return new Date(item.issued).getTime();
+      }
+
+      if ("from" in item && item.from) {
+        return new Date(item.from).getTime();
+      }
+
+      return 0;
+    };
+
+    const yearA = getYear(a);
+    const yearB = getYear(b);
+
+    if (
+      "year" in a &&
+      a.year === "ongoing" &&
+      "year" in b &&
+      b.year !== "ongoing"
+    )
+      return -1;
+    if (
+      "year" in b &&
+      b.year === "ongoing" &&
+      "year" in a &&
+      a.year !== "ongoing"
+    )
+      return 1;
+
+    return yearB - yearA;
   };
 
   const hasRecords =
@@ -79,7 +139,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Project</p>
                     </div>
                     <div>
-                      {user.project.map((project, index) => (
+                      {user.project.sort(sortByDate).map((project, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <div className="text-sm">
                             {project.year && (
@@ -203,7 +263,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Work Experience</p>
                     </div>
                     <div>
-                      {user.experience.map((experience, index) => (
+                      {user.experience.sort(sortByDate).map((experience, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <p className="text-sm pr-1">
                             {new Date(
@@ -334,7 +394,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Award</p>
                     </div>
                     <div>
-                      {user.award.map((award, index) => (
+                      {user.award.sort(sortByDate).map((award, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <div className="text-sm">{award.year}</div>
                           <div className="col-start-2 col-end-5">
@@ -439,7 +499,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Certification</p>
                     </div>
                     <div>
-                      {user.certification.map((certification, index) => (
+                      {user.certification.sort(sortByDate).map((certification, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <div>
                             <p className="text-sm">
@@ -561,7 +621,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Education</p>
                     </div>
                     <div>
-                      {user.education.map((education, index) => (
+                      {user.education.sort(sortByDate).map((education, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <div>
                             <p className="text-sm">
@@ -684,7 +744,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                       <p className="text-lg text-black/70">Volunteer</p>
                     </div>
                     <div>
-                      {user.volunteer.map((volunteer, index) => (
+                      {user.volunteer.sort(sortByDate).map((volunteer, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
                           <div className="text-sm">
                             {volunteer.from && (

@@ -15,6 +15,21 @@ interface DefaultTemplateProps {
   user: Profile;
 }
 
+type ItemWithYear = {
+  year?: string | number;
+  fromMonth?: string;
+};
+
+type Certification = {
+  issued?: string | number;
+  expires?: string | number;
+};
+
+type Education = {
+  from?: string | number;
+  to?: string | number;
+};
+
 export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
   const hasRecords =
     (user?.project.length ?? 0) > 0 ||
@@ -29,6 +44,51 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
 
     const upperCaseCode = countryCode.toUpperCase();
     return countries.getName(upperCaseCode, "en") || "Unknown Country";
+  };
+
+  const sortByDate = (
+    a: ItemWithYear | Certification | Education,
+    b: ItemWithYear | Certification | Education
+  ): number => {
+    const getYear = (
+      item: ItemWithYear | Certification | Education
+    ): number => {
+      if ("year" in item && item.year) {
+        return typeof item.year === "string" && item.year !== "ongoing"
+          ? new Date(`${item.fromMonth || "Jan"} 1, ${item.year}`).getTime()
+          : 0;
+      }
+
+      if ("issued" in item && item.issued) {
+        return new Date(item.issued).getTime();
+      }
+
+      if ("from" in item && item.from) {
+        return new Date(item.from).getTime();
+      }
+
+      return 0;
+    };
+
+    const yearA = getYear(a);
+    const yearB = getYear(b);
+
+    if (
+      "year" in a &&
+      a.year === "ongoing" &&
+      "year" in b &&
+      b.year !== "ongoing"
+    )
+      return -1;
+    if (
+      "year" in b &&
+      b.year === "ongoing" &&
+      "year" in a &&
+      a.year !== "ongoing"
+    )
+      return 1;
+
+    return yearB - yearA;
   };
 
   return (
@@ -111,8 +171,8 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Project</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.project.map((project, index) => (
-                              <div key={index} className="flex flex-col gap-1">
+                            {user.project.sort(sortByDate).map((project) => (
+                              <div key={project._id} className="flex flex-col gap-1">
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {project.title}
                                   <span className="text-sm">
@@ -234,7 +294,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                             Work Experience
                           </h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.experience.map((experience, index) => (
+                            {user.experience.sort(sortByDate).map((experience, index) => (
                               <div key={index} className="flex flex-col gap-1">
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {experience.title}
@@ -366,7 +426,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Award</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.award.map((award, index) => (
+                            {user.award.sort(sortByDate).map((award, index) => (
                               <div key={index} className="flex flex-col gap-1">
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {award.title}
@@ -469,7 +529,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Certification</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.certification.map((certification, index) => (
+                            {user.certification.sort(sortByDate).map((certification, index) => (
                               <div key={index} className="flex flex-col gap-1">
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {certification.title}
@@ -586,7 +646,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Education</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.education.map((education, index) => (
+                            {user.education.sort(sortByDate).map((education, index) => (
                               <div key={index} className="flex flex-col gap-1">
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {education.title}
@@ -702,7 +762,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                                   Volunteer
                                 </h2>
                                 <div className="grid grid-cols-1 gap-4 w-full">
-                                  {user.volunteer.map((volunteer, index) => (
+                                  {user.volunteer.sort(sortByDate).map((volunteer, index) => (
                                     <div
                                       key={index}
                                       className="flex flex-col gap-1"
