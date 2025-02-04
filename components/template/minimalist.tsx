@@ -114,7 +114,9 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
           </div>
           <div className="py-4">
             <h3 className="text-lg md:text-xl">About me</h3>
-            {user.bio ? user.bio : "No bio available."}
+            {user.bio ? (
+              <p className="whitespace-pre-line">{user.bio}</p>
+            ) : "No bio available."}
           </div>
           {user.website || user.linkedIn || user.github ? (
             <>

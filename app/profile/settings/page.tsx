@@ -340,10 +340,10 @@ export default function Settings() {
                     />
                   </FormControl>
                   <FormDescription>
-                    {charCount > 100 ? (
-                      <span className="text-red-500">{charCount} / 100</span>
+                    {charCount > 300 ? (
+                      <span className="text-red-500">{charCount} / 300</span>
                     ) : (
-                      <span>{charCount} / 100</span>
+                      <span>{charCount} / 300</span>
                     )}
                   </FormDescription>
                   <FormMessage />

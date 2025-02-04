@@ -245,7 +245,7 @@ export default function Profile() {
           <>
             <div className="pb-4">
               <p className="text-lg text-black/70">About</p>
-              <p className="text-sm">{user?.bio}</p>
+              <p className="text-sm whitespace-pre-line">{user?.bio}</p>
             </div>
           </>
         ) : null}

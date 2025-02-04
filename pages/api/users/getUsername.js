@@ -18,12 +18,9 @@ export default async function handler(req, res) {
                 return res.status(404).json({ error: "User not found." });
             }
 
-            const currentTimestamp = new Date();
-
             await collection.updateOne(
                 { username },
                 { 
-                    $push: { viewHistory: { timestamp: currentTimestamp } },
                     $inc: { viewCount: 1 } 
                 }
             )

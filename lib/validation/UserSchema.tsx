@@ -33,7 +33,7 @@ export const userSchema = z.object({
   country: z.string().min(1),
   bio: z
     .string()
-    .max(100, "Bio must contain at most 100 character(s)")
+    .max(300, "Bio must contain at most 300 character(s)")
     .optional(),
   email: z.string().email("Invalid email format").optional(),
   image: z.union([z.instanceof(File), z.string()]).optional(),
