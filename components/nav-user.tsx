@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ChevronsUpDown,
-  LogIn,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogIn, LogOut, Sparkles } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -25,6 +20,17 @@ import {
 } from "@/components/ui/sidebar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Button } from "./ui/button";
 
 export function NavUser({
   user,
@@ -122,13 +128,31 @@ export function NavUser({
               </>
             )}
             {user.email ? (
-              <DropdownMenuItem
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="hover:cursor-pointer"
-              >
-                <LogOut />
-                Log Out
-              </DropdownMenuItem>
+              <Dialog>
+                <DialogTrigger className="relative flex hover:cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent hover:bg-accent w-full focus:text-accent-foreground">
+                  <LogOut className="h-4 w-4" />
+                  Log Out
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Log out?</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to log out?
+                    </DialogDescription>
+                    <DialogFooter className="pt-4">
+                      <DialogClose asChild>
+                        <Button variant="secondary">Cancel</Button>
+                      </DialogClose>
+                      <Button
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        variant="destructive"
+                      >
+                        Log out
+                      </Button>
+                    </DialogFooter>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
             ) : (
               <DropdownMenuItem
                 onClick={() => router.push("/auth/signin")}

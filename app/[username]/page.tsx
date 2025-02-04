@@ -10,7 +10,6 @@ import type { Profile } from "@/lib/interfaces";
 import DefaultTemplate from "@/components/template/default";
 import { motion } from "motion/react"
 import MinimalistTemplate from "@/components/template/minimalist";
-
 countries.registerLocale(enLocale);
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -55,6 +54,7 @@ export default function Page() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 100 }}
+      className="py-8 md:py-4 lg:py-0"
     >
       {selectedTemplate}
     </motion.div>

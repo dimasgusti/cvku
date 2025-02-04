@@ -53,8 +53,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: User,
       },
       {
-        title: "Templates",
-        url: "/templates",
+        title: "Template",
+        url: "/template",
         icon: Layers,
       },
     ],

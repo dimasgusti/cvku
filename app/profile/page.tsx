@@ -175,7 +175,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex flex-row justify-center items-center">
+    <div className="flex flex-row justify-center items-center py-8 md:py-4 lg:py-0">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
         {/* {user?.username && (
           <>
@@ -253,11 +253,11 @@ export default function Profile() {
         {!user?.username ? (
           <>
             <div className="flex flex-col justify-center items-center h-40">
-              <h2 className="text-xl md:text-2xl pb-2">
+              <h2 className="text-base md:text-lg pb-2">
                 Complete this step to continue.
               </h2>
               <Link href="/profile/settings">
-                <Button>
+                <Button size="sm">
                   <Edit /> Start
                 </Button>
               </Link>
@@ -272,7 +272,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.project ? (
+            {user.project && (
               <div>
                 {user.project.sort(sortByDate).map((project) => (
                   <div key={project._id} className="grid grid-cols-4 mt-2">
@@ -418,12 +418,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/project">
-                <Button variant="outline" size="sm">
-                  Add Project
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />
@@ -435,7 +429,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.experience ? (
+            {user.experience && (
               <div>
                 {user.experience.sort(sortByDate).map((experience) => (
                   <div key={experience._id} className="grid grid-cols-4 mt-2">
@@ -589,12 +583,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/work-experience">
-                <Button variant="outline" size="sm">
-                  Add Work Experience
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />
@@ -606,7 +594,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.award ? (
+            {user.award && (
               <div>
                 {user.award.sort(sortByDate).map((award) => (
                   <div key={award._id} className="grid grid-cols-4 mt-2">
@@ -732,12 +720,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/award">
-                <Button variant="outline" size="sm">
-                  Add Award
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />
@@ -749,7 +731,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.certification ? (
+            {user.certification && (
               <div>
                 {user.certification.sort(sortByDate).map((certification) => (
                   <div
@@ -897,12 +879,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/certification">
-                <Button variant="outline" size="sm">
-                  Add Award
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />
@@ -914,7 +890,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.education ? (
+            {user.education && (
               <div>
                 {user.education.sort(sortByDate).map((education) => (
                   <div key={education._id} className="grid grid-cols-4 mt-2">
@@ -1059,12 +1035,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/education">
-                <Button variant="outline" size="sm">
-                  Add Education
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />
@@ -1076,7 +1046,7 @@ export default function Profile() {
               </Link>
             </div>
 
-            {user.volunteer ? (
+            {user.volunteer && (
               <div>
                 {user.volunteer.sort(sortByDate).map((volunteer) => (
                   <div key={volunteer._id} className="grid grid-cols-4 mt-2">
@@ -1235,12 +1205,6 @@ export default function Profile() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <Link href="/profile/volunteer">
-                <Button variant="outline" size="sm">
-                  Add Volunteer
-                </Button>
-              </Link>
             )}
 
             <Separator className="my-4" />

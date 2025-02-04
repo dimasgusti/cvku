@@ -61,13 +61,18 @@ export default function AddAward() {
 
   const handleFileValidation = (file: File) => {
     const maxSize = 5 * 1024 * 1024;
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedTypes = [
+      "image/jpg",
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+    ];
     if (file.size > maxSize) {
       toast.error("File size exceeds 5MB!");
       return false;
     }
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only images (jpeg, png, gif) allowed.");
+      toast.error("Invalid file type. Only (jpg, jpeg, png, gif) allowed.");
       return false;
     }
     return true;
