@@ -1,9 +1,4 @@
-import {
-  ChevronRight,
-  Circle,
-  LayoutDashboard,
-  Zap,
-} from "lucide-react";
+import { ChevronRight, Circle, LayoutDashboard, Zap } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -12,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import Link from "next/link";
 
 export default function Features() {
   return (
@@ -35,10 +31,12 @@ export default function Features() {
               </p>
             </CardContent>
             <CardFooter>
-              <Button variant="secondary">
-                Coba Sekarang
-                <ChevronRight />
-              </Button>
+              <Link href="/auth/signin">
+                <Button variant="secondary">
+                  Coba Sekarang
+                  <ChevronRight />
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
           <Card className="max-w-md">
@@ -55,10 +53,12 @@ export default function Features() {
               </p>
             </CardContent>
             <CardFooter>
-              <Button variant="secondary">
-                Coba Sekarang
-                <ChevronRight />
-              </Button>
+              <Link href="/auth/signin">
+                <Button variant="secondary">
+                  Coba Sekarang
+                  <ChevronRight />
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
           <Card className="max-w-md">
@@ -75,10 +75,12 @@ export default function Features() {
               </p>
             </CardContent>
             <CardFooter>
-              <Button variant="secondary">
-                Coba Sekarang
-                <ChevronRight />
-              </Button>
+              <Link href="/auth/signin">
+                <Button variant="secondary">
+                  Coba Sekarang
+                  <ChevronRight />
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
         </div>

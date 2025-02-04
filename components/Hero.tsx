@@ -24,7 +24,7 @@ export default function Hero() {
                 Buat Sekarang
               </Button>
             </Link>
-            <Link href="/auth/signin">
+            <Link href="/terms-and-conditions">
               <Button variant="outline" size="lg">
                 <LifeBuoy />
                 Pelajari

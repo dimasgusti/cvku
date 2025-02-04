@@ -32,7 +32,8 @@ export default function Features2() {
           />
         </div>
         <h2 className="text-xl md:text-2xl">
-          CVKU adalah solusi tepat untuk menonjolkan potensi Anda dengan mudah, cepat dan profesional. <br />
+          CVKU adalah solusi tepat untuk menonjolkan potensi Anda dengan mudah,
+          cepat dan profesional. <br />
           Mulai sekarang, tingkatkan peluang Anda dengan CV yang tak terlupakan!
         </h2>
       </div>
@@ -61,8 +62,8 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         <p>{description}</p>
       </CardContent>
       <CardFooter>
-        <Link href="/">
-          <Button>
+        <Link href="/auth/signin">
+          <Button variant="secondary">
             Coba Sekarang
             <ChevronRight />
           </Button>

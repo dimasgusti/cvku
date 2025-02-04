@@ -11,6 +11,7 @@ import Link from "next/link";
 export default function SignIn() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  // const { data: session } = useSession();
 
   useEffect(() => {
     if (router.query.error) {
@@ -25,9 +26,12 @@ export default function SignIn() {
     }
   };
 
+  // if(session){
+  //   router.push("/profile")
+  // }
+
   return (
     <div className="w-full h-screen flex flex-col md:flex-row">
-      {/* Left Section: Login Form */}
       <div className="flex-1 flex flex-col justify-center items-center bg-white px-4 py-10 md:py-0">
         <Link href="/">
           <img
@@ -72,14 +76,12 @@ export default function SignIn() {
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="underline">
-            Privacy Policy
+          <a href="/terms-and-conditions" className="underline">
+            Terms & Conditions
           </a>
           .
         </footer>
       </div>
-
-      {/* Right Section: Image */}
       <div className="flex-1 hidden md:block">
         <img
           src="/mountain.jpg"

@@ -8,8 +8,11 @@ import {
 } from "./ui/card";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Pricing() {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col justify-center items-center min-h-[30rem] py-16">
       <div className="flex flex-wrap flex-col justify-center items-center gap-4 px-4 w-full md:max-w-4xl">
@@ -26,7 +29,7 @@ export default function Pricing() {
               "Pilih dari 2 template dasar",
               "Cocok untuk fresh graduate dan freelancer baru",
             ]}
-            onActionClick={() => null}
+            onActionClick={() => router.push('/auth/signin')}
             actionLabel="Coba Sekarang"
           />
           <PricingCard
@@ -40,7 +43,7 @@ export default function Pricing() {
               "Akses ke 10+ template premium yang dirancang profesional.",
               "Dapatkan prioritas dukungan pelanggan",
             ]}
-            onActionClick={() => null}
+            onActionClick={() => router.push('/auth/signin')}
             actionLabel="Coba Sekarang"
           />
         </div>
