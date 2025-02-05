@@ -91,11 +91,11 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
 
   const hasRecords =
     (user?.project ?? []).length > 0 ||
-    (user?.experience?.length ?? 0) > 0 ||
-    (user?.award?.length ?? 0) > 0 ||
-    (user?.certification?.length ?? 0) > 0 ||
-    (user?.education?.length ?? 0) > 0 ||
-    (user?.volunteer?.length ?? 0) > 0;
+    (user?.experience ?? []).length > 0 ||
+    (user?.award ?? []).length > 0 ||
+    (user?.certification ?? []).length > 0 ||
+    (user?.education ?? []).length > 0 ||
+    (user?.volunteer ?? []).length > 0;
 
   return (
     <div className="flex flex-row justify-center items-center">

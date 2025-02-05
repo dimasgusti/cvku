@@ -32,12 +32,12 @@ type Education = {
 
 export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
   const hasRecords =
-    (user?.project.length ?? 0) > 0 ||
-    (user?.experience?.length ?? 0) > 0 ||
-    (user?.award?.length ?? 0) > 0 ||
-    (user?.certification?.length ?? 0) > 0 ||
-    (user?.education?.length ?? 0) > 0 ||
-    (user?.volunteer?.length ?? 0) > 0;
+    (user?.project ?? []).length > 0 ||
+    (user?.experience ?? []).length > 0 ||
+    (user?.award ?? []).length > 0 ||
+    (user?.certification ?? []).length > 0 ||
+    (user?.education ?? []).length > 0 ||
+    (user?.volunteer ?? []).length > 0;
 
   const getCountryName = (countryCode: string): string => {
     if (!countryCode) return "Unknown Country";
@@ -116,7 +116,9 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
             <h3 className="text-lg md:text-xl">About me</h3>
             {user.bio ? (
               <p className="whitespace-pre-line">{user.bio}</p>
-            ) : "No bio available."}
+            ) : (
+              "No bio available."
+            )}
           </div>
           {user.website || user.linkedIn || user.github ? (
             <>
@@ -174,7 +176,10 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <h2 className="text-lg md:text-xl">Project</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
                             {user.project.sort(sortByDate).map((project) => (
-                              <div key={project._id} className="flex flex-col gap-1">
+                              <div
+                                key={project._id}
+                                className="flex flex-col gap-1"
+                              >
                                 <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
                                   {project.title}
                                   <span className="text-sm">
@@ -296,129 +301,134 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                             Work Experience
                           </h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.experience.sort(sortByDate).map((experience, index) => (
-                              <div key={index} className="flex flex-col gap-1">
-                                <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
-                                  {experience.title}
-                                  <span className="text-sm">
-                                    {experience.company && experience.url ? (
-                                      <>
-                                        {" "}
-                                        at{" "}
-                                        <a
-                                          href={experience.url}
-                                          target="_blank"
-                                          className="underline"
-                                        >
-                                          {experience.company}
-                                        </a>
-                                      </>
-                                    ) : experience.company ? (
-                                      <> at {experience.company}</>
-                                    ) : (
-                                      experience.url && (
+                            {user.experience
+                              .sort(sortByDate)
+                              .map((experience, index) => (
+                                <div
+                                  key={index}
+                                  className="flex flex-col gap-1"
+                                >
+                                  <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
+                                    {experience.title}
+                                    <span className="text-sm">
+                                      {experience.company && experience.url ? (
                                         <>
                                           {" "}
+                                          at{" "}
                                           <a
                                             href={experience.url}
                                             target="_blank"
                                             className="underline"
                                           >
-                                            Visit Link
+                                            {experience.company}
                                           </a>
                                         </>
-                                      )
-                                    )}
-                                  </span>
-                                </h4>
-                                <p>
-                                  {new Date(
-                                    `${experience.fromMonth} 1`
-                                  ).toLocaleString("en-US", {
-                                    month: "short",
-                                  })}{" "}
-                                  {experience.from}{" "}
-                                  {experience.to && (
-                                    <span>
-                                      -{" "}
-                                      {experience.to === "ongoing" ? (
-                                        "Ongoing"
+                                      ) : experience.company ? (
+                                        <> at {experience.company}</>
                                       ) : (
-                                        <span>
-                                          {" "}
-                                          {new Date(
-                                            `${experience.toMonth} 1`
-                                          ).toLocaleString("en-US", {
-                                            month: "short",
-                                          })}{" "}
-                                          {experience.to}
-                                        </span>
+                                        experience.url && (
+                                          <>
+                                            {" "}
+                                            <a
+                                              href={experience.url}
+                                              target="_blank"
+                                              className="underline"
+                                            >
+                                              Visit Link
+                                            </a>
+                                          </>
+                                        )
                                       )}
                                     </span>
-                                  )}
-                                </p>
-                                <p>{experience.description}</p>
-                                {experience.images && (
-                                  <PhotoProvider>
-                                    <div className="overflow-x-auto flex flex-row space-x-4">
-                                      {Array.isArray(experience.images) ? (
-                                        experience.images.map(
-                                          (imageUrl, index) => (
-                                            <div
-                                              key={index}
-                                              className="flex-shrink-0"
-                                            >
-                                              <PhotoView
-                                                src={
-                                                  typeof imageUrl === "string"
-                                                    ? imageUrl
-                                                    : (
-                                                        imageUrl as StaticImageData
-                                                      ).src
-                                                }
+                                  </h4>
+                                  <p>
+                                    {new Date(
+                                      `${experience.fromMonth} 1`
+                                    ).toLocaleString("en-US", {
+                                      month: "short",
+                                    })}{" "}
+                                    {experience.from}{" "}
+                                    {experience.to && (
+                                      <span>
+                                        -{" "}
+                                        {experience.to === "ongoing" ? (
+                                          "Ongoing"
+                                        ) : (
+                                          <span>
+                                            {" "}
+                                            {new Date(
+                                              `${experience.toMonth} 1`
+                                            ).toLocaleString("en-US", {
+                                              month: "short",
+                                            })}{" "}
+                                            {experience.to}
+                                          </span>
+                                        )}
+                                      </span>
+                                    )}
+                                  </p>
+                                  <p>{experience.description}</p>
+                                  {experience.images && (
+                                    <PhotoProvider>
+                                      <div className="overflow-x-auto flex flex-row space-x-4">
+                                        {Array.isArray(experience.images) ? (
+                                          experience.images.map(
+                                            (imageUrl, index) => (
+                                              <div
+                                                key={index}
+                                                className="flex-shrink-0"
                                               >
-                                                <Image
-                                                  src={imageUrl}
-                                                  layout="intrinsic"
-                                                  alt={`Image ${user.username} ${index}`}
-                                                  width={100}
-                                                  height={50}
-                                                  className="cursor-pointer"
-                                                  unoptimized
-                                                />
-                                              </PhotoView>
-                                            </div>
+                                                <PhotoView
+                                                  src={
+                                                    typeof imageUrl === "string"
+                                                      ? imageUrl
+                                                      : (
+                                                          imageUrl as StaticImageData
+                                                        ).src
+                                                  }
+                                                >
+                                                  <Image
+                                                    src={imageUrl}
+                                                    layout="intrinsic"
+                                                    alt={`Image ${user.username} ${index}`}
+                                                    width={100}
+                                                    height={50}
+                                                    className="cursor-pointer"
+                                                    unoptimized
+                                                  />
+                                                </PhotoView>
+                                              </div>
+                                            )
                                           )
-                                        )
-                                      ) : (
-                                        <div className="flex-shrink-0">
-                                          <PhotoView
-                                            src={
-                                              typeof experience.images ===
-                                              "string"
-                                                ? experience.images
-                                                : (
-                                                    experience.images as StaticImageData
-                                                  ).src
-                                            }
-                                          >
-                                            <Image
-                                              src={experience.images}
-                                              layout="intrinsic"
-                                              alt={`Image ${user.username}`}
-                                              width={100}
-                                              height={50}
-                                              className="cursor-pointer"
-                                              unoptimized
-                                            />
-                                          </PhotoView>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </PhotoProvider>
-                                )}
-                              </div>
-                            ))}
+                                        ) : (
+                                          <div className="flex-shrink-0">
+                                            <PhotoView
+                                              src={
+                                                typeof experience.images ===
+                                                "string"
+                                                  ? experience.images
+                                                  : (
+                                                      experience.images as StaticImageData
+                                                    ).src
+                                              }
+                                            >
+                                              <Image
+                                                src={experience.images}
+                                                layout="intrinsic"
+                                                alt={`Image ${user.username}`}
+                                                width={100}
+                                                height={50}
+                                                className="cursor-pointer"
+                                                unoptimized
+                                              />
+                                            </PhotoView>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </PhotoProvider>
+                                  )}
+                                </div>
+                              ))}
                           </div>
                         </>
                       )}
@@ -531,114 +541,120 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Certification</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.certification.sort(sortByDate).map((certification, index) => (
-                              <div key={index} className="flex flex-col gap-1">
-                                <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
-                                  {certification.title}
-                                  <span className="text-sm">
-                                    {certification.organization &&
-                                    certification.url ? (
-                                      <>
-                                        {" "}
-                                        at{" "}
-                                        <a
-                                          href={certification.url}
-                                          target="_blank"
-                                          className="underline"
-                                        >
-                                          {certification.organization}
-                                        </a>
-                                      </>
-                                    ) : certification.organization ? (
-                                      <> at {certification.organization}</>
-                                    ) : (
-                                      certification.url && (
+                            {user.certification
+                              .sort(sortByDate)
+                              .map((certification, index) => (
+                                <div
+                                  key={index}
+                                  className="flex flex-col gap-1"
+                                >
+                                  <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
+                                    {certification.title}
+                                    <span className="text-sm">
+                                      {certification.organization &&
+                                      certification.url ? (
                                         <>
+                                          {" "}
+                                          at{" "}
                                           <a
                                             href={certification.url}
                                             target="_blank"
                                             className="underline"
                                           >
-                                            Visit Link
+                                            {certification.organization}
                                           </a>
                                         </>
-                                      )
-                                    )}
-                                  </span>
-                                </h4>
-                                <p>
-                                  {certification.issued}
-                                  {certification.expires && (
-                                    <span>
-                                      {" - "}
-                                      {certification.expires === "doesNotExpire"
-                                        ? "No Expiry"
-                                        : `Expires ${certification.expires}`}
-                                    </span>
-                                  )}
-                                </p>
-                                <p>{certification.description}</p>
-                                {certification.images && (
-                                  <PhotoProvider>
-                                    <div className="overflow-x-auto flex flex-row space-x-4">
-                                      {Array.isArray(certification.images) ? (
-                                        certification.images.map(
-                                          (imageUrl, index) => (
-                                            <div
-                                              key={index}
-                                              className="flex-shrink-0"
-                                            >
-                                              <PhotoView
-                                                src={
-                                                  typeof imageUrl === "string"
-                                                    ? imageUrl
-                                                    : (
-                                                        imageUrl as StaticImageData
-                                                      ).src
-                                                }
-                                              >
-                                                <Image
-                                                  src={imageUrl}
-                                                  layout="intrisinic"
-                                                  alt={`Image ${user.username} ${index}`}
-                                                  width={100}
-                                                  height={50}
-                                                  className="cursor-pointer"
-                                                  unoptimized
-                                                />
-                                              </PhotoView>
-                                            </div>
-                                          )
-                                        )
+                                      ) : certification.organization ? (
+                                        <> at {certification.organization}</>
                                       ) : (
-                                        <div className="flex-shrink-0">
-                                          <PhotoView
-                                            src={
-                                              typeof certification.images ===
-                                              "string"
-                                                ? certification.images
-                                                : (
-                                                    certification.images as StaticImageData
-                                                  ).src
-                                            }
-                                          >
-                                            <Image
-                                              src={certification.images}
-                                              layout="intrisinic"
-                                              alt={`Image ${user.username}`}
-                                              width={100}
-                                              height={50}
-                                              className="cursor-pointer"
-                                              unoptimized
-                                            />
-                                          </PhotoView>
-                                        </div>
+                                        certification.url && (
+                                          <>
+                                            <a
+                                              href={certification.url}
+                                              target="_blank"
+                                              className="underline"
+                                            >
+                                              Visit Link
+                                            </a>
+                                          </>
+                                        )
                                       )}
-                                    </div>
-                                  </PhotoProvider>
-                                )}
-                              </div>
-                            ))}
+                                    </span>
+                                  </h4>
+                                  <p>
+                                    {certification.issued}
+                                    {certification.expires && (
+                                      <span>
+                                        {" - "}
+                                        {certification.expires ===
+                                        "doesNotExpire"
+                                          ? "No Expiry"
+                                          : `Expires ${certification.expires}`}
+                                      </span>
+                                    )}
+                                  </p>
+                                  <p>{certification.description}</p>
+                                  {certification.images && (
+                                    <PhotoProvider>
+                                      <div className="overflow-x-auto flex flex-row space-x-4">
+                                        {Array.isArray(certification.images) ? (
+                                          certification.images.map(
+                                            (imageUrl, index) => (
+                                              <div
+                                                key={index}
+                                                className="flex-shrink-0"
+                                              >
+                                                <PhotoView
+                                                  src={
+                                                    typeof imageUrl === "string"
+                                                      ? imageUrl
+                                                      : (
+                                                          imageUrl as StaticImageData
+                                                        ).src
+                                                  }
+                                                >
+                                                  <Image
+                                                    src={imageUrl}
+                                                    layout="intrisinic"
+                                                    alt={`Image ${user.username} ${index}`}
+                                                    width={100}
+                                                    height={50}
+                                                    className="cursor-pointer"
+                                                    unoptimized
+                                                  />
+                                                </PhotoView>
+                                              </div>
+                                            )
+                                          )
+                                        ) : (
+                                          <div className="flex-shrink-0">
+                                            <PhotoView
+                                              src={
+                                                typeof certification.images ===
+                                                "string"
+                                                  ? certification.images
+                                                  : (
+                                                      certification.images as StaticImageData
+                                                    ).src
+                                              }
+                                            >
+                                              <Image
+                                                src={certification.images}
+                                                layout="intrisinic"
+                                                alt={`Image ${user.username}`}
+                                                width={100}
+                                                height={50}
+                                                className="cursor-pointer"
+                                                unoptimized
+                                              />
+                                            </PhotoView>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </PhotoProvider>
+                                  )}
+                                </div>
+                              ))}
                           </div>
                         </>
                       )}
@@ -648,114 +664,120 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                           <Separator />
                           <h2 className="text-lg md:text-xl">Education</h2>
                           <div className="grid grid-cols-1 gap-4 w-full">
-                            {user.education.sort(sortByDate).map((education, index) => (
-                              <div key={index} className="flex flex-col gap-1">
-                                <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
-                                  {education.title}
-                                  <span className="text-sm">
-                                    {education.institution && education.url ? (
-                                      <>
-                                        {" "}
-                                        at{" "}
-                                        <a
-                                          href={education.url}
-                                          target="_blank"
-                                          className="underline"
-                                        >
-                                          {education.institution}
-                                        </a>
-                                      </>
-                                    ) : education.institution ? (
-                                      <> at {education.institution}</>
-                                    ) : (
-                                      education.url && (
+                            {user.education
+                              .sort(sortByDate)
+                              .map((education, index) => (
+                                <div
+                                  key={index}
+                                  className="flex flex-col gap-1"
+                                >
+                                  <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
+                                    {education.title}
+                                    <span className="text-sm">
+                                      {education.institution &&
+                                      education.url ? (
                                         <>
+                                          {" "}
+                                          at{" "}
                                           <a
                                             href={education.url}
                                             target="_blank"
                                             className="underline"
                                           >
-                                            Visit Link
+                                            {education.institution}
                                           </a>
                                         </>
-                                      )
-                                    )}
-                                  </span>
-                                </h4>
-                                <p>
-                                  {education.from}
-                                  {education.to && (
-                                    <span>
-                                      {" - "}
-                                      {parseInt(education.to) >
-                                      new Date().getFullYear()
-                                        ? `Expected ${education.to}`
-                                        : education.to}
-                                    </span>
-                                  )}
-                                </p>
-                                <p>{education.description}</p>
-                                {education.images && (
-                                  <PhotoProvider>
-                                    <div className="overflow-x-auto flex flex-row space-x-4">
-                                      {Array.isArray(education.images) ? (
-                                        education.images.map(
-                                          (imageUrl, index) => (
-                                            <div
-                                              key={index}
-                                              className="flex-shrink-0"
-                                            >
-                                              <PhotoView
-                                                src={
-                                                  typeof imageUrl === "string"
-                                                    ? imageUrl
-                                                    : (
-                                                        imageUrl as StaticImageData
-                                                      ).src
-                                                }
-                                              >
-                                                <Image
-                                                  src={imageUrl}
-                                                  layout="intrisinic"
-                                                  alt={`Image ${user.username} ${index}`}
-                                                  width={100}
-                                                  height={50}
-                                                  className="cursor-pointer"
-                                                  unoptimized
-                                                />
-                                              </PhotoView>
-                                            </div>
-                                          )
-                                        )
+                                      ) : education.institution ? (
+                                        <> at {education.institution}</>
                                       ) : (
-                                        <div className="flex-shrink-0">
-                                          <PhotoView
-                                            src={
-                                              typeof education.images ===
-                                              "string"
-                                                ? education.images
-                                                : (
-                                                    education.images as StaticImageData
-                                                  ).src
-                                            }
-                                          >
-                                            <Image
-                                              src={education.images}
-                                              layout="intrisinic"
-                                              alt={`Image ${user.username}`}
-                                              width={100}
-                                              height={50}
-                                              className="cursor-pointer"
-                                              unoptimized
-                                            />
-                                          </PhotoView>
-                                        </div>
+                                        education.url && (
+                                          <>
+                                            <a
+                                              href={education.url}
+                                              target="_blank"
+                                              className="underline"
+                                            >
+                                              Visit Link
+                                            </a>
+                                          </>
+                                        )
                                       )}
-                                    </div>
-                                  </PhotoProvider>
-                                )}
-                              </div>
-                            ))}
+                                    </span>
+                                  </h4>
+                                  <p>
+                                    {education.from}
+                                    {education.to && (
+                                      <span>
+                                        {" - "}
+                                        {parseInt(education.to) >
+                                        new Date().getFullYear()
+                                          ? `Expected ${education.to}`
+                                          : education.to}
+                                      </span>
+                                    )}
+                                  </p>
+                                  <p>{education.description}</p>
+                                  {education.images && (
+                                    <PhotoProvider>
+                                      <div className="overflow-x-auto flex flex-row space-x-4">
+                                        {Array.isArray(education.images) ? (
+                                          education.images.map(
+                                            (imageUrl, index) => (
+                                              <div
+                                                key={index}
+                                                className="flex-shrink-0"
+                                              >
+                                                <PhotoView
+                                                  src={
+                                                    typeof imageUrl === "string"
+                                                      ? imageUrl
+                                                      : (
+                                                          imageUrl as StaticImageData
+                                                        ).src
+                                                  }
+                                                >
+                                                  <Image
+                                                    src={imageUrl}
+                                                    layout="intrisinic"
+                                                    alt={`Image ${user.username} ${index}`}
+                                                    width={100}
+                                                    height={50}
+                                                    className="cursor-pointer"
+                                                    unoptimized
+                                                  />
+                                                </PhotoView>
+                                              </div>
+                                            )
+                                          )
+                                        ) : (
+                                          <div className="flex-shrink-0">
+                                            <PhotoView
+                                              src={
+                                                typeof education.images ===
+                                                "string"
+                                                  ? education.images
+                                                  : (
+                                                      education.images as StaticImageData
+                                                    ).src
+                                              }
+                                            >
+                                              <Image
+                                                src={education.images}
+                                                layout="intrisinic"
+                                                alt={`Image ${user.username}`}
+                                                width={100}
+                                                height={50}
+                                                className="cursor-pointer"
+                                                unoptimized
+                                              />
+                                            </PhotoView>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </PhotoProvider>
+                                  )}
+                                </div>
+                              ))}
 
                             {user.volunteer.length > 0 && (
                               <>
@@ -764,136 +786,140 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                                   Volunteer
                                 </h2>
                                 <div className="grid grid-cols-1 gap-4 w-full">
-                                  {user.volunteer.sort(sortByDate).map((volunteer, index) => (
-                                    <div
-                                      key={index}
-                                      className="flex flex-col gap-1"
-                                    >
-                                      <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
-                                        {volunteer.title}
-                                        <span className="text-sm">
-                                          {volunteer.organization &&
-                                          volunteer.url ? (
-                                            <>
-                                              {" "}
-                                              at{" "}
-                                              <a
-                                                href={volunteer.url}
-                                                target="_blank"
-                                                className="underline"
-                                              >
-                                                {volunteer.organization}
-                                              </a>
-                                            </>
-                                          ) : volunteer.organization ? (
-                                            <> at {volunteer.organization}</>
-                                          ) : (
-                                            volunteer.url && (
+                                  {user.volunteer
+                                    .sort(sortByDate)
+                                    .map((volunteer, index) => (
+                                      <div
+                                        key={index}
+                                        className="flex flex-col gap-1"
+                                      >
+                                        <h4 className="text-lg md:text-xl font-semibold flex-col justify-between items-end">
+                                          {volunteer.title}
+                                          <span className="text-sm">
+                                            {volunteer.organization &&
+                                            volunteer.url ? (
                                               <>
+                                                {" "}
+                                                at{" "}
                                                 <a
                                                   href={volunteer.url}
                                                   target="_blank"
                                                   className="underline"
                                                 >
-                                                  Visit Link
+                                                  {volunteer.organization}
                                                 </a>
                                               </>
-                                            )
-                                          )}
-                                        </span>
-                                      </h4>
-                                      {volunteer.from && (
-                                        <p>
-                                          {volunteer.to ? (
-                                            <span>
-                                              {new Date(
-                                                `${volunteer.fromMonth} 1`
-                                              ).toLocaleString("en-US", {
-                                                month: "short",
-                                              })}{" "}
-                                              {volunteer.from} -{" "}
-                                              {new Date(
-                                                `${volunteer.toMonth} 1`
-                                              ).toLocaleString("en-US", {
-                                                month: "short",
-                                              })}{" "}
-                                              {volunteer.to}
-                                            </span>
-                                          ) : (
-                                            <span>
-                                              {new Date(
-                                                `${volunteer.fromMonth} 1`
-                                              ).toLocaleString("en-US", {
-                                                month: "short",
-                                              })}{" "}
-                                              {volunteer.from} - Ongoing
-                                            </span>
-                                          )}
-                                        </p>
-                                      )}
-                                      <p>{volunteer.description}</p>
-                                      {volunteer.images && (
-                                        <PhotoProvider>
-                                          <div className="overflow-x-auto flex flex-row space-x-4">
-                                            {Array.isArray(volunteer.images) ? (
-                                              volunteer.images.map(
-                                                (imageUrl, index) => (
-                                                  <div
-                                                    key={index}
-                                                    className="flex-shrink-0"
-                                                  >
-                                                    <PhotoView
-                                                      src={
-                                                        typeof imageUrl ===
-                                                        "string"
-                                                          ? imageUrl
-                                                          : (
-                                                              imageUrl as StaticImageData
-                                                            ).src
-                                                      }
-                                                    >
-                                                      <Image
-                                                        src={imageUrl}
-                                                        layout="intrinsic"
-                                                        alt={`Image ${user.username} ${index}`}
-                                                        width={100}
-                                                        height={50}
-                                                        className="cursor-pointer"
-                                                        unoptimized
-                                                      />
-                                                    </PhotoView>
-                                                  </div>
-                                                )
-                                              )
+                                            ) : volunteer.organization ? (
+                                              <> at {volunteer.organization}</>
                                             ) : (
-                                              <div className="flex-shrink-0">
-                                                <PhotoView
-                                                  src={
-                                                    typeof volunteer.images ===
-                                                    "string"
-                                                      ? volunteer.images
-                                                      : (
-                                                          volunteer.images as StaticImageData
-                                                        ).src
-                                                  }
-                                                >
-                                                  <Image
-                                                    src={volunteer.images}
-                                                    layout="intrinsic"
-                                                    alt={`Image ${user.username}`}
-                                                    width={100}
-                                                    height={50}
-                                                    className="cursor-pointer"
-                                                    unoptimized
-                                                  />
-                                                </PhotoView>
-                                              </div>
+                                              volunteer.url && (
+                                                <>
+                                                  <a
+                                                    href={volunteer.url}
+                                                    target="_blank"
+                                                    className="underline"
+                                                  >
+                                                    Visit Link
+                                                  </a>
+                                                </>
+                                              )
                                             )}
-                                          </div>
-                                        </PhotoProvider>
-                                      )}
-                                    </div>
-                                  ))}
+                                          </span>
+                                        </h4>
+                                        {volunteer.from && (
+                                          <p>
+                                            {volunteer.to ? (
+                                              <span>
+                                                {new Date(
+                                                  `${volunteer.fromMonth} 1`
+                                                ).toLocaleString("en-US", {
+                                                  month: "short",
+                                                })}{" "}
+                                                {volunteer.from} -{" "}
+                                                {new Date(
+                                                  `${volunteer.toMonth} 1`
+                                                ).toLocaleString("en-US", {
+                                                  month: "short",
+                                                })}{" "}
+                                                {volunteer.to}
+                                              </span>
+                                            ) : (
+                                              <span>
+                                                {new Date(
+                                                  `${volunteer.fromMonth} 1`
+                                                ).toLocaleString("en-US", {
+                                                  month: "short",
+                                                })}{" "}
+                                                {volunteer.from} - Ongoing
+                                              </span>
+                                            )}
+                                          </p>
+                                        )}
+                                        <p>{volunteer.description}</p>
+                                        {volunteer.images && (
+                                          <PhotoProvider>
+                                            <div className="overflow-x-auto flex flex-row space-x-4">
+                                              {Array.isArray(
+                                                volunteer.images
+                                              ) ? (
+                                                volunteer.images.map(
+                                                  (imageUrl, index) => (
+                                                    <div
+                                                      key={index}
+                                                      className="flex-shrink-0"
+                                                    >
+                                                      <PhotoView
+                                                        src={
+                                                          typeof imageUrl ===
+                                                          "string"
+                                                            ? imageUrl
+                                                            : (
+                                                                imageUrl as StaticImageData
+                                                              ).src
+                                                        }
+                                                      >
+                                                        <Image
+                                                          src={imageUrl}
+                                                          layout="intrinsic"
+                                                          alt={`Image ${user.username} ${index}`}
+                                                          width={100}
+                                                          height={50}
+                                                          className="cursor-pointer"
+                                                          unoptimized
+                                                        />
+                                                      </PhotoView>
+                                                    </div>
+                                                  )
+                                                )
+                                              ) : (
+                                                <div className="flex-shrink-0">
+                                                  <PhotoView
+                                                    src={
+                                                      typeof volunteer.images ===
+                                                      "string"
+                                                        ? volunteer.images
+                                                        : (
+                                                            volunteer.images as StaticImageData
+                                                          ).src
+                                                    }
+                                                  >
+                                                    <Image
+                                                      src={volunteer.images}
+                                                      layout="intrinsic"
+                                                      alt={`Image ${user.username}`}
+                                                      width={100}
+                                                      height={50}
+                                                      className="cursor-pointer"
+                                                      unoptimized
+                                                    />
+                                                  </PhotoView>
+                                                </div>
+                                              )}
+                                            </div>
+                                          </PhotoProvider>
+                                        )}
+                                      </div>
+                                    ))}
                                 </div>
                               </>
                             )}
