@@ -72,13 +72,9 @@ export default function SignIn() {
         )}
         <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           By logging in, you agree to our{" "}
-          <a href="#" className="underline">
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a href="/terms-and-conditions" className="underline">
+          <Link href="/terms-and-conditions" className="underline">
             Terms & Conditions
-          </a>
+          </Link>
           .
         </footer>
       </div>
