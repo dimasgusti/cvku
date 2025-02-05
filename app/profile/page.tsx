@@ -177,17 +177,6 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center py-8 md:py-4 lg:py-0">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
-        {/* {user?.username && (
-          <>
-            <div className="flex flex-row justify-between items-center gap-4 py-4">
-              <Link href={`/${user.username}`} target="_blank">
-                <Button variant="secondary" size="sm">
-                  <Eye /> Preview
-                </Button>
-              </Link>
-            </div>
-          </>
-        )} */}
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Avatar style={{ width: 100, height: 100 }}>
             <AvatarImage src={`${user?.image}`} alt={user?.username} />
@@ -1032,6 +1021,25 @@ export default function Profile() {
                         </PhotoProvider>
                       )}
                     </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Skill</p>
+              <Link href="/profile/skill">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {user.skills && (
+              <div className="flex flex-wrap gap-2">
+                {user.skills.map((skill, index) => (
+                  <div key={index} className="px-3 py-1 bg-gray-300 rounded">
+                    <p>{skill}</p>
                   </div>
                 ))}
               </div>

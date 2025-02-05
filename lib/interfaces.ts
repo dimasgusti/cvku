@@ -90,6 +90,7 @@ export  interface Profile {
     education: Education[];
     volunteer: Volunteer[];
     viewCount: number;
+    skills: string[];
 }
 
 export interface Transaction {
