@@ -3,7 +3,7 @@ import clientPromise from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
   try {
-    const { event, data } = req
+    const { event, data } = req.body
 
     const client = await clientPromise;
     const db = client.db('cvku');
