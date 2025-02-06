@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import clientPromise from '../../../lib/mongodb';
 
 export async function POST(req) {
   try {
-    const { db } = await connectToDatabase();
     const body = await req.json();
     const { event, data } = body;
+
+    const client = await clientPromise;
+    const db = client.db('cvku');
+    const collection = db.collection('transaction');  
 
     if (event === 'payment.received' && data?.createdAt) {
       const createdAtDate = new Date(data.createdAt);
       const endDate = new Date(createdAtDate.setFullYear(createdAtDate.getFullYear() + 1));
       
-      // Save to MongoDB
-      await db.collection('transactions').insertOne({
+      await collection.insertOne({
         userId: data.merchantId,
         transactionId: data.id,
         amount: data.amount,
@@ -23,16 +25,9 @@ export async function POST(req) {
       
       return NextResponse.json({ success: true, endDate });
     } else {
-        await db.collection('transactions').insertOne({
-            userId: data.merchantId,
-            transactionId:data.id,
-            amount: data.amount,
-            createdAt: createdAtDate,
-            status: data.status,
-        })
+      await collection.insertOne({ event, data });
+      return NextResponse.json({ success: true, message: 'Event logged' });
     }
-
-    return NextResponse.json({ success: false, message: 'Event not handled or missing data' }, { status: 400 });
   } catch (error) {
     console.error('Error processing webhook:', error);
     return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
