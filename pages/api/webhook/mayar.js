@@ -1,4 +1,3 @@
-// pages/api/webhook/mayar.js
 import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {
@@ -8,13 +7,19 @@ export default async function handler(req, res) {
 
   try {
     const { body } = req;
-    
-    // Establish MongoDB connection
-    const client = await clientPromise;
-    const db = client.db('cvku');  // Replace with your database name
-    const collection = db.collection('transaction');  // Replace with your collection name
 
-    // Insert the incoming data into MongoDB
+    if (body.event === "payment.received") {
+      const createdAt = new Date(body.data.createdAt);
+      const endDate = new Date(createdAt);
+      endDate.setFullYear(createdAt.getFullYear() + 1);
+
+      body.data.endDate = endDate.getTime(); 
+    }
+
+    const client = await clientPromise;
+    const db = client.db('cvku');
+    const collection = db.collection('transaction');
+
     const result = await collection.insertOne(body);
 
     return res.status(200).json({ message: 'Data saved successfully', result });

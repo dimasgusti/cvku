@@ -35,6 +35,12 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Profile } from "@/lib/interfaces";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 countries.registerLocale(enLocale);
 
@@ -84,15 +90,15 @@ export default function Profile() {
         body: JSON.stringify({
           email: session?.user?.email,
           langName,
-        })
-      })
+        }),
+      });
 
       const result = await response.json();
 
-      if(!response.ok) {
+      if (!response.ok) {
         toast.error(`Failed to delete language:`, result.error);
       } else {
-        toast.success("Language deleted successfully")
+        toast.success("Language deleted successfully");
         setBtnLoading(false);
         mutate(`/api/users/getUser?email=${session?.user?.email}`);
       }
@@ -227,10 +233,21 @@ export default function Profile() {
                 <>
                   <p className="text-lg text-black/90 flex flex-row gap-2 items-center">
                     {user?.username}{" "}
-                    <span className="flex flex-row gap-1 items-center text-sm text-green-700">
-                      <TrendingUp size={16} />
-                      {user.viewCount}
-                    </span>
+                    {user.viewCount && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <span className="flex flex-row gap-1 items-center text-sm text-green-700">
+                              <TrendingUp size={16} />
+                              {user.viewCount}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Total views this month
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
                   </p>
                   {user.title ? (
                     <p className="text-sm text-black/70">💼 {user.title}</p>
