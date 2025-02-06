@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { ExternalLink, Loader } from "lucide-react";
+import { ArrowUp, ExternalLink, Loader } from "lucide-react";
 
 interface PaymentResponse {
   statusCode: number;
@@ -68,7 +68,7 @@ export default function Billing() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 24999,
+          amount: 54999,
           customerName: session.user?.name,
           email: session.user.email,
           mobile: "0000000000",
@@ -104,6 +104,7 @@ export default function Billing() {
         if (data.success) {
           setTransactions(data.transactions);
           setLoading(false);
+          toast.success("Your payment link is ready.");
         }
       } catch (error) {
         console.error("Error fetching payment status:", error);
@@ -185,15 +186,22 @@ export default function Billing() {
                 {!isProPlanActive && (
                   <Button
                     onClick={handleUpgrade}
-                    disabled={btnLoading}
+                    disabled={btnLoading || !!paymentLink}
                     className="mb-2 w-full flex flex-row justify-center items-center"
                   >
-                    {btnLoading ? "Processing..." : "Upgrade to CVKU Pro"}
+                    {paymentLink
+                      ? "Your payment link is ready"
+                      : btnLoading
+                      ? "Processing..."
+                      : "Upgrade to CVKU Pro"}
+                    {paymentLink && (
+                      <ArrowUp className="text-green-500 mr-2" size={18} />
+                    )}
                   </Button>
                 )}
                 <CardDescription className="text-center text-xs">
                   {!isProPlanActive &&
-                    "Only Rp 24.999/month for premium features"}
+                    "Only Rp 54.999/year for premium features"}
                 </CardDescription>
               </CardContent>
             </Card>

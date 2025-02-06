@@ -22,7 +22,7 @@ export default function Pricing() {
             title="Starter"
             description="Semua kebutuhan CV Anda"
             price={0}
-            pricePeriod="/bulan"
+            pricePeriod="/selamanya"
             features={[
               "Buat CV Online dengan mudah",
               "Bagikan URL unik CV Anda",
@@ -35,8 +35,8 @@ export default function Pricing() {
           <PricingCard
             title="Pro"
             description="Tingkatkan kelas CV Anda"
-            price={24.999}
-            pricePeriod="/bulan"
+            price={54.999}
+            pricePeriod="/tahun"
             features={[
               "Semua fitur Starter",
               "Eksport CV ke PDF",
