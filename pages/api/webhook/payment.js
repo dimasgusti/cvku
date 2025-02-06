@@ -11,8 +11,6 @@ export async function POST(req) {
       const createdAtDate = new Date(data.createdAt);
       const endDate = new Date(createdAtDate.setFullYear(createdAtDate.getFullYear() + 1));
       
-      console.log('Updated endDate:', endDate);
-      
       // Save to MongoDB
       await db.collection('transactions').insertOne({
         userId: data.merchantId,
@@ -24,6 +22,14 @@ export async function POST(req) {
       });
       
       return NextResponse.json({ success: true, endDate });
+    } else {
+        await db.collection('transactions').insertOne({
+            userId: data.merchantId,
+            transactionId:data.id,
+            amount: data.amount,
+            createdAt: createdAtDate,
+            status: data.status,
+        })
     }
 
     return NextResponse.json({ success: false, message: 'Event not handled or missing data' }, { status: 400 });
