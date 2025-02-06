@@ -1,11 +1,11 @@
 "use client";
 
-import { Profile } from "@/lib/interfaces";
+// import { Profile } from "@/lib/interfaces";
 // import countries from "i18n-iso-countries";
 
-interface DefaultTemplateProps {
-  user: Profile;
-}
+// interface DefaultTemplateProps {
+//   user: Profile;
+// }
 
 // type ItemWithYear = {
 //   year?: string | number;
