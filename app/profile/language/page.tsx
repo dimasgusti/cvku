@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Loader, Save } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,6 +36,7 @@ interface Language {
 }
 
 export default function Language() {
+    const router = useRouter();
   const [btnLoading, setBtnLoading] = useState(false);
   const { data: session } = useSession();
 
@@ -73,7 +74,7 @@ export default function Language() {
       if (!response.ok) throw new Error("Failed to add language");
 
       toast.success("Language added successfully!");
-      redirect("/profile");
+      router.push("/profile")
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "An unexpected error occured."
