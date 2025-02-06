@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
-export async function POST(req) {
+export default async function handler(req, res) {
   try {
-    const { body } = req
+    const { event, data } = req
 
     const client = await clientPromise;
     const db = client.db('cvku');
     const collection = db.collection('transaction');  
 
-    const result = await collection.insertOne(body);
+    const result = await collection.insertOne(
+        event, data
+    );
 
     return res.status(200).json({ message: 'Data saved successfully', result });
   } catch (error) {
