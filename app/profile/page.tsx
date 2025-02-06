@@ -90,7 +90,7 @@ export default function Profile() {
       const result = await response.json();
 
       if(!response.ok) {
-        toast.error("Failed to delete language");
+        toast.error(`Failed to delete language:`, result.error);
       } else {
         toast.success("Language deleted successfully")
         setBtnLoading(false);
