@@ -423,12 +423,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -450,7 +450,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
@@ -581,12 +581,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -607,7 +607,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
@@ -736,12 +736,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -763,7 +763,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
@@ -913,12 +913,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -941,7 +941,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
@@ -1052,12 +1052,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -1078,7 +1078,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
@@ -1221,12 +1221,12 @@ export default function Profile() {
                                   >
                                     <Image
                                       src={imageUrl}
+                                      loading="lazy"
                                       layout="intrisinic"
                                       alt={`Image ${user.username} ${index}`}
                                       width={100}
                                       height={50}
                                       className="cursor-pointer"
-                                      unoptimized
                                     />
                                   </PhotoView>
                                 </div>
@@ -1248,7 +1248,7 @@ export default function Profile() {
                                     width={100}
                                     height={50}
                                     className="cursor-pointer"
-                                    unoptimized
+                                    loading="lazy"
                                   />
                                 </PhotoView>
                               </div>
