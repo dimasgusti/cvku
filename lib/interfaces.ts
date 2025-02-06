@@ -70,6 +70,11 @@ export  interface Volunteer {
     images: string[];
 }
 
+export interface Language {
+    langName: string;
+    level: string[];
+}
+
 export  interface Profile {
     _id: string;
     private: boolean;
@@ -91,6 +96,7 @@ export  interface Profile {
     volunteer: Volunteer[];
     viewCount: number;
     skills: string[];
+    languages: Language[];
 }
 
 export interface Transaction {

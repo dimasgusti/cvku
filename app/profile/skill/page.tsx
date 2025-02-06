@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ import { z } from "zod";
 type SkillFormValues = z.infer<typeof skillSchema>;
 
 interface Skill {
+  action?: string;
   email?: string;
   skills?: string[];
 }
@@ -51,6 +53,7 @@ export default function SkillForm() {
       }
 
       const skillData: Skill = {
+        action: "add",
         email: session.user.email,
         skills: values.skills,
       };
@@ -72,6 +75,7 @@ export default function SkillForm() {
       );
     } finally {
       setBtnLoading(false);
+      redirect("/profile");
     }
   };
 

@@ -73,6 +73,36 @@ export default function Profile() {
     }
   };
 
+  const handleRemoveLanguage = async (langName: string) => {
+    setBtnLoading(true);
+    try {
+      const response = await fetch(`/api/users/deleteLanguage`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          langName,
+        })
+      })
+
+      const result = await response.json();
+
+      if(!response.ok) {
+        toast.error("Failed to delete language");
+      } else {
+        toast.success("Language deleted successfully")
+        setBtnLoading(false);
+        mutate(`/api/users/getUser?email=${session?.user?.email}`);
+      }
+    } catch (error) {
+      console.error(`Failed to remove language`, error);
+      toast.error(`An error occurred while trying to remove language`);
+      setBtnLoading(false);
+    }
+  };
+
   const handleRemove = async (type: string, itemId: string) => {
     setBtnLoading(true);
     try {
@@ -255,163 +285,6 @@ export default function Profile() {
         ) : (
           <>
             <div className="flex flex-row justify-between items-center my-4">
-              <p className="text-lg text-black/70">Project</p>
-              <Link href="/profile/project">
-                <PlusCircle size={14} />
-              </Link>
-            </div>
-
-            {user.project && (
-              <div>
-                {user.project.sort(sortByDate).map((project) => (
-                  <div key={project._id} className="grid grid-cols-4 mt-2">
-                    <div className="text-sm">
-                      {project.year && (
-                        <p>
-                          {project.year === "ongoing" ? (
-                            "Ongoing"
-                          ) : (
-                            <span>
-                              {new Date(
-                                `${project.fromMonth} 1`
-                              ).toLocaleString("en-US", {
-                                month: "short",
-                              })}{" "}
-                              {project.year}
-                            </span>
-                          )}
-                        </p>
-                      )}
-                    </div>
-                    <div className="col-start-2 col-end-5">
-                      <div className="flex flex-row justify-between">
-                        <p>
-                          {project.title}
-                          {project.company && project.url ? (
-                            <>
-                              {" "}
-                              at{" "}
-                              <a
-                                href={project.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                {project.company}
-                              </a>
-                            </>
-                          ) : project.company ? (
-                            <> at {project.company}</>
-                          ) : project.url ? (
-                            <>
-                              {" "}
-                              <a
-                                href={project.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                Visit Link
-                              </a>
-                            </>
-                          ) : null}
-                        </p>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Trash2 size={14} color="red" />
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle className="font-thin">
-                                Are you sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your project from our
-                                servers.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                className="bg-red-500 text-white"
-                                onClick={() =>
-                                  handleRemove("project", project._id)
-                                }
-                                disabled={btnLoading}
-                              >
-                                {btnLoading ? (
-                                  <span className="flex flex-row items-center justify-center gap-2">
-                                    <Loader className="animate-spin" />
-                                    Removing...
-                                  </span>
-                                ) : (
-                                  <span>Remove</span>
-                                )}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                      <p className="text-sm text-black/70 py-1">
-                        {project.description}
-                      </p>
-                      {project.images && (
-                        <PhotoProvider>
-                          <div className="overflow-x-auto flex flex-row space-x-4">
-                            {Array.isArray(project.images) ? (
-                              project.images.map((imageUrl, index) => (
-                                <div key={index} className="flex-shrink-0">
-                                  <PhotoView
-                                    src={
-                                      typeof imageUrl === "string"
-                                        ? imageUrl
-                                        : (imageUrl as StaticImageData).src
-                                    }
-                                  >
-                                    <Image
-                                      src={imageUrl}
-                                      layout="intrisinic"
-                                      alt={`Image ${user.username} ${index}`}
-                                      width={100}
-                                      height={50}
-                                      className="cursor-pointer"
-                                      unoptimized
-                                    />
-                                  </PhotoView>
-                                </div>
-                              ))
-                            ) : (
-                              <div className="flex-shrink-0">
-                                <PhotoView
-                                  src={
-                                    typeof project.images === "string"
-                                      ? project.images
-                                      : (project.images as StaticImageData).src
-                                  }
-                                >
-                                  <Image
-                                    src={project.images}
-                                    layout="intrisinic"
-                                    alt={`Image ${user.username}`}
-                                    width={100}
-                                    height={50}
-                                    className="cursor-pointer"
-                                    unoptimized
-                                  />
-                                </PhotoView>
-                              </div>
-                            )}
-                          </div>
-                        </PhotoProvider>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <Separator className="my-4" />
-
-            <div className="flex flex-row justify-between items-center my-4">
               <p className="text-lg text-black/70">Work Experience</p>
               <Link href="/profile/work-experience">
                 <PlusCircle size={14} />
@@ -577,191 +450,57 @@ export default function Profile() {
             <Separator className="my-4" />
 
             <div className="flex flex-row justify-between items-center my-4">
-              <p className="text-lg text-black/70">Award</p>
-              <Link href="/profile/award">
+              <p className="text-lg text-black/70">Project</p>
+              <Link href="/profile/project">
                 <PlusCircle size={14} />
               </Link>
             </div>
 
-            {user.award && (
+            {user.project && (
               <div>
-                {user.award.sort(sortByDate).map((award) => (
-                  <div key={award._id} className="grid grid-cols-4 mt-2">
-                    <div className="text-sm">{award.year}</div>
-                    <div className="col-start-2 col-end-5">
-                      <div className="flex flex-row justify-between">
+                {user.project.sort(sortByDate).map((project) => (
+                  <div key={project._id} className="grid grid-cols-4 mt-2">
+                    <div className="text-sm">
+                      {project.year && (
                         <p>
-                          {award.title}
-                          {award.presentedBy && award.url ? (
-                            <>
-                              {" "}
-                              at{" "}
-                              <a
-                                href={award.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                {award.presentedBy}
-                              </a>
-                            </>
-                          ) : award.presentedBy ? (
-                            <> at {award.presentedBy}</>
-                          ) : award.url ? (
-                            <>
-                              <a
-                                href={award.url}
-                                target="_blank"
-                                className="underline"
-                              >
-                                Visit Link
-                              </a>
-                            </>
-                          ) : null}
+                          {project.year === "ongoing" ? (
+                            "Ongoing"
+                          ) : (
+                            <span>
+                              {new Date(
+                                `${project.fromMonth} 1`
+                              ).toLocaleString("en-US", {
+                                month: "short",
+                              })}{" "}
+                              {project.year}
+                            </span>
+                          )}
                         </p>
-                        <Dialog>
-                          <DialogTrigger>
-                            <Trash2 size={14} color="red" />
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle className="font-thin">
-                                Are you sure?
-                              </DialogTitle>
-                              <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your project from our
-                                servers.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <Button
-                                variant="outline"
-                                className="bg-red-500 text-white"
-                                onClick={() => handleRemove("award", award._id)}
-                                disabled={btnLoading}
-                              >
-                                {btnLoading ? (
-                                  <span className="flex flex-row items-center justify-center gap-2">
-                                    <Loader className="animate-spin" />
-                                    Removing...
-                                  </span>
-                                ) : (
-                                  <span>Remove</span>
-                                )}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                      <p className="text-sm text-black/70 py-1">
-                        {award.description}
-                      </p>
-                      {award.images && (
-                        <PhotoProvider>
-                          <div className="overflow-x-auto flex flex-row space-x-4">
-                            {Array.isArray(award.images) ? (
-                              award.images.map((imageUrl, index) => (
-                                <div key={index} className="flex-shrink-0">
-                                  <PhotoView
-                                    src={
-                                      typeof imageUrl === "string"
-                                        ? imageUrl
-                                        : (imageUrl as StaticImageData).src
-                                    }
-                                  >
-                                    <Image
-                                      src={imageUrl}
-                                      layout="intrisinic"
-                                      alt={`Image ${user.username} ${index}`}
-                                      width={100}
-                                      height={50}
-                                      className="cursor-pointer"
-                                      unoptimized
-                                    />
-                                  </PhotoView>
-                                </div>
-                              ))
-                            ) : (
-                              <div className="flex-shrink-0">
-                                <PhotoView
-                                  src={
-                                    typeof award.images === "string"
-                                      ? award.images
-                                      : (award.images as StaticImageData).src
-                                  }
-                                >
-                                  <Image
-                                    src={award.images}
-                                    layout="intrisinic"
-                                    alt={`Image ${user.username}`}
-                                    width={100}
-                                    height={50}
-                                    className="cursor-pointer"
-                                    unoptimized
-                                  />
-                                </PhotoView>
-                              </div>
-                            )}
-                          </div>
-                        </PhotoProvider>
                       )}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <Separator className="my-4" />
-
-            <div className="flex flex-row justify-between items-center my-4">
-              <p className="text-lg text-black/70">Certification</p>
-              <Link href="/profile/certification">
-                <PlusCircle size={14} />
-              </Link>
-            </div>
-
-            {user.certification && (
-              <div>
-                {user.certification.sort(sortByDate).map((certification) => (
-                  <div
-                    key={certification._id}
-                    className="grid grid-cols-4 mt-2"
-                  >
-                    <div>
-                      <p className="text-sm">
-                        {certification.issued}
-                        {certification.expires && (
-                          <span>
-                            {" - "}
-                            {certification.expires === "doesNotExpire"
-                              ? "No Expiry"
-                              : `Expires ${certification.expires}`}
-                          </span>
-                        )}
-                      </p>
-                    </div>
                     <div className="col-start-2 col-end-5">
                       <div className="flex flex-row justify-between">
                         <p>
-                          {certification.title}
-                          {certification.organization && certification.url ? (
+                          {project.title}
+                          {project.company && project.url ? (
                             <>
                               {" "}
                               at{" "}
                               <a
-                                href={certification.url}
+                                href={project.url}
                                 target="_blank"
                                 className="underline"
                               >
-                                {certification.organization}
+                                {project.company}
                               </a>
                             </>
-                          ) : certification.organization ? (
-                            <> at {certification.organization}</>
-                          ) : certification.url ? (
+                          ) : project.company ? (
+                            <> at {project.company}</>
+                          ) : project.url ? (
                             <>
+                              {" "}
                               <a
-                                href={certification.url}
+                                href={project.url}
                                 target="_blank"
                                 className="underline"
                               >
@@ -790,10 +529,7 @@ export default function Profile() {
                                 variant="outline"
                                 className="bg-red-500 text-white"
                                 onClick={() =>
-                                  handleRemove(
-                                    "certification",
-                                    certification._id
-                                  )
+                                  handleRemove("project", project._id)
                                 }
                                 disabled={btnLoading}
                               >
@@ -811,13 +547,13 @@ export default function Profile() {
                         </Dialog>
                       </div>
                       <p className="text-sm text-black/70 py-1">
-                        {certification.description}
+                        {project.description}
                       </p>
-                      {certification.images && (
+                      {project.images && (
                         <PhotoProvider>
                           <div className="overflow-x-auto flex flex-row space-x-4">
-                            {Array.isArray(certification.images) ? (
-                              certification.images.map((imageUrl, index) => (
+                            {Array.isArray(project.images) ? (
+                              project.images.map((imageUrl, index) => (
                                 <div key={index} className="flex-shrink-0">
                                   <PhotoView
                                     src={
@@ -842,15 +578,13 @@ export default function Profile() {
                               <div className="flex-shrink-0">
                                 <PhotoView
                                   src={
-                                    typeof certification.images === "string"
-                                      ? certification.images
-                                      : (
-                                          certification.images as StaticImageData
-                                        ).src
+                                    typeof project.images === "string"
+                                      ? project.images
+                                      : (project.images as StaticImageData).src
                                   }
                                 >
                                   <Image
-                                    src={certification.images}
+                                    src={project.images}
                                     layout="intrisinic"
                                     alt={`Image ${user.username}`}
                                     width={100}
@@ -1048,6 +782,302 @@ export default function Profile() {
             <Separator className="my-4" />
 
             <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Certification</p>
+              <Link href="/profile/certification">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {user.certification && (
+              <div>
+                {user.certification.sort(sortByDate).map((certification) => (
+                  <div
+                    key={certification._id}
+                    className="grid grid-cols-4 mt-2"
+                  >
+                    <div>
+                      <p className="text-sm">
+                        {certification.issued}
+                        {certification.expires && (
+                          <span>
+                            {" - "}
+                            {certification.expires === "doesNotExpire"
+                              ? "No Expiry"
+                              : `Expires ${certification.expires}`}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {certification.title}
+                          {certification.organization && certification.url ? (
+                            <>
+                              {" "}
+                              at{" "}
+                              <a
+                                href={certification.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                {certification.organization}
+                              </a>
+                            </>
+                          ) : certification.organization ? (
+                            <> at {certification.organization}</>
+                          ) : certification.url ? (
+                            <>
+                              <a
+                                href={certification.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                Visit Link
+                              </a>
+                            </>
+                          ) : null}
+                        </p>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Trash2 size={14} color="red" />
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-thin">
+                                Are you sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your project from our
+                                servers.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                className="bg-red-500 text-white"
+                                onClick={() =>
+                                  handleRemove(
+                                    "certification",
+                                    certification._id
+                                  )
+                                }
+                                disabled={btnLoading}
+                              >
+                                {btnLoading ? (
+                                  <span className="flex flex-row items-center justify-center gap-2">
+                                    <Loader className="animate-spin" />
+                                    Removing...
+                                  </span>
+                                ) : (
+                                  <span>Remove</span>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      <p className="text-sm text-black/70 py-1">
+                        {certification.description}
+                      </p>
+                      {certification.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(certification.images) ? (
+                              certification.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrisinic"
+                                      alt={`Image ${user.username} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof certification.images === "string"
+                                      ? certification.images
+                                      : (
+                                          certification.images as StaticImageData
+                                        ).src
+                                  }
+                                >
+                                  <Image
+                                    src={certification.images}
+                                    layout="intrisinic"
+                                    alt={`Image ${user.username}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Award</p>
+              <Link href="/profile/award">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {user.award && (
+              <div>
+                {user.award.sort(sortByDate).map((award) => (
+                  <div key={award._id} className="grid grid-cols-4 mt-2">
+                    <div className="text-sm">{award.year}</div>
+                    <div className="col-start-2 col-end-5">
+                      <div className="flex flex-row justify-between">
+                        <p>
+                          {award.title}
+                          {award.presentedBy && award.url ? (
+                            <>
+                              {" "}
+                              at{" "}
+                              <a
+                                href={award.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                {award.presentedBy}
+                              </a>
+                            </>
+                          ) : award.presentedBy ? (
+                            <> at {award.presentedBy}</>
+                          ) : award.url ? (
+                            <>
+                              <a
+                                href={award.url}
+                                target="_blank"
+                                className="underline"
+                              >
+                                Visit Link
+                              </a>
+                            </>
+                          ) : null}
+                        </p>
+                        <Dialog>
+                          <DialogTrigger>
+                            <Trash2 size={14} color="red" />
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-thin">
+                                Are you sure?
+                              </DialogTitle>
+                              <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your project from our
+                                servers.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                className="bg-red-500 text-white"
+                                onClick={() => handleRemove("award", award._id)}
+                                disabled={btnLoading}
+                              >
+                                {btnLoading ? (
+                                  <span className="flex flex-row items-center justify-center gap-2">
+                                    <Loader className="animate-spin" />
+                                    Removing...
+                                  </span>
+                                ) : (
+                                  <span>Remove</span>
+                                )}
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      <p className="text-sm text-black/70 py-1">
+                        {award.description}
+                      </p>
+                      {award.images && (
+                        <PhotoProvider>
+                          <div className="overflow-x-auto flex flex-row space-x-4">
+                            {Array.isArray(award.images) ? (
+                              award.images.map((imageUrl, index) => (
+                                <div key={index} className="flex-shrink-0">
+                                  <PhotoView
+                                    src={
+                                      typeof imageUrl === "string"
+                                        ? imageUrl
+                                        : (imageUrl as StaticImageData).src
+                                    }
+                                  >
+                                    <Image
+                                      src={imageUrl}
+                                      layout="intrisinic"
+                                      alt={`Image ${user.username} ${index}`}
+                                      width={100}
+                                      height={50}
+                                      className="cursor-pointer"
+                                      unoptimized
+                                    />
+                                  </PhotoView>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="flex-shrink-0">
+                                <PhotoView
+                                  src={
+                                    typeof award.images === "string"
+                                      ? award.images
+                                      : (award.images as StaticImageData).src
+                                  }
+                                >
+                                  <Image
+                                    src={award.images}
+                                    layout="intrisinic"
+                                    alt={`Image ${user.username}`}
+                                    width={100}
+                                    height={50}
+                                    className="cursor-pointer"
+                                    unoptimized
+                                  />
+                                </PhotoView>
+                              </div>
+                            )}
+                          </div>
+                        </PhotoProvider>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Separator className="my-4" />
+
+            <div className="flex flex-row justify-between items-center my-4">
               <p className="text-lg text-black/70">Volunteer</p>
               <Link href="/profile/volunteer">
                 <PlusCircle size={14} />
@@ -1217,12 +1247,68 @@ export default function Profile() {
 
             <Separator className="my-4" />
 
+            <div className="flex flex-row justify-between items-center my-4">
+              <p className="text-lg text-black/70">Language</p>
+              <Link href="/profile/language">
+                <PlusCircle size={14} />
+              </Link>
+            </div>
+
+            {user.languages && (
+              <div>
+                {user.languages.map((language, index) => (
+                  <div key={index} className="flex flex-row justify-between">
+                    <p className={index !== 0 ? "mt-2" : ""}>
+                      {language.langName} - {language.level}
+                    </p>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Trash2 size={14} color="red" />
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="font-thin">
+                            Are you sure?
+                          </DialogTitle>
+                          <DialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your language from our records.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button
+                            variant="outline"
+                            className="bg-red-500 text-white"
+                            onClick={() =>
+                              handleRemoveLanguage(language.langName)
+                            }
+                            disabled={btnLoading}
+                          >
+                            {btnLoading ? (
+                              <span className="flex flex-row items-center justify-center gap-2">
+                                <Loader className="animate-spin" />
+                                Removing...
+                              </span>
+                            ) : (
+                              <span>Remove</span>
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Separator className="my-4" />
+
             {user.website || user.linkedIn || user.github ? (
               <div>
                 <div className="flex flex-row justify-between items-center my-4">
                   <p className="text-lg text-black/70">Contact</p>
                   <Link href="/profile/settings">
-                    <PlusCircle size={14} />
+                    <Edit size={14} />
                   </Link>
                 </div>
 
