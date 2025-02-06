@@ -91,7 +91,7 @@ export default function Page() {
   const templateMap: { [key: string]: JSX.Element } = {
     basic: <DefaultTemplate user={user} />,
     minimalist: <MinimalistTemplate user={user} />,
-    santika: <SantikaTemplate user={user} />,
+    santika: <SantikaTemplate />,
   };
 
   const selectedTemplate =

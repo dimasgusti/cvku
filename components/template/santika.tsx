@@ -22,7 +22,8 @@ interface DefaultTemplateProps {
 //   to?: string | number;
 // };
 
-export default function SantikaTemplate({ user }: DefaultTemplateProps) {
+// export default function SantikaTemplate({ user }: DefaultTemplateProps) {
+export default function SantikaTemplate(){
   // const hasRecords =
   //   (user?.project ?? []).length > 0 ||
   //   (user?.experience ?? []).length > 0 ||
