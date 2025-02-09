@@ -8,7 +8,6 @@ async function getTransactionsByEmail(email) {
   try {
     await client.connect();
 
-    const db = client.db(dbName)
     const collection = client.db().collection("transaction");
 
     const transactions = await collection.find({
