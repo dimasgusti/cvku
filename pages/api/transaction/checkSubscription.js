@@ -1,7 +1,6 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.DATABASE_URL;
-const dbName = "cvku"
 
 async function getTransactionsByEmail(email) {
     const client = new MongoClient(uri)
