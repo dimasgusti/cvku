@@ -566,7 +566,7 @@ export default function MinimalistTemplate({ user }: DefaultTemplateProps) {
                                 {user.skills.map((skill, index) => (
                                   <div
                                     key={index}
-                                    className="px-3 py-1 bg-gray-300 rounded"
+                                    className="px-3 py-1 bg-black text-white rounded"
                                   >
                                     <p>{skill}</p>
                                   </div>
