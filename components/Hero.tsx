@@ -1,49 +1,36 @@
-import Link from "next/link";
 import { Button } from "./ui/button";
-import { FileText, LifeBuoy } from "lucide-react";
-import Image from "next/image";
+import { motion } from "motion/react";
 
 export default function Hero() {
   return (
-    <section className="w-full flex flex-row justify-center items-center py-32">
-      <div className="grid grid-cols-1 w-full md:max-w-4xl px-4">
-        <div>
+    <>
+      <motion.section
+        className="h-screen w-full flex flex-col lg:flex-row justify-center items-start lg:items-center p-4"
+        initial={{ y: -10 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="w-full lg:w-1/2 flex flex-col gap-2 relative">
           <h1 className="text-3xl md:text-4xl font-semibold font-serif">
-            Buat CV Profesional Tanpa Ribet!
+            Bingung Bikin CV?
           </h1>
-          <h2 className="text-xl md:text-2xl">Mudah, Cepat, dan Gratis</h2>
-          {/* <TextReveal /> */}
-          <p className="text-base md:text-lg max-w-xl">
-            Tingkatkan kualitas CV-mu dengan desain modern yang memukau. Saatnya
-            tampil beda dan unggul di mata perekrut dan klien!
-          </p>
-          <div className="flex flex-row items-center gap-4 mt-2">
-            <Link href="/auth/signin">
-              <Button variant="default" size="lg">
-                <FileText />
-                Buat Sekarang
-              </Button>
-            </Link>
-            <Link href="/terms-and-conditions">
-              <Button variant="outline" size="lg">
-                <LifeBuoy />
-                Pelajari
-              </Button>
-            </Link>
-          </div>
+          <h2 className="text-xl md:text-2xl">
+            Template menarik, desain profesional, semua ada di CVKU.
+          </h2>
+          <motion.div
+            initial={{ y: 0 }}
+            whileHover={{ y: -5 }}
+            className="w-fit mt-1"
+          >
+            <Button
+              variant="default"
+              className="w-fit font-semibold hover:shadow-xl transition-all duration-100"
+            >
+              Coba CVKU Gratis!
+            </Button>
+          </motion.div>
         </div>
-        <div className="flex flex-row justify-center items-start">
-          <Image
-            src="/hero.png"
-            alt="CV"
-            width={1440}
-            height={720}
-            className="rounded-sm w-full mt-4 overflow-hidden"
-            quality={100}
-            priority
-          />
-        </div>
-      </div>
-    </section>
+      </motion.section>
+    </>
   );
 }

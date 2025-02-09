@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 w-full">
       <Button
         className="fixed top-2 left-1 z-50 h-10 w-10"
-        variant="default"
+        variant="outline"
         size="icon"
         onClick={toggleSidebar}
       >

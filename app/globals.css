@@ -6,7 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -34,7 +33,7 @@ body {
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
  
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 217 96% 51%; /* #0563FC */
     --primary-foreground: 210 40% 98%;
  
     --secondary: 210 40% 96.1%;
@@ -70,8 +69,8 @@ body {
     --border: 216 34% 17%;
     --input: 216 34% 17%;
  
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
+    --primary: 217 96% 51%; /* #0563FC */
+    --primary-foreground: 210 40% 98%;
  
     --secondary: 222.2 47.4% 11.2%;
     --secondary-foreground: 210 40% 98%;

@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 
 const TextReveal = () => {
   const shareItems = [
-    "",
-    "Branding",
-    "sekarang",
-    "tanpa",
-    "biaya",
-    "apapun."
+    "Mudah",
+    "Cepat",
+    "Gratis",
+    "Profesional",
+    "Eksklusif",
+    "Modern."
   ];
   return (
     <div className="overflow-hidden w-72 lg:w-full my-2">

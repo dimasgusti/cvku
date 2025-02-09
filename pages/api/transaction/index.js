@@ -1,3 +1,5 @@
+import clientPromise from '../../../lib/mongodb';
+
 export default async function handler(req, res) {
   if (req.method === "POST") {
 
@@ -30,6 +32,28 @@ export default async function handler(req, res) {
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error creating new transaction." });
+    }
+  } else if (req.method === "GET"){
+    const { email } = req.query;
+
+    if(!email){
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    try {
+      const client = await clientPromise;
+      const db = client.db("cvku");
+
+      const transactions = await db.collection("transactions").find({ 
+        "data.customerEmail": email,
+      }).toArray();
+
+      console.log(transactions)
+
+      return res.status(200).json(transactions);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Error fetching transactions" });
     }
   } else {
     res.status(405).json({ error: "Method not allowed." });

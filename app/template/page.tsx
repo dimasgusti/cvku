@@ -1,10 +1,51 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { userSchema } from "@/lib/validation/UserSchema";
+import { Loader } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export default function TemplatePage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  async function onUpdate(values: z.infer<typeof userSchema>) {
+    setBtnLoading(true);
+    if (!session?.user?.email) {
+      toast.error("Please sign in to update template.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/users/updateUser", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Something went wrong");
+      }
+
+      toast.success("Template updated!");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unexpected error occurred."
+      );
+    } finally {
+      setBtnLoading(false);
+    }
+  }
 
   const templates = [
     {
@@ -21,60 +62,22 @@ export default function TemplatePage() {
       image: "/template/minimalist.jpeg",
       previewUrl: "https://cvku.vercel.app/dimasgusti",
     },
-    {
-      id: 3,
-      name: "Santika",
-      description: "Desain modern dengan warna kontras yang menarik.",
-      image: "/template/minimalist.jpeg",
-      previewUrl: "https://cvku.vercel.app/dimasgusti",
-    },
-    {
-      id: 4,
-      name: "Semilir",
-      description: "Desain modern dengan warna kontras yang menarik.",
-      image: "/template/minimalist.jpeg",
-      previewUrl: "https://cvku.vercel.app/dimasgusti",
-    },
-    {
-      id: 5,
-      name: "Swara",
-      description: "Desain modern dengan warna kontras yang menarik.",
-      image: "/template/minimalist.jpeg",
-      previewUrl: "https://cvku.vercel.app/dimasgusti",
-    },
   ];
 
   return (
-    <div className="flex flex-col justify-center items-start">
-      <div className="md:h-32 lg:h-40 w-full bg-primary text-primary-foreground flex flex-col justify-center items-center text-center py-8 md:py-4 lg:py-0">
-        <h1 className="text-3xl md:text-4xl font-semibold font-serif">
-          Template
-        </h1>
-        <p>Temukan template yang mencerminkan kepribadian Anda</p>
-      </div>
-      <div className="w-full px-4 md:px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-        {templates.map((template) => (
-          <div
-            key={template.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition duration-100"
-          >
-            <img
-              src={template.image}
-              alt={template.name}
-              className="w-full h-40 object-cover"
-            />
-            <div className="p-4">
-              <h2 className="text-lg font-semibold">{template.name}</h2>
-              <p className="text-sm text-gray-600">{template.description}</p>
-              <Button
-                className="mt-2 w-full"
-                onClick={() => router.push(template.previewUrl)}
-              >
-                Lihat Template
-              </Button>
-            </div>
-          </div>
-        ))}
+    <div className="h-screen w-full flex flex-col justify-center items-start p-4">
+      <h1 className="text-3xl md:text-4xl font-semibold font-serif">
+        Browse Template
+      </h1>
+      <div className="flex flex-col md:w-2/3 lg:w-1/3 mb-4">
+        <p>
+          Browse through our collection, find the perfect template for your
+          style, and start personalizing it to match your experience and skills.
+        </p>
+        <p>
+          Get inspired, choose your template, and begin building a CV that will
+          make a lasting impression.
+        </p>
       </div>
     </div>
   );

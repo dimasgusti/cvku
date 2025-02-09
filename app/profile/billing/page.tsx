@@ -4,9 +4,19 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ArrowLeft, ExternalLink, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -84,7 +94,7 @@ export default function Billing() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 1000,
+          amount: 500,
           customerName: session.user?.name,
           email: session.user.email,
           mobile: "0000000000",
@@ -154,12 +164,123 @@ export default function Billing() {
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
         <div className="space-y-4 pt-4 pb-16">
           <Link href="/profile">
-            <Button variant="outline" className="w-full">
+            <Button variant="outline">
               <ArrowLeft />
               Back to Profile
             </Button>
           </Link>
-          <Card className="shadow-lg rounded-lg border border-gray-200">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4">
+            <Card className="w-full">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardDescription className="font-serif text-xl md:text-2xl">
+                  CVKU
+                </CardDescription>
+                <CardTitle>Free Forever</CardTitle>
+              </CardHeader>
+              <CardContent>Perfect for starting a career.</CardContent>
+            </Card>
+            <Card className="w-full">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardDescription className="font-serif text-xl md:text-2xl">
+                  CVKU Pro
+                </CardDescription>
+                <CardTitle>
+                  Rp 54.999<span className="text-xs">/year</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>Ideal for professionals.</CardContent>
+              <CardFooter className="flex flex-row items-center justify-between">
+                <Button
+                  variant={transactionData ? "outline" : "default"}
+                  onClick={() => {
+                    if (transactionData?.isActive) {
+                      toast("You are already subscribed.");
+                    } else {
+                      handleUpgrade();
+                    }
+                  }}
+                >
+                  {transactionData?.isActive ? "Activated" : "Upgrade to Pro"}
+                </Button>
+                {transactionData?.isActive && latestTransaction && (
+                  <p>
+                    until{" "}
+                    {new Date(latestTransaction.endDate).toLocaleDateString(
+                      "en-GB"
+                    )}
+                  </p>
+                )}
+              </CardFooter>
+            </Card>
+          </div>
+          {paymentLink && (
+            <Card className="w-full">
+              <CardHeader>
+                <CardDescription className="font-serif text-xl md:text-2xl">
+                  Payment Link
+                </CardDescription>
+                <CardContent className="flex flex-col justify-center items-center gap-2">
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        paymentLink.data.link,
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
+                    variant="default"
+                    size='default'
+                    className="mt-2"
+                  >
+                    Pay Now
+                    <ExternalLink />
+                  </Button>
+                  <p className="text-xs text-black/70">Pay with QRIS and Bank Virtual Account</p>
+                  <p className="text-xs text-black/70">Please refresh after completing your payment.</p>
+                </CardContent>
+              </CardHeader>
+            </Card>
+          )}
+          <Card className="w-full">
+            <CardHeader>
+              <CardDescription className="font-serif text-xl md:text-2xl">
+                Latest Transaction
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {transactionData?.isActive ? (
+                latestTransaction && (
+                  <>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Payment Method</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            {new Date(
+                              latestTransaction.createdAt
+                            ).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>{latestTransaction.amount}</TableCell>
+                          <TableCell>
+                            {latestTransaction.paymentMethod}
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </>
+                )
+              ) : (
+                <p>No Transaction history found</p>
+              )}
+            </CardContent>
+          </Card>
+          {/* <Card className="shadow-lg rounded-lg border border-gray-200">
             <CardHeader>
               <CardTitle className="text-2xl font-semibold text-center">
                 Your Subscription Plan
@@ -238,7 +359,7 @@ export default function Billing() {
                 )}
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>

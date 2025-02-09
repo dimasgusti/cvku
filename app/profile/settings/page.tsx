@@ -204,7 +204,7 @@ export default function Settings() {
 
   if (status === 'loading') {
     return (
-      <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
+      <div className="flex flex-col justify-center items-center text-center min-h-screen">
         <Loader className="animate-spin" size={32} />
         Please wait
       </div>
