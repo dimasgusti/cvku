@@ -132,130 +132,6 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
           <>
             {hasRecords ? (
               <>
-                {user.project.length > 0 && (
-                  <>
-                    <Separator className="my-4" />
-                    <div className="flex flex-row justify-between items-center my-4">
-                      <p className="text-lg text-black/70">Project</p>
-                    </div>
-                    <div>
-                      {user.project.sort(sortByDate).map((project, index) => (
-                        <div key={index} className="grid grid-cols-4 mt-2">
-                          <div className="text-sm">
-                            {project.year && (
-                              <p>
-                                {project.year === "ongoing" ? (
-                                  "Ongoing"
-                                ) : (
-                                  <span>
-                                    {new Date(
-                                      `${project.fromMonth} 1`
-                                    ).toLocaleString("en-US", {
-                                      month: "short",
-                                    })}{" "}
-                                    {project.year}
-                                  </span>
-                                )}
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-start-2 col-end-5">
-                            <div className="flex flex-row justify-between">
-                              <p>
-                                {project.title}
-                                {project.company && project.url ? (
-                                  <>
-                                    {" "}
-                                    at{" "}
-                                    <a
-                                      href={project.url}
-                                      target="_blank"
-                                      className="underline"
-                                    >
-                                      {project.company}
-                                    </a>
-                                  </>
-                                ) : project.company ? (
-                                  <> at {project.company}</>
-                                ) : project.url ? (
-                                  <>
-                                    {" "}
-                                    <a
-                                      href={project.url}
-                                      target="_blank"
-                                      className="underline"
-                                    >
-                                      Visit Link
-                                    </a>
-                                  </>
-                                ) : null}
-                              </p>
-                            </div>
-                            <p className="text-sm text-black/70">
-                              {project.description}
-                            </p>
-                            {project.images && (
-                              <PhotoProvider>
-                                <div className="overflow-x-auto flex flex-row space-x-4">
-                                  {Array.isArray(project.images) ? (
-                                    project.images.map((imageUrl, index) => (
-                                      <div
-                                        key={index}
-                                        className="flex-shrink-0"
-                                      >
-                                        <PhotoView
-                                          src={
-                                            typeof imageUrl === "string"
-                                              ? imageUrl
-                                              : (imageUrl as StaticImageData)
-                                                  .src
-                                          }
-                                        >
-                                          <Image
-                                            src={imageUrl}
-                                            layout="intrinsic"
-                                            alt={`Image ${user.username} ${index}`}
-                                            width={100}
-                                            height={50}
-                                            className="cursor-pointer"
-                                            unoptimized
-                                          />
-                                        </PhotoView>
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <div className="flex-shrink-0">
-                                      <PhotoView
-                                        src={
-                                          typeof project.images === "string"
-                                            ? project.images
-                                            : (
-                                                project.images as StaticImageData
-                                              ).src
-                                        }
-                                      >
-                                        <Image
-                                          src={project.images}
-                                          layout="intrinsic"
-                                          alt={`Image ${user.username}`}
-                                          width={100}
-                                          height={50}
-                                          className="cursor-pointer"
-                                          unoptimized
-                                        />
-                                      </PhotoView>
-                                    </div>
-                                  )}
-                                </div>
-                              </PhotoProvider>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
                 {user.experience.length > 0 && (
                   <>
                     <Separator className="my-4" />
@@ -393,38 +269,56 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                   </>
                 )}
 
-                {user.award.length > 0 && (
+                {user.project.length > 0 && (
                   <>
                     <Separator className="my-4" />
                     <div className="flex flex-row justify-between items-center my-4">
-                      <p className="text-lg text-black/70">Award</p>
+                      <p className="text-lg text-black/70">Project</p>
                     </div>
                     <div>
-                      {user.award.sort(sortByDate).map((award, index) => (
+                      {user.project.sort(sortByDate).map((project, index) => (
                         <div key={index} className="grid grid-cols-4 mt-2">
-                          <div className="text-sm">{award.year}</div>
+                          <div className="text-sm">
+                            {project.year && (
+                              <p>
+                                {project.year === "ongoing" ? (
+                                  "Ongoing"
+                                ) : (
+                                  <span>
+                                    {new Date(
+                                      `${project.fromMonth} 1`
+                                    ).toLocaleString("en-US", {
+                                      month: "short",
+                                    })}{" "}
+                                    {project.year}
+                                  </span>
+                                )}
+                              </p>
+                            )}
+                          </div>
                           <div className="col-start-2 col-end-5">
                             <div className="flex flex-row justify-between">
                               <p>
-                                {award.title}
-                                {award.presentedBy && award.url ? (
+                                {project.title}
+                                {project.company && project.url ? (
                                   <>
                                     {" "}
                                     at{" "}
                                     <a
-                                      href={award.url}
+                                      href={project.url}
                                       target="_blank"
                                       className="underline"
                                     >
-                                      {award.presentedBy}
+                                      {project.company}
                                     </a>
                                   </>
-                                ) : award.presentedBy ? (
-                                  <> at {award.presentedBy}</>
-                                ) : award.url ? (
+                                ) : project.company ? (
+                                  <> at {project.company}</>
+                                ) : project.url ? (
                                   <>
+                                    {" "}
                                     <a
-                                      href={award.url}
+                                      href={project.url}
                                       target="_blank"
                                       className="underline"
                                     >
@@ -435,13 +329,13 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                               </p>
                             </div>
                             <p className="text-sm text-black/70">
-                              {award.description}
+                              {project.description}
                             </p>
-                            {award.images && (
+                            {project.images && (
                               <PhotoProvider>
                                 <div className="overflow-x-auto flex flex-row space-x-4">
-                                  {Array.isArray(award.images) ? (
-                                    award.images.map((imageUrl, index) => (
+                                  {Array.isArray(project.images) ? (
+                                    project.images.map((imageUrl, index) => (
                                       <div
                                         key={index}
                                         className="flex-shrink-0"
@@ -456,7 +350,7 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                                         >
                                           <Image
                                             src={imageUrl}
-                                            layout="intrisinic"
+                                            layout="intrinsic"
                                             alt={`Image ${user.username} ${index}`}
                                             width={100}
                                             height={50}
@@ -470,15 +364,16 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                                     <div className="flex-shrink-0">
                                       <PhotoView
                                         src={
-                                          typeof award.images === "string"
-                                            ? award.images
-                                            : (award.images as StaticImageData)
-                                                .src
+                                          typeof project.images === "string"
+                                            ? project.images
+                                            : (
+                                                project.images as StaticImageData
+                                              ).src
                                         }
                                       >
                                         <Image
-                                          src={award.images}
-                                          layout="intrisinic"
+                                          src={project.images}
+                                          layout="intrinsic"
                                           alt={`Image ${user.username}`}
                                           width={100}
                                           height={50}
@@ -494,131 +389,6 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                           </div>
                         </div>
                       ))}
-                    </div>
-                  </>
-                )}
-
-                {user.certification.length > 0 && (
-                  <>
-                    <Separator className="my-4" />
-                    <div className="flex flex-row justify-between items-center my-4">
-                      <p className="text-lg text-black/70">Certification</p>
-                    </div>
-                    <div>
-                      {user.certification
-                        .sort(sortByDate)
-                        .map((certification, index) => (
-                          <div key={index} className="grid grid-cols-4 mt-2">
-                            <div>
-                              <p className="text-sm">
-                                {certification.issued}
-                                {certification.expires && (
-                                  <span>
-                                    {" - "}
-                                    {certification.expires === "doesNotExpire"
-                                      ? "No Expiry"
-                                      : `Expires ${certification.expires}`}
-                                  </span>
-                                )}
-                              </p>
-                            </div>
-                            <div className="col-start-2 col-end-5">
-                              <div className="flex flex-row justify-between">
-                                <p>
-                                  {certification.title}
-                                  {certification.organization &&
-                                  certification.url ? (
-                                    <>
-                                      {" "}
-                                      at{" "}
-                                      <a
-                                        href={certification.url}
-                                        target="_blank"
-                                        className="underline"
-                                      >
-                                        {certification.organization}
-                                      </a>
-                                    </>
-                                  ) : certification.organization ? (
-                                    <> at {certification.organization}</>
-                                  ) : certification.url ? (
-                                    <>
-                                      <a
-                                        href={certification.url}
-                                        target="_blank"
-                                        className="underline"
-                                      >
-                                        Visit Link
-                                      </a>
-                                    </>
-                                  ) : null}
-                                </p>
-                              </div>
-                              <p className="text-sm text-black/70">
-                                {certification.description}
-                              </p>
-                              {certification.images && (
-                                <PhotoProvider>
-                                  <div className="overflow-x-auto flex flex-row space-x-4">
-                                    {Array.isArray(certification.images) ? (
-                                      certification.images.map(
-                                        (imageUrl, index) => (
-                                          <div
-                                            key={index}
-                                            className="flex-shrink-0"
-                                          >
-                                            <PhotoView
-                                              src={
-                                                typeof imageUrl === "string"
-                                                  ? imageUrl
-                                                  : (
-                                                      imageUrl as StaticImageData
-                                                    ).src
-                                              }
-                                            >
-                                              <Image
-                                                src={imageUrl}
-                                                layout="intrisinic"
-                                                alt={`Image ${user.username} ${index}`}
-                                                width={100}
-                                                height={50}
-                                                className="cursor-pointer"
-                                                unoptimized
-                                              />
-                                            </PhotoView>
-                                          </div>
-                                        )
-                                      )
-                                    ) : (
-                                      <div className="flex-shrink-0">
-                                        <PhotoView
-                                          src={
-                                            typeof certification.images ===
-                                            "string"
-                                              ? certification.images
-                                              : (
-                                                  certification.images as StaticImageData
-                                                ).src
-                                          }
-                                        >
-                                          <Image
-                                            src={certification.images}
-                                            layout="intrisinic"
-                                            alt={`Image ${user.username}`}
-                                            width={100}
-                                            height={50}
-                                            className="cursor-pointer"
-                                            unoptimized
-                                          />
-                                        </PhotoView>
-                                      </div>
-                                    )}
-                                  </div>
-                                </PhotoProvider>
-                              )}
-                            </div>
-                          </div>
-                        ))}
                     </div>
                   </>
                 )}
@@ -747,6 +517,257 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                             </div>
                           </div>
                         ))}
+                    </div>
+                  </>
+                )}
+
+                {user.skills.length > 0 && (
+                  <>
+                    <Separator className="my-4" />
+                    <div className="flex flex-row justify-between items-center my-4">
+                      <p className="text-lg text-black/70">Skill</p>
+                    </div>
+                    <div>
+                      {user.skills && (
+                        <div className="flex flex-wrap gap-2">
+                          {user.skills.map((skill, index) => (
+                            <div
+                              key={index}
+                              className="px-3 py-1 bg-gray-300 rounded"
+                            >
+                              <p>{skill}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+                {user.certification.length > 0 && (
+                  <>
+                    <Separator className="my-4" />
+                    <div className="flex flex-row justify-between items-center my-4">
+                      <p className="text-lg text-black/70">Certification</p>
+                    </div>
+                    <div>
+                      {user.certification
+                        .sort(sortByDate)
+                        .map((certification, index) => (
+                          <div key={index} className="grid grid-cols-4 mt-2">
+                            <div>
+                              <p className="text-sm">
+                                {certification.issued}
+                                {certification.expires && (
+                                  <span>
+                                    {" - "}
+                                    {certification.expires === "doesNotExpire"
+                                      ? "No Expiry"
+                                      : `Expires ${certification.expires}`}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                            <div className="col-start-2 col-end-5">
+                              <div className="flex flex-row justify-between">
+                                <p>
+                                  {certification.title}
+                                  {certification.organization &&
+                                  certification.url ? (
+                                    <>
+                                      {" "}
+                                      at{" "}
+                                      <a
+                                        href={certification.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        {certification.organization}
+                                      </a>
+                                    </>
+                                  ) : certification.organization ? (
+                                    <> at {certification.organization}</>
+                                  ) : certification.url ? (
+                                    <>
+                                      <a
+                                        href={certification.url}
+                                        target="_blank"
+                                        className="underline"
+                                      >
+                                        Visit Link
+                                      </a>
+                                    </>
+                                  ) : null}
+                                </p>
+                              </div>
+                              <p className="text-sm text-black/70">
+                                {certification.description}
+                              </p>
+                              {certification.images && (
+                                <PhotoProvider>
+                                  <div className="overflow-x-auto flex flex-row space-x-4">
+                                    {Array.isArray(certification.images) ? (
+                                      certification.images.map(
+                                        (imageUrl, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex-shrink-0"
+                                          >
+                                            <PhotoView
+                                              src={
+                                                typeof imageUrl === "string"
+                                                  ? imageUrl
+                                                  : (
+                                                      imageUrl as StaticImageData
+                                                    ).src
+                                              }
+                                            >
+                                              <Image
+                                                src={imageUrl}
+                                                layout="intrisinic"
+                                                alt={`Image ${user.username} ${index}`}
+                                                width={100}
+                                                height={50}
+                                                className="cursor-pointer"
+                                                unoptimized
+                                              />
+                                            </PhotoView>
+                                          </div>
+                                        )
+                                      )
+                                    ) : (
+                                      <div className="flex-shrink-0">
+                                        <PhotoView
+                                          src={
+                                            typeof certification.images ===
+                                            "string"
+                                              ? certification.images
+                                              : (
+                                                  certification.images as StaticImageData
+                                                ).src
+                                          }
+                                        >
+                                          <Image
+                                            src={certification.images}
+                                            layout="intrisinic"
+                                            alt={`Image ${user.username}`}
+                                            width={100}
+                                            height={50}
+                                            className="cursor-pointer"
+                                            unoptimized
+                                          />
+                                        </PhotoView>
+                                      </div>
+                                    )}
+                                  </div>
+                                </PhotoProvider>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </>
+                )}
+                {user.award.length > 0 && (
+                  <>
+                    <Separator className="my-4" />
+                    <div className="flex flex-row justify-between items-center my-4">
+                      <p className="text-lg text-black/70">Award</p>
+                    </div>
+                    <div>
+                      {user.award.sort(sortByDate).map((award, index) => (
+                        <div key={index} className="grid grid-cols-4 mt-2">
+                          <div className="text-sm">{award.year}</div>
+                          <div className="col-start-2 col-end-5">
+                            <div className="flex flex-row justify-between">
+                              <p>
+                                {award.title}
+                                {award.presentedBy && award.url ? (
+                                  <>
+                                    {" "}
+                                    at{" "}
+                                    <a
+                                      href={award.url}
+                                      target="_blank"
+                                      className="underline"
+                                    >
+                                      {award.presentedBy}
+                                    </a>
+                                  </>
+                                ) : award.presentedBy ? (
+                                  <> at {award.presentedBy}</>
+                                ) : award.url ? (
+                                  <>
+                                    <a
+                                      href={award.url}
+                                      target="_blank"
+                                      className="underline"
+                                    >
+                                      Visit Link
+                                    </a>
+                                  </>
+                                ) : null}
+                              </p>
+                            </div>
+                            <p className="text-sm text-black/70">
+                              {award.description}
+                            </p>
+                            {award.images && (
+                              <PhotoProvider>
+                                <div className="overflow-x-auto flex flex-row space-x-4">
+                                  {Array.isArray(award.images) ? (
+                                    award.images.map((imageUrl, index) => (
+                                      <div
+                                        key={index}
+                                        className="flex-shrink-0"
+                                      >
+                                        <PhotoView
+                                          src={
+                                            typeof imageUrl === "string"
+                                              ? imageUrl
+                                              : (imageUrl as StaticImageData)
+                                                  .src
+                                          }
+                                        >
+                                          <Image
+                                            src={imageUrl}
+                                            layout="intrisinic"
+                                            alt={`Image ${user.username} ${index}`}
+                                            width={100}
+                                            height={50}
+                                            className="cursor-pointer"
+                                            unoptimized
+                                          />
+                                        </PhotoView>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <div className="flex-shrink-0">
+                                      <PhotoView
+                                        src={
+                                          typeof award.images === "string"
+                                            ? award.images
+                                            : (award.images as StaticImageData)
+                                                .src
+                                        }
+                                      >
+                                        <Image
+                                          src={award.images}
+                                          layout="intrisinic"
+                                          alt={`Image ${user.username}`}
+                                          width={100}
+                                          height={50}
+                                          className="cursor-pointer"
+                                          unoptimized
+                                        />
+                                      </PhotoView>
+                                    </div>
+                                  )}
+                                </div>
+                              </PhotoProvider>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </>
                 )}
@@ -888,6 +909,31 @@ export default function DefaultTemplate({ user }: DefaultTemplateProps) {
                             </div>
                           </div>
                         ))}
+                    </div>
+                  </>
+                )}
+
+                {user.languages.length > 0 && (
+                  <>
+                    <Separator className="my-4" />
+                    <div className="flex flex-row justify-between items-center my-4">
+                      <p className="text-lg text-black/70">Language</p>
+                    </div>
+                    <div>
+                      {user.languages && (
+                        <div>
+                          {user.languages.map((language, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-row justify-between"
+                            >
+                              <p className={index !== 0 ? "mt-2" : ""}>
+                                {language.langName} - {language.level}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
