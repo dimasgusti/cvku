@@ -200,7 +200,7 @@ export default function Billing() {
                     }
                   }}
                 >
-                  {transactionData?.isActive ? "Activated" : "Upgrade to Pro"}
+                  {btnLoading ? "Processing..." : transactionData?.isActive ? "Activated" : "Upgrade to Pro"}
                 </Button>
                 {transactionData?.isActive && latestTransaction && (
                   <p>
