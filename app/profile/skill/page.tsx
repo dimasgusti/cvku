@@ -113,8 +113,9 @@ export default function SkillForm() {
             className="space-y-4 pt-4 pb-16"
           >
             <Link href="/profile">
-              <Button variant="outline" type="button">
+              <Button variant="outline">
                 <ArrowLeft />
+                Back to Profile
               </Button>
             </Link>
             <h2 className="text-xl md:text-2xl">Update Skill</h2>

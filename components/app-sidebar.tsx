@@ -29,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const { data: subscriptionData } = useSWR<ResponseData>(
     session?.user?.email
-      ? `/api/transaction/getTransactionByEmail?email=${session.user.email}`
+      ? `/api/transaction/checkSubscription?email=${session.user.email}`
       : null,
     fetcher
   );
@@ -39,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       name: userData?.username || "",
       email: session?.user?.email || "",
       avatar: userData?.image || session?.user?.image || "",
-      proPlan: subscriptionData?.isSubscriptionValidToday ?? false,
+      proPlan: subscriptionData?.isActive ?? false,
     },
     navMain: [
       {

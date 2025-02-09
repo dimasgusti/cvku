@@ -224,10 +224,11 @@ export default function Settings() {
             className="space-y-4 pt-4 pb-16"
           >
             <Link href="/profile">
-              <Button variant="outline">
-                <ArrowLeft />
-              </Button>
-            </Link>
+                <Button variant='outline'>
+                  <ArrowLeft />
+                  Back to Profile
+                </Button>
+              </Link>
             <h2 className="text-xl md:text-2xl">Update Profile</h2>
             <Avatar style={{ width: 100, height: 100 }}>
               <AvatarImage

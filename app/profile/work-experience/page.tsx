@@ -198,8 +198,9 @@ export default function AddWorkExperience() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <Link href="/profile">
-                <Button>
+                <Button variant='outline'>
                   <ArrowLeft />
+                  Back to Profile
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Experience</h2>

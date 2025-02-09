@@ -122,7 +122,5 @@ export interface Transaction {
   }
 
 export interface ResponseData {
-    success: boolean;
-    transactions: Transaction[];
-    isSubscriptionValidToday: boolean;
+    isActive: boolean;
 }

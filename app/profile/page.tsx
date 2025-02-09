@@ -61,10 +61,15 @@ type Education = {
   to?: string | number;
 };
 
+interface TransactionResponse {
+  isActive: boolean;
+}
+
 export default function Profile() {
   const { data: session, status } = useSession();
   const [btnLoading, setBtnLoading] = useState(false);
   const router = useRouter();
+  const userEmail = session?.user?.email;
 
   const getCountryName = (countryCode: string): string => {
     if (!countryCode) return "Unknown Country";
@@ -192,16 +197,19 @@ export default function Profile() {
   };
 
   const { data: user } = useSWR<Profile>(
-    session?.user?.email
-      ? `/api/users/getUser?email=${session.user.email}`
-      : null,
+    userEmail ? `/api/users/getUser?email=${userEmail}` : null,
+    fetcher
+  );
+
+  const { data: transaction } = useSWR<TransactionResponse>(
+    userEmail ? `/api/transaction/checkSubscription?email=${userEmail}` : null,
     fetcher
   );
 
   if (status === "unauthenticated") {
     redirect("/auth/signin");
   }
-  if (status === "loading" || !user) {
+  if (status === "loading" || !user || !transaction) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -213,6 +221,17 @@ export default function Profile() {
   return (
     <div className="flex flex-row justify-center items-center py-8 md:py-4 lg:py-0">
       <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4 pt-4 pb-16">
+        <div className="flex flex-row justify-center items-center py-4">
+          {transaction.isActive ? (
+            <Button className="w-full" onClick={() => router.push("/profile/billing")}>
+              You&apos;re subscribed to CVKU Pro!
+            </Button>
+          ) : (
+            <Button className="w-full" onClick={() => router.push("/profile/billing")}>
+              Get CVKU Pro
+            </Button>
+          )}
+        </div>
         <div className="flex flex-row justify-start items-center gap-4 py-4">
           <Avatar style={{ width: 100, height: 100 }}>
             <AvatarImage src={`${user?.image}`} alt={user?.username} />

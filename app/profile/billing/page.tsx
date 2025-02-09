@@ -1,20 +1,55 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, ExternalLink, Loader } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Link from "next/link";
-import { ArrowUp, ExternalLink, Loader } from "lucide-react";
+
+interface TransactionData {
+  id: string;
+  transactionId: string;
+  status: string;
+  transactionStatus: string;
+  createdAt: string;
+  updatedAt: string;
+  merchantId: string;
+  merchantName: string;
+  merchantEmail: string;
+  customerName: string;
+  customerEmail: string;
+  customerMobile: string;
+  amount: number;
+  isAdminFeeBorneByCustomer: boolean;
+  isChannelFeeBorneByCustomer: boolean;
+  productId: string;
+  productName: string;
+  productType: string;
+  pixelFbp: string | null;
+  pixelFbc: string | null;
+  couponUsed: string | null;
+  paymentMethod: string;
+  nettAmount: number;
+  endDate: number;
+}
+
+interface TransactionResponse {
+  success: boolean;
+  transactions: Array<{
+    _id: string;
+    event: string;
+    data: TransactionData;
+  }>;
+  isActive: boolean;
+}
 
 interface PaymentResponse {
   statusCode: number;
@@ -26,32 +61,13 @@ interface PaymentResponse {
   };
 }
 
-interface Transaction {
-  event: string;
-  id: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  merchantId: string;
-  merchantName: string;
-  merchantEmail: string;
-  customerEmail: string;
-  customerMobile: string;
-  amount: string;
-  isAdminFeeBorneByCustomer: string;
-  isChannelFeeBorneByCustomer: string;
-  productId: string;
-  productName: string;
-  productType: string;
-  endDate: string;
-}
-
 export default function Billing() {
   const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(true);
+  const [transactionData, setTransactionData] =
+    useState<TransactionResponse | null>(null);
   const [btnLoading, setBtnLoading] = useState(false);
   const [paymentLink, setPaymentLink] = useState<PaymentResponse | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const handleUpgrade = async () => {
     setBtnLoading(true);
@@ -68,7 +84,7 @@ export default function Billing() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: 54999,
+          amount: 1000,
           customerName: session.user?.name,
           email: session.user.email,
           mobile: "0000000000",
@@ -92,41 +108,33 @@ export default function Billing() {
   };
 
   useEffect(() => {
-    const fetchPaymentStatus = async () => {
-      try {
-        const response = await fetch(
-          `/api/transaction/getTransactionByEmail?email=${session?.user?.email}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch payment status.");
-        }
-        const data = await response.json();
-        if (data.success) {
-          setTransactions(data.transactions);
+    const fetchTransactionData = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await fetch(
+            `/api/transaction/checkSubscription?email=${session.user.email}`
+          );
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+          const data = await response.json();
+          setTransactionData(data);
+        } catch (error) {
+          toast.error(
+            error instanceof Error ? error.message : "Something went wrong."
+          );
+        } finally {
           setLoading(false);
-          toast.success("Your payment link is ready.");
         }
-      } catch (error) {
-        console.error("Error fetching payment status:", error);
       }
     };
 
     if (session?.user?.email) {
-      fetchPaymentStatus();
+      fetchTransactionData();
     }
   }, [session?.user?.email]);
 
-  const isProPlanActive = transactions.some((transaction) => {
-    const today = new Date();
-    const endDate = new Date(transaction.endDate);
-    return endDate >= today;
-  });
-
-  if (status === "unauthenticated") {
-    redirect("/");
-  }
-
-  if (loading) {
+  if (status === "loading" || loading) {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -135,139 +143,104 @@ export default function Billing() {
     );
   }
 
+  if (status === "unauthenticated") {
+    redirect("/");
+  }
+
+  const latestTransaction = transactionData?.transactions[0]?.data;
+
   return (
-    <>
-      <div className="flex flex-col justify-center items-center">
-        <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] px-4 space-y-4 py-4">
-          <h2 className="text-xl md:text-2xl">Subscription</h2>
-          <div className="flex flex-row justify-center items-center">
-            <Card className="w-full">
-              <CardHeader className="text-center">
-                <CardTitle>
-                  {isProPlanActive
-                    ? `You're on CVKU Pro Plan until ${new Intl.DateTimeFormat(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      ).format(
-                        new Date(
-                          transactions.find(
-                            (transaction) =>
-                              new Date(transaction.endDate) >= new Date()
-                          )?.endDate || new Date()
-                        )
-                      )}`
-                    : "You're on CVKU Free Plan"}
-                </CardTitle>
-                <CardDescription>
-                  {isProPlanActive
-                    ? "Enjoy premium features until your subscription ends."
-                    : "No Expiry, Enjoy for as Long as You Want."}
-                </CardDescription>
-              </CardHeader>
-              {!isProPlanActive && <Separator className="mb-4" />}
-              <CardContent>
-                <div className="flex flex-col justify-center items-center gap-2 mb-2">
-                  {paymentLink && (
+    <div className="flex flex-col justify-center items-center space-y-6 w-full max-w-2xl mx-auto px-4">
+      <div className="w-full sm:w-[360px] md:w-[420px] lg:w-[640px] min-h-96 px-4">
+        <div className="space-y-4 pt-4 pb-16">
+          <Link href="/profile">
+            <Button variant="outline" className="w-full">
+              <ArrowLeft />
+              Back to Profile
+            </Button>
+          </Link>
+          <Card className="shadow-lg rounded-lg border border-gray-200">
+            <CardHeader>
+              <CardTitle className="text-2xl font-semibold text-center">
+                Your Subscription Plan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <p className="text-lg font-medium mb-2">
+                  Current Plan:{" "}
+                  <span className="font-semibold text-green-600">
+                    {transactionData?.isActive ? "CVKU Pro" : "CVKU Free"}
+                  </span>
+                </p>
+                {transactionData?.isActive ? (
+                  latestTransaction ? (
                     <>
-                      <CardTitle>You&apos;re payment link:</CardTitle>
-                      <Link href={paymentLink.data.link} target="_blank">
-                        <Button variant="secondary" className="mb-2">
-                          {paymentLink.data.link}
-                          <ExternalLink size={14} />
-                        </Button>
-                      </Link>
+                      <p>
+                        <strong>Payment Date:</strong>{" "}
+                        {new Date(
+                          latestTransaction.createdAt
+                        ).toLocaleDateString()}
+                      </p>
+                      <p>
+                        <strong>Amount:</strong> Rp {latestTransaction.amount}
+                      </p>
+                      <p>
+                        <strong>Ends on:</strong>{" "}
+                        {new Date(latestTransaction.endDate).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </p>
+                      <p>
+                        <strong>Payment Method:</strong>{" "}
+                        {latestTransaction.paymentMethod}
+                      </p>
                     </>
-                  )}
-                </div>
-                {!isProPlanActive && (
-                  <Button
-                    onClick={handleUpgrade}
-                    disabled={btnLoading || !!paymentLink}
-                    className="mb-2 w-full flex flex-row justify-center items-center"
-                  >
-                    {paymentLink
-                      ? "Your payment link is ready"
-                      : btnLoading
-                      ? "Processing..."
-                      : "Upgrade to CVKU Pro"}
+                  ) : (
+                    <p>No transaction history found.</p>
+                  )
+                ) : (
+                  <div className="mt-6">
+                    <Button
+                      onClick={handleUpgrade}
+                      disabled={btnLoading || !!paymentLink}
+                      className="w-full"
+                    >
+                      {paymentLink
+                        ? "Payment Link Ready"
+                        : btnLoading
+                        ? "Processing..."
+                        : "Upgrade to CVKU Pro"}
+                    </Button>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Pay via QRIS or Bank Virtual Account (Indonesia).
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Only Rp 54.999/year for premium features.
+                    </p>
                     {paymentLink && (
-                      <ArrowUp className="text-green-500 mr-2" size={18} />
+                      <div className="mt-4">
+                        <CardTitle className="text-lg font-semibold">
+                          Your Payment Link:
+                        </CardTitle>
+                        <Link href={paymentLink.data.link} target="_blank">
+                          <Button variant="secondary" className="w-full">
+                            {paymentLink.data.link}
+                            <ExternalLink size={14} className="ml-2" />
+                          </Button>
+                        </Link>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Please refresh after completing payment.
+                        </p>
+                      </div>
                     )}
-                  </Button>
+                  </div>
                 )}
-                <CardDescription className="text-center text-xs">
-                  {!isProPlanActive &&
-                    "Only Rp 54.999/year for premium features"}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          </div>
-          <h2 className="text-xl md:text-2xl">Transaction History</h2>
-        </div>
-        <div className="w-full flex flex-row justify-center items-center">
-          <Card className="w-fit mx-4">
-            <CardContent className="py-4">
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead>
-                    <tr>
-                      <th className="border px-4 py-2">No</th>
-                      <th className="border px-4 py-2">Start Date</th>
-                      <th className="border px-4 py-2">End Date</th>
-                      <th className="border px-4 py-2">Amount</th>
-                      <th className="border px-4 py-2">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions.length > 0 ? (
-                      transactions.map((transaction, index) => (
-                        <tr key={transaction.id}>
-                          <td className="border px-4 py-2">{index + 1}</td>
-                          <td className="border px-4 py-2">
-                            {new Intl.DateTimeFormat("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }).format(
-                              new Date(parseInt(transaction.createdAt))
-                            )}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {new Intl.DateTimeFormat("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }).format(new Date(transaction.endDate))}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {transaction.amount}
-                          </td>
-                          <td className="border px-4 py-2">
-                            {transaction.status}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={5}
-                          className="border px-4 py-2 text-center text-gray-500"
-                        >
-                          No transactions found.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 }

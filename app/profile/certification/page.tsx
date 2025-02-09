@@ -62,12 +62,7 @@ export default function AddCertification() {
 
   const handleFileValidation = (file: File) => {
     const maxSize = 5 * 1024 * 1024;
-    const allowedTypes = [
-      "image/jpg",
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-    ];
+    const allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif"];
     if (file.size > maxSize) {
       toast.error("File size exceeds 5MB!");
       return false;
@@ -164,7 +159,7 @@ export default function AddCertification() {
     }
   };
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex flex-col justify-center items-center text-center min-h-[30rem]">
         <Loader className="animate-spin" size={32} />
@@ -184,8 +179,9 @@ export default function AddCertification() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <Link href="/profile">
-                <Button>
+                <Button variant="outline">
                   <ArrowLeft />
+                  Back to Profile
                 </Button>
               </Link>
               <h2 className="text-xl md:text-2xl">Add Certification</h2>

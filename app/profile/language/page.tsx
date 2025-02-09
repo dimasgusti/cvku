@@ -36,7 +36,7 @@ interface Language {
 }
 
 export default function Language() {
-    const router = useRouter();
+  const router = useRouter();
   const [btnLoading, setBtnLoading] = useState(false);
   const { data: session } = useSession();
 
@@ -74,7 +74,7 @@ export default function Language() {
       if (!response.ok) throw new Error("Failed to add language");
 
       toast.success("Language added successfully!");
-      router.push("/profile")
+      router.push("/profile");
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "An unexpected error occured."
@@ -93,8 +93,9 @@ export default function Language() {
             className="space-y-4 pt-4 pb-16"
           >
             <Link href="/profile">
-              <Button variant="outline" type="button">
+              <Button variant="outline">
                 <ArrowLeft />
+                Back to Profile
               </Button>
             </Link>
             <h2 className="text-xl md:text-2xl">Add Language</h2>

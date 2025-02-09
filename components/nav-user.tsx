@@ -93,37 +93,22 @@ export function NavUser({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem
+                    className="hover:cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent hover:bg-accent w-full focus:text-accent-foreground"
                     onClick={() => router.push("/profile/billing")}
-                    className="hover:cursor-pointer"
                   >
                     {user.proPlan ? (
-                      <>
-                        <Sparkles />
-                        You&apos;re on Pro Plan
-                      </>
+                      <div className="flex flex-row items-center gap-2">
+                        <Sparkles className="h-4 w-4" />
+                        <p>You&apos;re on CVKU Pro</p>
+                      </div>
                     ) : (
-                      <>
-                        <Sparkles />
-                        Upgrade to Pro Plan
-                      </>
+                      <div className="flex flex-row items-center gap-2">
+                        <Sparkles className="h-4 w-4" />
+                        <p>Get CVKU Pro</p>
+                      </div>
                     )}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-                {/* <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup> */}
                 <DropdownMenuSeparator />
               </>
             )}
